@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CommunityARts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="scroll-scene" id="scroll-scene">
+      <div class="scene-sticky">
+        <img
+          class="scene-bg"
+          src="images/mural.svg"
+          alt="A wide street mural covering the full width of the page"
+        />
+        <div class="scene-veil" aria-hidden="true"></div>
+        <div class="scene-mover" id="mover" aria-label="Person walking across the mural in a six-frame walk cycle">
+          <img src="images/walk-1.jpg" alt="" data-step="0" class="is-active" />
+          <img src="images/walk-2.jpg" alt="" data-step="1" />
+          <img src="images/walk-3.jpg" alt="" data-step="2" />
+          <img src="images/walk-4.jpg" alt="" data-step="3" />
+          <img src="images/walk-5.jpg" alt="" data-step="4" />
+          <img src="images/walk-6.jpg" alt="" data-step="5" />
+        </div>
+        <header class="intro">
+          <p class="eyebrow">CommunityARts</p>
+          <h1>Scroll the mural.</h1>
+        </header>
+        <p class="scene-caption">Scroll</p>
+      </div>
+    </section>
+
+    <footer class="outro">
+      <h2>The wall stays. The work travels.</h2>
+      <p>
+        Keep scrolling back up to send the image the other way — its place on
+        the mural is tied to how far you’ve scrolled.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
