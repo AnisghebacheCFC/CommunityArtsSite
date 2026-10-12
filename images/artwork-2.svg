@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#1a1410"/>
+  <rect x="48" y="48" width="704" height="904" fill="#1e3a3a"/>
+  <circle cx="400" cy="360" r="230" fill="#2ec4b6"/>
+  <circle cx="330" cy="300" r="90" fill="#f3e6c8"/>
+  <path d="M120 860 C240 560 560 560 680 860" fill="#e4572e"/>
+  <rect x="140" y="780" width="520" height="80" fill="#f3e6c8"/>
+  <text x="400" y="832" text-anchor="middle" fill="#1a1410" font-family="Georgia, serif" font-size="42">ARts</text>
+</svg>

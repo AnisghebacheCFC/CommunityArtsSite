@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#1a1410"/>
+  <rect x="48" y="48" width="704" height="904" fill="#f3e6c8"/>
+  <polygon points="48,952 752,160 752,952" fill="#2ec4b6"/>
+  <polygon points="48,952 48,280 520,952" fill="#e4572e"/>
+  <circle cx="560" cy="280" r="110" fill="#ffd166"/>
+  <rect x="140" y="780" width="520" height="80" fill="#1a1410"/>
+  <text x="400" y="832" text-anchor="middle" fill="#f3e6c8" font-family="Georgia, serif" font-size="42">ARts</text>
+</svg>

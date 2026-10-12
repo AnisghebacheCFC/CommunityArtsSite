@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c9b8a0"/>
+      <stop offset="55%" stop-color="#8f6a4a"/>
+      <stop offset="100%" stop-color="#3c2a1e"/>
+    </linearGradient>
+    <pattern id="brick" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="#6d4a36"/>
+      <rect y="19" width="80" height="2" fill="#4a2f22"/>
+      <rect x="39" width="2" height="19" fill="#4a2f22"/>
+      <rect x="79" y="21" width="2" height="19" fill="#4a2f22"/>
+      <rect y="-1" x="-1" width="2" height="21" fill="#4a2f22"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect y="80" width="1600" height="820" fill="url(#brick)"/>
+  <rect y="80" width="1600" height="820" fill="#2a1810" opacity="0.18"/>
+  <path d="M0 180 C220 40 380 320 560 120 S900 40 1100 240 S1400 80 1600 160 L1600 900 L0 900 Z" fill="#e4572e" opacity="0.92"/>
+  <path d="M0 420 C180 300 340 560 560 380 S900 300 1180 520 S1460 360 1600 440 L1600 900 L0 900 Z" fill="#2ec4b6" opacity="0.88"/>
+  <path d="M0 640 C250 520 420 780 700 620 S1040 540 1280 720 S1500 600 1600 680 L1600 900 L0 900 Z" fill="#ffd166"/>
+  <circle cx="280" cy="260" r="90" fill="#fff3"/>
+  <circle cx="1240" cy="210" r="130" fill="#1113"/>
+  <rect x="0" y="0" width="1600" height="90" fill="#1c1410"/>
+  <text x="48" y="58" fill="#f4efe6" font-family="Georgia, serif" font-size="28" letter-spacing="6">COMMUNITY ARTS WALL</text>
+</svg>
