@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>Review journal entry · Community Arts</title>
+    <title>Journal administration · Community Arts</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,22 +15,62 @@
   </head>
   <body>
     <main class="page">
-      <p class="eyebrow">Review</p>
-      <h1>Journal review</h1>
-      <div id="auth-panel">
-        <p class="lede">Sign in with the Community Arts review address to preview, approve or reject an entry.</p>
-        <form class="form" id="login-form">
+      <p class="eyebrow">Administration</p>
+      <h1>Community Journal</h1>
+
+      <form class="form" id="login-form">
+        <label>
+          Password
+          <input name="password" type="password" required autocomplete="current-password" />
+        </label>
+        <button type="submit">Login</button>
+      </form>
+
+      <div id="dashboard" hidden>
+        <div class="actions">
+          <button type="button" id="logout">Log out</button>
+        </div>
+        <div id="list" class="journal-list"></div>
+        <form class="form" id="editor" hidden>
+          <input type="hidden" name="id" id="entry-id" />
           <label>
-            Email
-            <input name="email" type="email" required value="anis@communityarts.org.uk" />
+            Title
+            <input name="title" id="entry-title" required maxlength="140" />
           </label>
-          <button type="submit">Send login link</button>
+          <label>
+            Date
+            <input name="entry_date" id="entry-date" type="date" required />
+          </label>
+          <div>
+            <span class="eyebrow">Body</span>
+            <div class="toolbar">
+              <button type="button" data-cmd="bold">Bold</button>
+              <button type="button" data-cmd="italic">Italic</button>
+              <button type="button" data-cmd="insertUnorderedList">List</button>
+            </div>
+            <div class="editor" id="entry-body" contenteditable="true"></div>
+          </div>
+          <div id="entry-media" class="entry-media"></div>
+          <label>
+            Add images
+            <input name="images" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple />
+          </label>
+          <label>
+            Add video files
+            <input name="videos" type="file" accept="video/mp4,video/webm" multiple />
+          </label>
+          <label>
+            Video links (YouTube or Vimeo, one per line)
+            <textarea name="embeds" id="entry-embeds" rows="3"></textarea>
+          </label>
+          <div class="actions">
+            <button type="submit">Save</button>
+            <button type="button" id="approve">Approve</button>
+            <button type="button" id="unpublish">Unpublish</button>
+            <button type="button" id="reject">Reject</button>
+            <button type="button" id="delete">Delete</button>
+          </div>
         </form>
-      </div>
-      <article id="preview"></article>
-      <div class="actions" id="actions" hidden>
-        <button type="button" id="approve">Approve</button>
-        <button type="button" id="reject">Reject</button>
       </div>
       <p class="status" id="status"></p>
     </main>

@@ -6,7 +6,7 @@ create table if not exists public.journal_entries (
   entry_date date not null,
   body_html text not null,
   excerpt text,
-  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected', 'unpublished')),
   review_token_hash text not null,
   image_paths text[] not null default '{}',
   video_paths text[] not null default '{}',

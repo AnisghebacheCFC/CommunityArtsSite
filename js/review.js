@@ -1,88 +1,190 @@
+const ADMIN_EMAIL = "anis@communityarts.org.uk";
 const supabase = window.CAClient.configured() ? window.CAClient.client() : null;
-const params = new URLSearchParams(location.search);
-const entryId = params.get("id");
-const token = params.get("token");
 const status = document.getElementById("status");
-const preview = document.getElementById("preview");
-const actions = document.getElementById("actions");
-const authPanel = document.getElementById("auth-panel");
+const loginForm = document.getElementById("login-form");
+const dashboard = document.getElementById("dashboard");
+const list = document.getElementById("list");
+const editor = document.getElementById("editor");
+const media = document.getElementById("entry-media");
+const body = document.getElementById("entry-body");
 
-const callModerate = async (payload, accessToken) => {
+let current = null;
+
+const sessionToken = async () => {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token || "";
+};
+
+const callAdmin = async (payload, files) => {
+  const accessToken = await sessionToken();
+  if (!accessToken) throw new Error("Sign in first.");
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    apikey: window.CA.supabaseAnonKey,
+  };
+  let bodyPayload;
+  if (files) {
+    bodyPayload = files;
+    if (!bodyPayload.has("action")) bodyPayload.set("action", payload.action);
+    if (payload.id) bodyPayload.set("id", payload.id);
+  } else {
+    headers["Content-Type"] = "application/json";
+    bodyPayload = JSON.stringify(payload);
+  }
   const response = await fetch(window.CAClient.functionsUrl("moderate-journal"), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-      apikey: window.CA.supabaseAnonKey,
-    },
-    body: JSON.stringify(payload),
+    headers,
+    body: bodyPayload,
   });
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || "Request failed.");
   return result;
 };
 
-const showEntry = (entry) => {
-  preview.innerHTML = `
-    <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
-    <h2>${entry.title}</h2>
-    <p class="status">Status: ${entry.status}</p>
-    <div class="entry-media">
-      ${(entry.image_urls || []).map((src) => `<img src="${src}" alt="" />`).join("")}
-      ${(entry.video_urls || []).map((src) => `<video controls src="${src}"></video>`).join("")}
-      ${(entry.video_embeds || [])
-        .map((src) => `<iframe src="${src}" allowfullscreen height="360"></iframe>`)
-        .join("")}
-    </div>
-    <div class="prose">${entry.body_html}</div>
-  `;
-  actions.hidden = entry.status !== "pending";
+const showLogin = () => {
+  loginForm.hidden = false;
+  dashboard.hidden = true;
+  editor.hidden = true;
 };
 
-document.getElementById("login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  if (!supabase) return;
-  const email = new FormData(event.target).get("email");
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: location.href },
+const showDashboard = async () => {
+  loginForm.hidden = true;
+  dashboard.hidden = false;
+  const result = await callAdmin({ action: "list" });
+  list.innerHTML = (result.entries || [])
+    .map(
+      (entry) => `<article class="journal-card">
+        <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
+        <h3>${entry.title}</h3>
+        <p class="status">${entry.status}</p>
+        <a href="#${entry.id}" data-id="${entry.id}">Edit</a>
+      </article>`,
+    )
+    .join("") || "<p class='status'>No entries yet.</p>";
+};
+
+const renderMedia = (entry) => {
+  const images = (entry.image_urls || [])
+    .map((src, i) => `<label><img src="${src}" alt="" /><input type="checkbox" name="remove_image" value="${entry.image_paths[i] || ""}" /> Remove image</label>`)
+    .join("");
+  const videos = (entry.video_urls || [])
+    .map((src, i) => `<label><video controls src="${src}"></video><input type="checkbox" name="remove_video" value="${entry.video_paths[i] || ""}" /> Remove video</label>`)
+    .join("");
+  media.innerHTML = images + videos;
+};
+
+const openEntry = async (id) => {
+  const result = await callAdmin({ action: "preview", id });
+  current = result.entry;
+  document.getElementById("entry-id").value = current.id;
+  document.getElementById("entry-title").value = current.title;
+  document.getElementById("entry-date").value = current.entry_date;
+  body.innerHTML = current.body_html || "";
+  document.getElementById("entry-embeds").value = (current.video_embeds || []).join("\n");
+  renderMedia(current);
+  editor.hidden = false;
+  editor.scrollIntoView({ behavior: "smooth" });
+};
+
+document.querySelectorAll(".toolbar [data-cmd]").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.execCommand(button.dataset.cmd, false);
+    body.focus();
   });
-  status.textContent = error ? error.message : "Check the review inbox for a login link.";
 });
 
-const moderate = async (action) => {
-  const { data } = await supabase.auth.getSession();
-  const accessToken = data.session?.access_token;
-  if (!accessToken) {
-    status.textContent = "Sign in first.";
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!supabase) {
+    status.textContent = "Supabase is not configured.";
     return;
   }
+  status.textContent = "Signing in…";
+  const password = new FormData(loginForm).get("password");
+  const { error } = await supabase.auth.signInWithPassword({
+    email: ADMIN_EMAIL,
+    password,
+  });
+  if (error) {
+    status.textContent = "Login failed.";
+    return;
+  }
+  loginForm.reset();
+  status.textContent = "";
   try {
-    const result = await callModerate({ id: entryId, token, action }, accessToken);
+    await showDashboard();
+  } catch (err) {
+    status.textContent = err.message;
+    showLogin();
+  }
+});
+
+document.getElementById("logout").addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  current = null;
+  showLogin();
+  status.textContent = "Signed out.";
+});
+
+list.addEventListener("click", (event) => {
+  const link = event.target.closest("[data-id]");
+  if (!link) return;
+  event.preventDefault();
+  openEntry(link.dataset.id).catch((err) => {
+    status.textContent = err.message;
+  });
+});
+
+editor.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const data = new FormData(editor);
+  data.set("action", "update");
+  data.set("body_html", body.innerHTML.trim());
+  try {
+    const result = await callAdmin({ action: "update", id: data.get("id") }, data);
+    status.textContent = result.message || "Saved.";
+    current = result.entry;
+    renderMedia(current);
+    await showDashboard();
+  } catch (err) {
+    status.textContent = err.message;
+  }
+});
+
+const runAction = async (action) => {
+  if (!current) return;
+  if (action === "delete" && !confirm("Delete this entry permanently?")) return;
+  try {
+    const result = await callAdmin({ action, id: current.id });
     status.textContent = result.message;
-    if (result.entry) showEntry(result.entry);
-  } catch (error) {
-    status.textContent = error.message;
+    if (action === "delete") {
+      editor.hidden = true;
+      current = null;
+    } else if (result.entry) {
+      current = result.entry;
+    }
+    await showDashboard();
+  } catch (err) {
+    status.textContent = err.message;
   }
 };
 
-document.getElementById("approve").addEventListener("click", () => moderate("approve"));
-document.getElementById("reject").addEventListener("click", () => moderate("reject"));
+document.getElementById("approve").addEventListener("click", () => runAction("approve"));
+document.getElementById("unpublish").addEventListener("click", () => runAction("unpublish"));
+document.getElementById("reject").addEventListener("click", () => runAction("reject"));
+document.getElementById("delete").addEventListener("click", () => runAction("delete"));
 
 (async () => {
-  if (!supabase || !entryId) {
-    status.textContent = "Missing review configuration or entry id.";
+  if (!supabase) {
+    status.textContent = "Supabase is not configured.";
     return;
   }
-
-  const { data } = await supabase.auth.getSession();
-  if (!data.session) return;
-
-  authPanel.hidden = true;
+  const token = await sessionToken();
+  if (!token) return;
   try {
-    const result = await callModerate({ id: entryId, token, action: "preview" }, data.session.access_token);
-    showEntry(result.entry);
-  } catch (error) {
-    status.textContent = error.message;
+    await showDashboard();
+  } catch {
+    await supabase.auth.signOut();
+    showLogin();
   }
 })();
