@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { signMedia } from "../_shared/media.ts";
 
 const ADMIN_EMAIL = "anis@communityarts.org.uk";
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -12,11 +13,6 @@ const json = (status: number, body: Record<string, unknown>) =>
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
-
-const publicUrl = (path: string) => {
-  const base = Deno.env.get("SUPABASE_URL") ?? "";
-  return `${base}/storage/v1/object/public/journal/${path}`;
-};
 
 const sanitizeHtml = (html: string) =>
   html
@@ -42,20 +38,13 @@ const embedUrl = (raw: string) => {
   }
 };
 
-const signedUrls = async (supabase: ReturnType<typeof createClient>, paths: string[]) => {
-  if (!paths.length) return [];
-  const { data } = await supabase.storage.from("journal").createSignedUrls(paths, 60 * 20);
-  return (data || []).map((item) => item.signedUrl).filter(Boolean);
-};
-
 const present = async (supabase: ReturnType<typeof createClient>, entry: Record<string, unknown>) => {
   const imagePaths = (entry.image_paths as string[]) || [];
   const videoPaths = (entry.video_paths as string[]) || [];
-  const approved = entry.status === "approved";
   return {
     ...entry,
-    image_urls: approved ? imagePaths.map(publicUrl) : await signedUrls(supabase, imagePaths),
-    video_urls: approved ? videoPaths.map(publicUrl) : await signedUrls(supabase, videoPaths),
+    image_urls: await signMedia(supabase, imagePaths),
+    video_urls: await signMedia(supabase, videoPaths),
   };
 };
 
@@ -156,16 +145,14 @@ Deno.serve(async (req) => {
   if (action === "approve") {
     const imagePaths = await Promise.all((entry.image_paths || []).map((path: string) => movePublic(supabase, path)));
     const videoPaths = await Promise.all((entry.video_paths || []).map((path: string) => movePublic(supabase, path)));
-    const imageUrls = imagePaths.map(publicUrl);
-    const videoUrls = videoPaths.map(publicUrl);
     const published = {
       status: "approved",
       published_at: new Date().toISOString(),
       image_paths: imagePaths,
       video_paths: videoPaths,
-      image_urls: imageUrls,
-      video_urls: videoUrls,
-      featured_path: imageUrls[0] || null,
+      image_urls: [],
+      video_urls: [],
+      featured_path: imagePaths[0] || null,
     };
     const { data: updated } = await supabase.from("journal_entries").update(published).eq("id", id).select("*").single();
     return json(200, { message: "Entry published.", entry: await present(supabase, updated) });
@@ -214,8 +201,6 @@ Deno.serve(async (req) => {
       .filter(Boolean)
       .slice(0, 3);
     const excerpt = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 180);
-    const imageUrls = entry.status === "approved" ? imagePaths.map(publicUrl) : [];
-    const videoUrls = entry.status === "approved" ? videoPaths.map(publicUrl) : [];
     const { data: updated, error: updateError } = await supabase
       .from("journal_entries")
       .update({
@@ -226,9 +211,9 @@ Deno.serve(async (req) => {
         image_paths: imagePaths,
         video_paths: videoPaths,
         video_embeds: embeds,
-        image_urls: imageUrls,
-        video_urls: videoUrls,
-        featured_path: imageUrls[0] || null,
+        image_urls: [],
+        video_urls: [],
+        featured_path: imagePaths[0] || null,
       })
       .eq("id", id)
       .select("*")

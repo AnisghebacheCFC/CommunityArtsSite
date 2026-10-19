@@ -1,0 +1,10 @@
+project_id = "njsmvpdgdsoalbmmcxhh"
+
+[functions.public-journal]
+verify_jwt = false
+
+[functions.submit-journal]
+verify_jwt = false
+
+[functions.moderate-journal]
+verify_jwt = true

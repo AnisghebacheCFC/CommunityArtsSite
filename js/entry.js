@@ -19,24 +19,16 @@ const renderMedia = (entry) => {
     return;
   }
 
-  const supabase = window.CAClient.client();
-  const { data, error } = await supabase
-    .from("journal_entries")
-    .select("title, entry_date, body_html, image_urls, video_urls, video_embeds, status")
-    .eq("id", id)
-    .eq("status", "approved")
-    .maybeSingle();
-
-  if (error || !data) {
-    root.innerHTML = "<p class='status'>This entry is not published.</p>";
-    return;
-  }
-
-  document.title = `${data.title} · Community Arts`;
-  root.innerHTML = `
-    <time datetime="${data.entry_date}">${window.CAClient.formatDate(data.entry_date)}</time>
-    <h1>${data.title}</h1>
-    ${renderMedia(data)}
-    <div class="prose">${data.body_html}</div>
+  try {
+    const { entry } = await window.CAClient.callFunction("public-journal", { action: "get", id });
+    document.title = `${entry.title} · Community Arts`;
+    root.innerHTML = `
+    <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
+    <h1>${entry.title}</h1>
+    ${renderMedia(entry)}
+    <div class="prose">${entry.body_html}</div>
   `;
+  } catch {
+    root.innerHTML = "<p class='status'>This entry is not published.</p>";
+  }
 })();
