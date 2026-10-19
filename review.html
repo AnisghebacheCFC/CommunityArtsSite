@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Review journal entry · Community Arts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <p class="eyebrow">Review</p>
+      <h1>Journal review</h1>
+      <div id="auth-panel">
+        <p class="lede">Sign in with the Community Arts review address to preview, approve or reject an entry.</p>
+        <form class="form" id="login-form">
+          <label>
+            Email
+            <input name="email" type="email" required value="anis@communityarts.org.uk" />
+          </label>
+          <button type="submit">Send login link</button>
+        </form>
+      </div>
+      <article id="preview"></article>
+      <div class="actions" id="actions" hidden>
+        <button type="button" id="approve">Approve</button>
+        <button type="button" id="reject">Reject</button>
+      </div>
+      <p class="status" id="status"></p>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/review.js"></script>
+  </body>
+</html>

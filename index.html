@@ -37,14 +37,62 @@
       </div>
     </section>
 
-    <footer class="outro">
-      <h2>The wall stays. The work travels.</h2>
-      <p>
-        Keep scrolling back up to send the image the other way — its place on
-        the mural is tied to how far you’ve scrolled.
-      </p>
+    <main>
+      <section class="about" id="about">
+        <p class="eyebrow">About Community Arts</p>
+        <h2>Connecting generations through creativity.</h2>
+        <div class="prose">
+          <p>
+            Community Arts is an independent, community-led initiative rooted in
+            Elephant &amp; Castle, Southwark.
+          </p>
+          <p>
+            We bring younger and older generations together through accessible,
+            hands-on arts workshops, creating opportunities for connection,
+            creative expression and shared learning.
+          </p>
+          <p>
+            Working with students, emerging artists and local residents, we aim
+            to reduce social isolation, strengthen community relationships and
+            provide aspiring creatives with practical experience and paid
+            opportunities where funding allows.
+          </p>
+          <p>
+            Our workshops explore botanical printing, natural dyes, collage,
+            calligraphy, textiles and knitting, encouraging participants to
+            experiment, exchange skills and discover new creative interests.
+          </p>
+          <p>
+            Beginning with workshops at Draper Hall, our ambition is to build a
+            wider network of creative activities throughout Southwark,
+            connecting local community spaces, residents and artists.
+          </p>
+        </div>
+      </section>
+
+      <section class="journal" id="journal">
+        <p class="eyebrow">From the studio</p>
+        <h2>Community Journal</h2>
+        <p class="lede">
+          A growing record of the things we make, the people we meet and the
+          ideas we explore. Follow our workshops, creative experiments and
+          collaborations as Community Arts develops across Southwark.
+        </p>
+        <div id="journal-list" class="journal-list"></div>
+        <p class="journal-actions">
+          <a href="submit.html">Submit an entry</a>
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      Community Arts · Elephant &amp; Castle, Southwark
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/client.js"></script>
     <script src="script.js"></script>
+    <script src="js/journal-list.js"></script>
   </body>
 </html>
