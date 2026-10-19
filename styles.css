@@ -46,6 +46,7 @@ body {
 }
 
 .about,
+.facilitators,
 .journal,
 .page {
   padding: 5.5rem 1.5rem 4rem;
@@ -54,10 +55,79 @@ body {
 }
 
 .about h2,
+.facilitators h2,
 .journal h2,
 .page h1 {
   font-size: clamp(2.2rem, 6vw, 3.6rem);
   margin: 0.4rem 0 1.5rem;
+}
+
+.facilitator-list {
+  list-style: none;
+  display: grid;
+  gap: 3.2rem;
+  margin-top: 2.2rem;
+}
+
+.facilitator {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.facilitator-portrait {
+  width: min(100%, 14rem);
+  aspect-ratio: 4 / 5;
+  background:
+    linear-gradient(135deg, rgb(228 87 46 / 0.12), transparent 42%),
+    repeating-linear-gradient(
+      -8deg,
+      transparent,
+      transparent 10px,
+      rgb(20 17 15 / 0.04) 10px,
+      rgb(20 17 15 / 0.04) 11px
+    ),
+    #efe6d6;
+  border: 1px solid rgb(20 17 15 / 0.14);
+  box-shadow: 6px 8px 0 rgb(20 17 15 / 0.06);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.facilitator:hover .facilitator-portrait {
+  transform: rotate(-1.2deg) translateY(-2px);
+  box-shadow: 9px 12px 0 rgb(20 17 15 / 0.08);
+}
+
+.facilitator h3 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.facilitator-role {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0.35rem 0 0.8rem;
+}
+
+.facilitator p:last-child {
+  color: var(--muted);
+}
+
+@media (min-width: 720px) {
+  .facilitator {
+    grid-template-columns: 14rem 1fr;
+    gap: 1.6rem;
+    align-items: start;
+  }
+
+  .facilitator:nth-child(even) {
+    grid-template-columns: 1fr 14rem;
+  }
+
+  .facilitator:nth-child(even) .facilitator-portrait {
+    order: 2;
+  }
 }
 
 .prose {
