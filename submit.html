@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Submit a journal entry · Community Arts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <p class="eyebrow"><a href="index.html">Community Arts</a></p>
+      <h1>Submit a journal entry</h1>
+      <p class="lede">
+        Entries are held for review. Nothing is published until it is approved.
+      </p>
+      <form class="form" id="submit-form">
+        <label>
+          Title
+          <input name="title" required maxlength="140" />
+        </label>
+        <label>
+          Date
+          <input name="entry_date" type="date" required />
+        </label>
+        <div>
+          <span class="eyebrow">Body</span>
+          <div class="toolbar">
+            <button type="button" data-cmd="bold">Bold</button>
+            <button type="button" data-cmd="italic">Italic</button>
+            <button type="button" data-cmd="insertUnorderedList">List</button>
+          </div>
+          <div class="editor" id="body" contenteditable="true"></div>
+        </div>
+        <label>
+          Images
+          <input name="images" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple />
+        </label>
+        <label>
+          Video files
+          <input name="videos" type="file" accept="video/mp4,video/webm" multiple />
+        </label>
+        <label>
+          Video links (YouTube or Vimeo, one per line)
+          <textarea name="embeds" rows="3" placeholder="https://www.youtube.com/watch?v="></textarea>
+        </label>
+        <input class="hp" name="company" tabindex="-1" autocomplete="off" />
+        <input type="hidden" name="started" id="started" />
+        <button type="submit">Submit</button>
+      </form>
+      <p class="status" id="status"></p>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/submit.js"></script>
+  </body>
+</html>
