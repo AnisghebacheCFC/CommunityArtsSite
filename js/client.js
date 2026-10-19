@@ -2,7 +2,7 @@ const configured = () =>
   Boolean(window.CA?.supabaseUrl && window.CA?.supabaseAnonKey);
 
 const client = () => {
-  if (!configured()) return null;
+  if (!configured() || !window.supabase?.createClient) return null;
   return window.supabase.createClient(window.CA.supabaseUrl, window.CA.supabaseAnonKey);
 };
 

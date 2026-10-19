@@ -18,7 +18,10 @@
       <p class="eyebrow">Administration</p>
       <h1>Community Journal</h1>
 
-      <form class="form" id="login-form">
+      <noscript>
+        <p class="status">JavaScript is required to sign in. The login form will not send your password.</p>
+      </noscript>
+      <form class="form" id="login-form" method="post" action="review.html" onsubmit="event.preventDefault(); if (window.CA_handleLogin) window.CA_handleLogin(event); return false;">
         <label>
           Password
           <input name="password" type="password" required autocomplete="current-password" />
@@ -31,7 +34,7 @@
           <button type="button" id="logout">Log out</button>
         </div>
         <div id="list" class="journal-list"></div>
-        <form class="form" id="editor" hidden>
+        <form class="form" id="editor" method="post" action="review.html" hidden>
           <input type="hidden" name="id" id="entry-id" />
           <label>
             Title
@@ -74,9 +77,9 @@
       </div>
       <p class="status" id="status"></p>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/client.js"></script>
-    <script src="js/review.js"></script>
+    <script src="js/review.js?v=login-fix"></script>
   </body>
 </html>

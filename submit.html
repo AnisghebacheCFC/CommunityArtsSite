@@ -20,7 +20,7 @@
       <p class="lede">
         Entries are held for review. Nothing is published until it is approved.
       </p>
-      <form class="form" id="submit-form">
+      <form class="form" id="submit-form" method="post" action="submit.html">
         <label>
           Title
           <input name="title" required maxlength="140" />
@@ -56,7 +56,7 @@
       </form>
       <p class="status" id="status"></p>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/client.js"></script>
     <script src="js/submit.js"></script>
