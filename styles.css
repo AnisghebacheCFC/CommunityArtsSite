@@ -46,7 +46,6 @@ body {
 }
 
 .about,
-.facilitators,
 .journal,
 .page {
   padding: 5.5rem 1.5rem 4rem;
@@ -62,39 +61,54 @@ body {
   margin: 0.4rem 0 1.5rem;
 }
 
+.facilitators {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 5.5rem clamp(1.5rem, 5vw, 2.5rem) 6rem;
+}
+
 .facilitator-list {
   list-style: none;
-  display: grid;
-  gap: 3.2rem;
-  margin-top: 2.2rem;
+  margin: 0;
+  padding: 0;
 }
 
 .facilitator {
   display: grid;
-  gap: 1.2rem;
+  gap: 1.5rem;
+  padding: 3.25rem 0;
+  border-bottom: 1px solid rgb(20 17 15 / 0.12);
+}
+
+.facilitator:first-child {
+  padding-top: 1.25rem;
+}
+
+.facilitator:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 .facilitator-portrait {
-  width: min(100%, 14rem);
+  width: min(100%, 280px);
   aspect-ratio: 4 / 5;
-  background:
-    linear-gradient(135deg, rgb(228 87 46 / 0.12), transparent 42%),
-    repeating-linear-gradient(
-      -8deg,
-      transparent,
-      transparent 10px,
-      rgb(20 17 15 / 0.04) 10px,
-      rgb(20 17 15 / 0.04) 11px
-    ),
-    #efe6d6;
-  border: 1px solid rgb(20 17 15 / 0.14);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #efe8d8;
+  border: 1px solid rgb(20 17 15 / 0.2);
   box-shadow: 6px 8px 0 rgb(20 17 15 / 0.06);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.facilitator:hover .facilitator-portrait {
-  transform: rotate(-1.2deg) translateY(-2px);
-  box-shadow: 9px 12px 0 rgb(20 17 15 / 0.08);
+.facilitator-copy {
+  max-width: 40.625rem;
+  min-width: 0;
 }
 
 .facilitator h3 {
@@ -107,26 +121,24 @@ body {
 .facilitator-role {
   font-style: italic;
   color: var(--muted);
-  margin: 0.35rem 0 0.8rem;
+  margin: 0.35rem 0 0.9rem;
 }
 
-.facilitator p:last-child {
+.facilitator-copy p:last-child {
   color: var(--muted);
+  line-height: 1.65;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 800px) {
   .facilitator {
-    grid-template-columns: 14rem 1fr;
-    gap: 1.6rem;
+    grid-template-columns: 280px minmax(0, 1fr);
+    column-gap: 2.5rem;
     align-items: start;
   }
 
-  .facilitator:nth-child(even) {
-    grid-template-columns: 1fr 14rem;
-  }
-
-  .facilitator:nth-child(even) .facilitator-portrait {
-    order: 2;
+  .facilitator-portrait {
+    width: 280px;
+    height: 350px;
   }
 }
 
