@@ -137,7 +137,17 @@ body {
 
   .facilitator-portrait {
     width: 280px;
+    max-width: 280px;
     height: 350px;
+    min-width: 0;
+    justify-self: start;
+  }
+
+  .facilitator-portrait img {
+    width: 280px;
+    height: 350px;
+    max-width: 100%;
+    object-fit: cover;
   }
 }
 
@@ -389,7 +399,6 @@ h2 {
   left: 0;
   width: min(42vw, 420px);
   aspect-ratio: 4 / 5;
-  border: 10px solid var(--frame);
   box-shadow:
     0 24px 60px rgb(0 0 0 / 0.35),
     0 2px 8px rgb(0 0 0 / 0.2);
@@ -397,7 +406,6 @@ h2 {
   will-change: transform;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
-  background: var(--frame);
 }
 
 .scene-mover img {
@@ -428,6 +436,5 @@ h2 {
 @media (max-width: 640px) {
   .scene-mover {
     width: min(42vw, 280px);
-    border-width: 7px;
   }
 }
