@@ -25,8 +25,8 @@ const renderMedia = (entry) => {
     root.innerHTML = `
     <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
     <h1>${entry.title}</h1>
-    ${renderMedia(entry)}
     <div class="prose">${entry.body_html}</div>
+    ${renderMedia(entry)}
   `;
   } catch {
     root.innerHTML = "<p class='status'>This entry is not published.</p>";
