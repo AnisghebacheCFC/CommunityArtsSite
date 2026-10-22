@@ -9,9 +9,6 @@ const THANKS_LAYERS = [
   ],
   [
     { name: "Walworth Garden", credit: "Plant materials &amp; advice", logo: `${THANKS_DIR}/walworthgarden.webp` },
-    { name: "", credit: "", logo: "" },
-    { name: "", credit: "", logo: "" },
-    { name: "", credit: "", logo: "" },
   ],
 ];
 
@@ -23,10 +20,10 @@ if (root) {
         `<ul class="thanks-list">${layer
           .map((item) => {
             const src = item.logo ? encodeURI(item.logo) : "";
-            const logo = src ? `<img src="${src}" alt="" />` : "";
+            const logo = src ? `<div class="thanks-logo"><img src="${src}" alt="" /></div>` : "";
             return `<li class="thanks-item">
-      <div class="thanks-logo">${logo}</div>
-      <h3>${item.name}</h3>
+      ${logo}
+      ${item.name ? `<h3>${item.name}</h3>` : ""}
       ${item.credit ? `<p>${item.credit}</p>` : ""}
     </li>`;
           })
