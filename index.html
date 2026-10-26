@@ -5,6 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CommunityArts</title>
+    <script>
+      if (
+        location.pathname === "/index.html" &&
+        /^(www\.)?communityarts\.org\.uk$/i.test(location.hostname)
+      ) {
+        location.replace("https://communityarts.org.uk/" + location.search + location.hash);
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -69,6 +77,37 @@
             We're starting locally, with the hope of gradually bringing these
             activities to more community spaces across Southwark.
           </p>
+        </div>
+      </section>
+
+      <section class="workshops" id="workshops" aria-label="Workshops">
+        <div class="workshop-cards">
+          <article class="workshop-card">
+            <h2>Join a workshop</h2>
+            <p>
+              Explore creative activities and meet local neighbours. Email us for
+              upcoming workshop details.
+            </p>
+            <a
+              class="workshop-button"
+              href="mailto:anis@communityarts.org.uk?subject=Upcoming%20Community%20Arts%20workshops"
+            >
+              Ask about upcoming workshops
+            </a>
+          </article>
+          <article class="workshop-card">
+            <h2>Host a workshop</h2>
+            <p>
+              Bring botanical printing or collage to your community space. Contact
+              us to discuss your group, venue and budget.
+            </p>
+            <a
+              class="workshop-button"
+              href="mailto:anis@communityarts.org.uk?subject=Hosting%20a%20Community%20Arts%20workshop"
+            >
+              Discuss hosting a workshop
+            </a>
+          </article>
         </div>
       </section>
 

@@ -67,6 +67,92 @@ body {
   margin: 0.4rem 0 1.5rem;
 }
 
+.workshops {
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.workshop-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.workshop-card {
+  display: grid;
+  gap: 0.85rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.35rem 1.25rem 1.45rem;
+  background: #f7f1e6;
+  border: 1px solid rgb(20 17 15 / 0.08);
+  box-shadow: 8px 10px 0 rgb(20 17 15 / 0.06);
+}
+
+.workshop-card h2 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.15rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.workshop-card p {
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.workshop-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  margin-top: 0.25rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+
+.workshop-button:hover {
+  background: #2a2420;
+}
+
+.workshop-button:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.workshop-button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.workshop-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .workshop-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .workshop-button {
+    width: 100%;
+  }
+}
+
 .facilitators {
   max-width: 1100px;
   margin-inline: auto;
