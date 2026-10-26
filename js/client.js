@@ -9,13 +9,33 @@ const client = () => {
 const functionsUrl = (name) =>
   `${window.CA.supabaseUrl.replace(/\/$/, "")}/functions/v1/${name}`;
 
+const parseDate = (value) => {
+  if (value == null || value === "") return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  const day = raw.match(/^(\d{4}-\d{2}-\d{2})/);
+  const parsed = day ? new Date(`${day[1]}T00:00:00`) : new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
 const formatDate = (value) => {
-  if (!value) return "";
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(`${value}T00:00:00`));
+  const parsed = parseDate(value);
+  if (!parsed) return "";
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(parsed);
+  } catch {
+    return "";
+  }
+};
+
+const dateInputValue = (value) => {
+  const raw = String(value ?? "").trim();
+  const day = raw.match(/^(\d{4}-\d{2}-\d{2})/);
+  return day ? day[1] : "";
 };
 
 const excerptFrom = (html, length = 180) => {
@@ -38,4 +58,4 @@ const callFunction = async (name, payload) => {
   return result;
 };
 
-window.CAClient = { configured, client, functionsUrl, formatDate, excerptFrom, callFunction };
+window.CAClient = { configured, client, functionsUrl, formatDate, dateInputValue, excerptFrom, callFunction };

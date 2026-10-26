@@ -75,7 +75,7 @@
     listEl.innerHTML = (result.entries || [])
       .map(
         (entry) => `<article class="journal-card">
-        <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
+        <time datetime="${window.CAClient.dateInputValue(entry.entry_date)}">${window.CAClient.formatDate(entry.entry_date)}</time>
         <h3>${entry.title}</h3>
         <p class="status">${entry.status}</p>
         <a href="#${entry.id}" data-id="${entry.id}">Edit</a>
@@ -137,7 +137,7 @@
     current = result.entry;
     document.getElementById("entry-id").value = current.id;
     document.getElementById("entry-title").value = current.title;
-    document.getElementById("entry-date").value = current.entry_date;
+    document.getElementById("entry-date").value = window.CAClient.dateInputValue(current.entry_date);
     bodyEl.innerHTML = current.body_html || "";
     document.getElementById("entry-embeds").value = (current.video_embeds || []).join("\n");
     renderMedia(current);
