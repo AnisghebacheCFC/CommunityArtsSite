@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="canonical" href="https://communityarts.org.uk/DartsofDeath_Viewer">
+  <title>Darts of Death — 3D viewer</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #10131a; color: #f4f4f4; }
+    .layout { display: grid; grid-template-rows: minmax(420px, 1fr) auto; min-height: 100dvh; }
+    #viewer { position: relative; min-height: 420px; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, #263140 0%, #171e2a 45%, #10131a 90%); }
+    #viewer canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    #status { position: absolute; top: 20px; left: 20px; pointer-events: none; font-size: 12px; letter-spacing: .04em; color: #c9d4e6; background: #0c1220b0; padding: 9px 12px; border: 1px solid #ffffff24; border-radius: 8px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; justify-content: space-between; padding: 19px clamp(16px,4vw,48px); border-top: 1px solid #ffffff22; }
+    .heading h1 { font-size: 17px; margin: 0 0 4px; font-weight: 600; }
+    .heading p { margin: 0; color: #a5b0c1; font-size: 12px; }
+    .options { display: flex; gap: 16px 24px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+    label { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; }
+    input[type="range"] { width: 125px; cursor: pointer; accent-color: #bdc9e5; }
+    input[type="checkbox"] { accent-color: #cbd6f2; cursor: pointer; }
+    button { color: inherit; background: #ffffff14; border: 1px solid #ffffff35; border-radius: 7px; padding: 8px 12px; cursor: pointer; }
+    button:hover { background: #ffffff25; }
+    @media (min-width: 800px) { #viewer { min-height: 550px; } }
+  </style>
+  <!-- Both imports intentionally use the SAME pinned Three.js version. -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <main class="layout">
+    <div id="viewer" aria-label="Interactive 3D view of Darts of Death">
+      <div id="status" role="status">Loading 3D model…</div>
+    </div>
+    <section class="controls" aria-label="3D viewer controls">
+      <div class="heading">
+        <h1>Darts of Death</h1>
+        <p>Drag to rotate · Scroll or pinch to zoom · Right-drag to pan</p>
+      </div>
+      <div class="options">
+        <label><input type="checkbox" id="culling" checked> Back-face culling</label>
+        <label><input type="checkbox" id="autorotate"> Auto-rotate</label>
+        <label for="lighting">Lighting <input type="range" id="lighting" min="0.2" max="3" step="0.1" value="1"> <span id="lightingValue">1.0×</span></label>
+        <button type="button" id="reset">Reset view</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const mount = document.getElementById('viewer');
+    const status = document.getElementById('status');
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    mount.prepend(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, mount.clientWidth / mount.clientHeight, 0.01, 1000);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.autoRotateSpeed = 0.7;
+
+    const hemisphere = new THREE.HemisphereLight(0xe6f0ff, 0x3b4153, 2.2);
+    scene.add(hemisphere);
+
+    const keyLight = new THREE.DirectionalLight(0xfff3e2, 3.1);
+    keyLight.position.set(5, 8, 7);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.0001;
+    scene.add(keyLight, keyLight.target);
+
+    const fillLight = new THREE.DirectionalLight(0x9bbdff, 1.2);
+    fillLight.position.set(-5, 4, -3);
+    scene.add(fillLight);
+
+    let model = null;
+    let resetPosition = null;
+    let resetTarget = null;
+
+    const applyCullMode = () => {
+      if (!model) return;
+      const side = document.getElementById('culling').checked ? THREE.FrontSide : THREE.DoubleSide;
+      model.traverse((obj) => {
+        if (!obj.isMesh) return;
+        const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+        for (const material of materials) {
+          material.side = side;
+          material.needsUpdate = true;
+        }
+      });
+    };
+
+    new GLTFLoader().load(
+      '/DartsofDeath_Viewer/DartsofDeath.glb',
+      (gltf) => {
+        model = gltf.scene;
+        model.traverse((obj) => {
+          if (!obj.isMesh) return;
+          obj.castShadow = true;
+          obj.receiveShadow = true;
+          // This particular GLB contains NO authored materials. Use matte, light-reactive
+          // settings on the imported default materials; preserve any vertex colours.
+          const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+          for (const material of materials) {
+            if (material.isMeshStandardMaterial) {
+              material.metalness = 0.0;
+              material.roughness = 0.82;
+            }
+          }
+        });
+        scene.add(model);
+        applyCullMode();
+
+        // Frame the whole model regardless of its scale or origin.
+        const bounds = new THREE.Box3().setFromObject(model);
+        const centre = bounds.getCenter(new THREE.Vector3());
+        const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+        const radius = Math.max(sphere.radius, 0.01);
+        const fov = THREE.MathUtils.degToRad(camera.fov);
+        const distance = radius / Math.sin(fov / 2) * 1.55;
+
+        controls.target.copy(centre);
+        camera.position.copy(centre).add(new THREE.Vector3(0.75, 0.6, 1).normalize().multiplyScalar(distance));
+        camera.near = Math.max(0.001, distance / 1000);
+        camera.far = distance * 30;
+        camera.updateProjectionMatrix();
+        controls.minDistance = radius * 0.25;
+        controls.maxDistance = distance * 7;
+        controls.update();
+        resetPosition = camera.position.clone();
+        resetTarget = controls.target.clone();
+
+        keyLight.position.copy(centre).add(new THREE.Vector3(1.5, 2.2, 1.5).multiplyScalar(radius));
+        keyLight.target.position.copy(centre);
+        keyLight.target.updateMatrixWorld();
+        fillLight.position.copy(centre).add(new THREE.Vector3(-1.5, 0.8, -1.2).multiplyScalar(radius));
+        const shadowCamera = keyLight.shadow.camera;
+        const extent = radius * 2.5;
+        shadowCamera.left = -extent;
+        shadowCamera.right = extent;
+        shadowCamera.top = extent;
+        shadowCamera.bottom = -extent;
+        shadowCamera.near = Math.max(0.01, radius * 0.01);
+        shadowCamera.far = radius * 9;
+        shadowCamera.updateProjectionMatrix();
+
+        status.textContent = 'Model loaded · 3 mesh objects';
+      },
+      undefined,
+      (error) => {
+        console.error('Could not load GLB:', error);
+        status.textContent = 'Could not load DartsofDeath.glb. Check that both files are in the same folder and served over HTTP(S).';
+      }
+    );
+
+    document.getElementById('culling').addEventListener('change', applyCullMode);
+    document.getElementById('autorotate').addEventListener('change', (event) => {
+      controls.autoRotate = event.target.checked;
+    });
+    document.getElementById('lighting').addEventListener('input', (event) => {
+      const intensity = Number(event.target.value);
+      hemisphere.intensity = 2.2 * intensity;
+      keyLight.intensity = 3.1 * intensity;
+      fillLight.intensity = 1.2 * intensity;
+      document.getElementById('lightingValue').textContent = intensity.toFixed(1) + '×';
+    });
+    document.getElementById('reset').addEventListener('click', () => {
+      if (!resetPosition || !resetTarget) return;
+      camera.position.copy(resetPosition);
+      controls.target.copy(resetTarget);
+      controls.update();
+    });
+
+    new ResizeObserver(() => {
+      const width = mount.clientWidth;
+      const height = mount.clientHeight;
+      if (!width || !height) return;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }).observe(mount);
+
+    renderer.setAnimationLoop(() => {
+      controls.update();
+      renderer.render(scene, camera);
+    });
+  </script>
+</body>
+</html>
