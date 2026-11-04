@@ -3,28 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11151d">
   <link rel="canonical" href="https://communityarts.org.uk/DartsofDeath_Viewer">
-  <title>Darts of Death — 3D viewer</title>
+  <title>Darts of Death · Interactive 3D installation</title>
   <style>
-    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: #10131a; color: #f4f4f4; }
+    html, body { margin: 0; min-height: 100%; background: #10151e; color: #f1f4f8; }
     .layout { display: grid; grid-template-rows: minmax(420px, 1fr) auto; min-height: 100dvh; }
-    #viewer { position: relative; min-height: 420px; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, #263140 0%, #171e2a 45%, #10131a 90%); }
-    #viewer canvas { display: block; width: 100%; height: 100%; touch-action: none; }
-    #status { position: absolute; top: 20px; left: 20px; pointer-events: none; font-size: 12px; letter-spacing: .04em; color: #c9d4e6; background: #0c1220b0; padding: 9px 12px; border: 1px solid #ffffff24; border-radius: 8px; }
-    .controls { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; justify-content: space-between; padding: 19px clamp(16px,4vw,48px); border-top: 1px solid #ffffff22; }
-    .heading h1 { font-size: 17px; margin: 0 0 4px; font-weight: 600; }
-    .heading p { margin: 0; color: #a5b0c1; font-size: 12px; }
-    .options { display: flex; gap: 16px 24px; flex-wrap: wrap; align-items: center; font-size: 13px; }
-    label { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; }
-    input[type="range"] { width: 125px; cursor: pointer; accent-color: #bdc9e5; }
-    input[type="checkbox"] { accent-color: #cbd6f2; cursor: pointer; }
-    button { color: inherit; background: #ffffff14; border: 1px solid #ffffff35; border-radius: 7px; padding: 8px 12px; cursor: pointer; }
-    button:hover { background: #ffffff25; }
-    @media (min-width: 800px) { #viewer { min-height: 550px; } }
+    #viewer { position: relative; min-height: 420px; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, #303845 0%, #1b2532 54%, #10151e 100%); }
+    #viewer canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+    #status { position: absolute; z-index: 2; top: 17px; left: 17px; max-width: calc(100% - 34px); padding: 9px 12px; border-radius: 9px; font-size: 12px; line-height: 1.45; border: 1px solid #ffffff23; background: #10151edb; color: #e2e8f0; pointer-events: none; }
+    #status.error { color: #ffc7bf; }
+    .panel { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px 32px; padding: 18px clamp(16px, 4vw, 45px); border-top: 1px solid #ffffff1c; }
+    h1 { font-size: 17px; font-weight: 640; letter-spacing: -.02em; margin: 0 0 5px; }
+    .description { font-size: 12px; line-height: 1.65; color: #a8b5c7; margin: 0; }
+    .description strong { color: #e6d6a8; font-weight: 600; }
+    .actions, .options { display: flex; align-items: center; gap: 12px 18px; flex-wrap: wrap; }
+    .actions { margin-top: 9px; }
+    .options { font-size: 12px; }
+    label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap; }
+    input[type="checkbox"], input[type="range"] { accent-color: #e1c58b; cursor: pointer; }
+    input[type="range"] { width: 100px; }
+    button { appearance: none; background: #ffffff12; border: 1px solid #ffffff35; border-radius: 8px; color: #f1f4f8; font: inherit; font-size: 12px; cursor: pointer; padding: 9px 12px; transition: background 140ms ease, border-color 140ms ease; }
+    button:hover { background: #ffffff22; border-color: #ffffff60; }
+    button:focus-visible, input:focus-visible { outline: 2px solid #e7c88d; outline-offset: 3px; }
+    button.primary { background: #d3ba83; border-color: #d3ba83; color: #14171e; font-weight: 650; }
+    button.primary:hover { background: #e8d6ad; }
+    .video-state { color: #a8b5c7; font-size: 12px; white-space: nowrap; }
+    #startVideo[hidden] { display: none; }
+    @media (max-width: 600px) {
+      .layout { grid-template-rows: minmax(56dvh, 1fr) auto; }
+      #viewer { min-height: 56dvh; }
+      .panel { padding: 16px; }
+      .actions, .options { gap: 10px 12px; }
+    }
+    @media (min-width: 1000px) { #viewer { min-height: 570px; } }
   </style>
-  <!-- Both imports intentionally use the SAME pinned Three.js version. -->
+  <!-- Three.js is loaded from a public CDN. All modules use the same version. -->
   <script type="importmap">
     {
       "imports": {
@@ -36,19 +52,26 @@
 </head>
 <body>
   <main class="layout">
-    <div id="viewer" aria-label="Interactive 3D view of Darts of Death">
-      <div id="status" role="status">Loading 3D model…</div>
+    <div id="viewer" aria-label="Interactive 3D model of Darts of Death">
+      <div id="status" role="status" aria-live="polite">Loading textured 3D model…</div>
     </div>
-    <section class="controls" aria-label="3D viewer controls">
-      <div class="heading">
+    <section class="panel" aria-label="Viewer settings">
+      <div>
         <h1>Darts of Death</h1>
-        <p>Drag to rotate · Scroll or pinch to zoom · Right-drag to pan</p>
+        <p class="description"><strong>Tap the Darts of Death artwork</strong> to reveal the looping video for 2 seconds.</p>
+        <p class="description">Drag to rotate · Scroll or pinch to zoom · Right-drag to pan</p>
+        <div class="actions">
+          <button type="button" id="reveal" class="primary" disabled>Reveal video (2 sec)</button>
+          <button type="button" id="focus" disabled>Focus artwork</button>
+          <button type="button" id="reset" disabled>Reset view</button>
+          <button type="button" id="startVideo" hidden>Start video</button>
+          <span id="videoState" class="video-state" role="status" aria-live="polite">Video: loading</span>
+        </div>
       </div>
       <div class="options">
         <label><input type="checkbox" id="culling" checked> Back-face culling</label>
         <label><input type="checkbox" id="autorotate"> Auto-rotate</label>
         <label for="lighting">Lighting <input type="range" id="lighting" min="0.2" max="3" step="0.1" value="1"> <span id="lightingValue">1.0×</span></label>
-        <button type="button" id="reset">Reset view</button>
       </div>
     </section>
   </main>
@@ -57,132 +80,303 @@
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    const mount = document.getElementById('viewer');
-    const status = document.getElementById('status');
+    const $ = (id) => document.getElementById(id);
+    const mount = $('viewer');
+    const status = $('status');
+    const videoState = $('videoState');
+    const playButton = $('startVideo');
+    const revealButton = $('reveal');
+
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.12;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     mount.prepend(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, mount.clientWidth / mount.clientHeight, 0.01, 1000);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environmentIntensity = 0.85;
+    pmrem.dispose();
+
+    const camera = new THREE.PerspectiveCamera(42, Math.max(1, mount.clientWidth) / Math.max(1, mount.clientHeight), 0.01, 1000);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
     controls.autoRotateSpeed = 0.7;
 
-    const hemisphere = new THREE.HemisphereLight(0xe6f0ff, 0x3b4153, 2.2);
+    const hemisphere = new THREE.HemisphereLight(0xe6f0ff, 0x3b4153, 1.25);
     scene.add(hemisphere);
-
-    const keyLight = new THREE.DirectionalLight(0xfff3e2, 3.1);
+    const keyLight = new THREE.DirectionalLight(0xfff3e2, 2.4);
     keyLight.position.set(5, 8, 7);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.0001;
     scene.add(keyLight, keyLight.target);
-
-    const fillLight = new THREE.DirectionalLight(0x9bbdff, 1.2);
+    const fillLight = new THREE.DirectionalLight(0x9bbdff, 0.85);
     fillLight.position.set(-5, 4, -3);
     scene.add(fillLight);
 
+    // The MP4 is a separate file; GLB does not embed playable video textures.
+    // The video runs continuously behind Plane.001 while the viewer is open.
+    const video = document.createElement('video');
+    video.src = '/DartsofDeath_Viewer/loop.mp4';
+    video.loop = true;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('preload', 'auto');
+    video.setAttribute('aria-hidden', 'true');
+    video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;';
+    document.body.append(video);  // Helps inline video playback on mobile Safari.
+
+    const videoTexture = new THREE.VideoTexture(video);
+    videoTexture.colorSpace = THREE.SRGBColorSpace;
+    videoTexture.flipY = false;  // glTF's UV orientation is opposite the default for external textures.
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+
+    video.addEventListener('playing', () => {
+      videoState.textContent = 'Video: looping · muted';
+      playButton.hidden = true;
+    });
+    video.addEventListener('waiting', () => {
+      videoState.textContent = 'Video: buffering';
+    });
+    video.addEventListener('error', () => {
+      videoState.textContent = 'Video: could not load loop.mp4';
+      playButton.hidden = false;
+    });
+    video.addEventListener('pause', () => {
+      if (!video.ended && !video.error) videoState.textContent = 'Video: paused';
+    });
+
+    async function ensureVideoPlaying() {
+      if (!video.paused || video.error) return;
+      try {
+        await video.play();
+        playButton.hidden = true;
+      } catch (err) {
+        console.warn('Video autoplay blocked; click Start video:', err);
+        videoState.textContent = 'Video: click Start video';
+        playButton.hidden = false;
+      }
+    }
+    playButton.addEventListener('click', ensureVideoPlaying);
+    ensureVideoPlaying();
+
     let model = null;
+    let artwork = null;  // Plane.001: the image that temporarily disappears.
+    let screen = null;   // Plane: the MP4 video surface immediately behind artwork.
     let resetPosition = null;
     let resetTarget = null;
+    let hiddenUntil = 0;
+    let hideTimeout = null;
 
-    const applyCullMode = () => {
+    function applyCullMode() {
       if (!model) return;
-      const side = document.getElementById('culling').checked ? THREE.FrontSide : THREE.DoubleSide;
+      const side = $('culling').checked ? THREE.FrontSide : THREE.DoubleSide;
       model.traverse((obj) => {
         if (!obj.isMesh) return;
         const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
         for (const material of materials) {
+          if (!material || material.side === side) continue;
           material.side = side;
           material.needsUpdate = true;
         }
       });
-    };
+    }
+
+    function frameWholeModel() {
+      const bounds = new THREE.Box3().setFromObject(model);
+      const centre = bounds.getCenter(new THREE.Vector3());
+      const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+      const radius = Math.max(sphere.radius, 0.01);
+      const distance = radius / Math.sin(THREE.MathUtils.degToRad(camera.fov) / 2) * 1.45;
+      controls.target.copy(centre);
+      // Position from -Z: both Plane and Plane.001 face in this direction.
+      camera.position.copy(centre).add(new THREE.Vector3(0.7, 0.65, -1.1).normalize().multiplyScalar(distance));
+      camera.near = Math.max(0.001, distance / 1000);
+      camera.far = distance * 30;
+      camera.updateProjectionMatrix();
+      controls.minDistance = radius * 0.18;
+      controls.maxDistance = distance * 7;
+      controls.update();
+      resetPosition = camera.position.clone();
+      resetTarget = controls.target.clone();
+
+      keyLight.position.copy(centre).add(new THREE.Vector3(1.5, 2.2, -1.5).multiplyScalar(radius));
+      keyLight.target.position.copy(centre);
+      keyLight.target.updateMatrixWorld();
+      fillLight.position.copy(centre).add(new THREE.Vector3(-1.5, 0.8, 1.2).multiplyScalar(radius));
+      const shadowCamera = keyLight.shadow.camera;
+      const extent = radius * 2.5;
+      shadowCamera.left = -extent;
+      shadowCamera.right = extent;
+      shadowCamera.top = extent;
+      shadowCamera.bottom = -extent;
+      shadowCamera.near = Math.max(0.01, radius * 0.01);
+      shadowCamera.far = radius * 9;
+      shadowCamera.updateProjectionMatrix();
+    }
 
     new GLTFLoader().load(
-      '/DartsofDeath_Viewer/DartsofDeath.glb',
+      '/DartsofDeath_Viewer/DartsofDeath2.glb',
       (gltf) => {
         model = gltf.scene;
-        model.traverse((obj) => {
-          if (!obj.isMesh) return;
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-          // This particular GLB contains NO authored materials. Use matte, light-reactive
-          // settings on the imported default materials; preserve any vertex colours.
-          const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
-          for (const material of materials) {
-            if (material.isMeshStandardMaterial) {
-              material.metalness = 0.0;
-              material.roughness = 0.82;
-            }
+        model.traverse((object) => {
+          if (object.isMesh) {
+            object.castShadow = true;
+            object.receiveShadow = true;
           }
         });
+        // Three.js strips characters such as "." from node names, so Plane.001
+        // is loaded as Plane001.
+        const findNamed = (name) => model.getObjectByName(name)
+          || model.getObjectByName(name.replace(/\s/g, '_').replace(/[^\w-]/g, ''));
+        artwork = findNamed('Plane.001');
+        screen = findNamed('Plane');
+
+        if (screen && screen.isMesh) {
+          // Only change Plane's material. Every other GLB texture, UV map,
+          // KHR_texture_transform, PBR property, and mesh remains as exported.
+          screen.material = new THREE.MeshBasicMaterial({
+            name: 'Looping MP4 screen',
+            map: videoTexture,
+            color: 0xffffff,
+            toneMapped: false,
+            side: THREE.FrontSide
+          });
+          screen.castShadow = false;
+          screen.receiveShadow = false;
+          ensureVideoPlaying();
+        } else {
+          console.warn('Could not find video mesh named Plane.');
+          videoState.textContent = 'Video surface Plane was not found';
+        }
+
         scene.add(model);
         applyCullMode();
-
-        // Frame the whole model regardless of its scale or origin.
-        const bounds = new THREE.Box3().setFromObject(model);
-        const centre = bounds.getCenter(new THREE.Vector3());
-        const sphere = bounds.getBoundingSphere(new THREE.Sphere());
-        const radius = Math.max(sphere.radius, 0.01);
-        const fov = THREE.MathUtils.degToRad(camera.fov);
-        const distance = radius / Math.sin(fov / 2) * 1.55;
-
-        controls.target.copy(centre);
-        camera.position.copy(centre).add(new THREE.Vector3(0.75, 0.6, 1).normalize().multiplyScalar(distance));
-        camera.near = Math.max(0.001, distance / 1000);
-        camera.far = distance * 30;
-        camera.updateProjectionMatrix();
-        controls.minDistance = radius * 0.25;
-        controls.maxDistance = distance * 7;
-        controls.update();
-        resetPosition = camera.position.clone();
-        resetTarget = controls.target.clone();
-
-        keyLight.position.copy(centre).add(new THREE.Vector3(1.5, 2.2, 1.5).multiplyScalar(radius));
-        keyLight.target.position.copy(centre);
-        keyLight.target.updateMatrixWorld();
-        fillLight.position.copy(centre).add(new THREE.Vector3(-1.5, 0.8, -1.2).multiplyScalar(radius));
-        const shadowCamera = keyLight.shadow.camera;
-        const extent = radius * 2.5;
-        shadowCamera.left = -extent;
-        shadowCamera.right = extent;
-        shadowCamera.top = extent;
-        shadowCamera.bottom = -extent;
-        shadowCamera.near = Math.max(0.01, radius * 0.01);
-        shadowCamera.far = radius * 9;
-        shadowCamera.updateProjectionMatrix();
-
-        status.textContent = 'Model loaded · 3 mesh objects';
+        frameWholeModel();
+        $('reset').disabled = false;
+        $('focus').disabled = !(artwork && artwork.isMesh);
+        revealButton.disabled = !(artwork && artwork.isMesh && screen && screen.isMesh);
+        status.textContent = artwork && screen
+          ? 'Ready · Tap the Darts of Death artwork to reveal the video'
+          : 'Model loaded, but a required plane could not be found';
       },
       undefined,
       (error) => {
         console.error('Could not load GLB:', error);
-        status.textContent = 'Could not load DartsofDeath.glb. Check that both files are in the same folder and served over HTTP(S).';
+        status.classList.add('error');
+        status.textContent = 'Model could not load. Upload index.html, DartsofDeath2.glb and loop.mp4 together, then visit through HTTP(S).';
       }
     );
 
-    document.getElementById('culling').addEventListener('change', applyCullMode);
-    document.getElementById('autorotate').addEventListener('change', (event) => {
+    function focusArtwork() {
+      if (!artwork || !model) return;
+      artwork.updateWorldMatrix(true, false);
+      const centre = artwork.getWorldPosition(new THREE.Vector3());
+      const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(artwork.getWorldQuaternion(new THREE.Quaternion())).normalize();
+      const size = new THREE.Box3().setFromObject(artwork).getSize(new THREE.Vector3());
+      const halfVerticalFov = THREE.MathUtils.degToRad(camera.fov) / 2;
+      const distance = Math.max(size.y, size.x / camera.aspect) / (2 * Math.tan(halfVerticalFov)) * 1.5;
+      controls.target.copy(centre);
+      camera.position.copy(centre).addScaledVector(normal, distance);
+      camera.updateProjectionMatrix();
+      controls.update();
+    }
+
+    function revealVideoForTwoSeconds() {
+      if (!artwork || !artwork.visible || !screen || !screen.isMesh) return;
+      ensureVideoPlaying();
+      artwork.visible = false;
+      hiddenUntil = performance.now() + 2000;
+      revealButton.disabled = true;
+      status.textContent = 'Video revealed · Artwork returns in 2 seconds';
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        artwork.visible = true;
+        hiddenUntil = 0;
+        revealButton.disabled = false;
+        status.textContent = 'Artwork restored · Tap again to reveal the video';
+      }, 2000);
+    }
+
+    // Raycast only Plane.001 so the 2 nearly coincident panels don't
+    // cause the click to select the video plane instead of the artwork.
+    const raycaster = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    function isPointerOnArtwork(clientX, clientY) {
+      if (!artwork || !artwork.visible) return false;
+      const rect = renderer.domElement.getBoundingClientRect();
+      if (!rect.width || !rect.height) return false;
+      ndc.set(((clientX - rect.left) / rect.width) * 2 - 1,
+              -((clientY - rect.top) / rect.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      return raycaster.intersectObject(artwork, true).length > 0;
+    }
+
+    const canvas = renderer.domElement;
+    const activePointers = new Set();
+    let press = null;
+    canvas.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      activePointers.add(event.pointerId);
+      if (activePointers.size === 1) {
+        press = { id: event.pointerId, x: event.clientX, y: event.clientY, time: performance.now() };
+      } else {
+        press = null;
+      }
+    });
+    canvas.addEventListener('pointermove', (event) => {
+      if (press && press.id === event.pointerId &&
+          Math.hypot(event.clientX - press.x, event.clientY - press.y) > 8) press = null;
+      if (event.pointerType === 'mouse' && activePointers.size === 0) {
+        canvas.style.cursor = isPointerOnArtwork(event.clientX, event.clientY) ? 'pointer' : 'grab';
+      }
+    });
+    canvas.addEventListener('pointerup', (event) => {
+      const wasTap = press && press.id === event.pointerId &&
+        activePointers.size === 1 &&
+        performance.now() - press.time < 850 &&
+        Math.hypot(event.clientX - press.x, event.clientY - press.y) <= 8;
+      activePointers.delete(event.pointerId);
+      press = null;
+      if (wasTap && isPointerOnArtwork(event.clientX, event.clientY)) revealVideoForTwoSeconds();
+    });
+    canvas.addEventListener('pointercancel', (event) => {
+      activePointers.delete(event.pointerId);
+      press = null;
+    });
+    canvas.addEventListener('pointerleave', () => {
+      if (!activePointers.size) canvas.style.cursor = 'grab';
+    });
+
+    $('culling').addEventListener('change', applyCullMode);
+    $('autorotate').addEventListener('change', (event) => {
       controls.autoRotate = event.target.checked;
     });
-    document.getElementById('lighting').addEventListener('input', (event) => {
+    $('lighting').addEventListener('input', (event) => {
       const intensity = Number(event.target.value);
-      hemisphere.intensity = 2.2 * intensity;
-      keyLight.intensity = 3.1 * intensity;
-      fillLight.intensity = 1.2 * intensity;
-      document.getElementById('lightingValue').textContent = intensity.toFixed(1) + '×';
+      hemisphere.intensity = 1.25 * intensity;
+      keyLight.intensity = 2.4 * intensity;
+      fillLight.intensity = 0.85 * intensity;
+      scene.environmentIntensity = 0.85 * intensity;
+      $('lightingValue').textContent = intensity.toFixed(1) + '×';
     });
-    document.getElementById('reset').addEventListener('click', () => {
+    $('focus').addEventListener('click', focusArtwork);
+    revealButton.addEventListener('click', revealVideoForTwoSeconds);
+    $('reset').addEventListener('click', () => {
       if (!resetPosition || !resetTarget) return;
       camera.position.copy(resetPosition);
       controls.target.copy(resetTarget);
@@ -190,12 +384,11 @@
     });
 
     new ResizeObserver(() => {
-      const width = mount.clientWidth;
-      const height = mount.clientHeight;
-      if (!width || !height) return;
-      camera.aspect = width / height;
+      const w = mount.clientWidth, h = mount.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+      renderer.setSize(w, h);
     }).observe(mount);
 
     renderer.setAnimationLoop(() => {
