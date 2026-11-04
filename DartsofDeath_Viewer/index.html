@@ -28,15 +28,11 @@
     button { appearance: none; background: #ffffff12; border: 1px solid #ffffff35; border-radius: 8px; color: #f1f4f8; font: inherit; font-size: 12px; cursor: pointer; padding: 9px 12px; transition: background 140ms ease, border-color 140ms ease; }
     button:hover { background: #ffffff22; border-color: #ffffff60; }
     button:focus-visible, input:focus-visible { outline: 2px solid #e7c88d; outline-offset: 3px; }
-    button.primary { background: #d3ba83; border-color: #d3ba83; color: #14171e; font-weight: 650; }
-    button.primary:hover { background: #e8d6ad; }
-    .video-state { color: #a8b5c7; font-size: 12px; white-space: nowrap; }
-    #startVideo[hidden] { display: none; }
     @media (max-width: 600px) {
       .layout { grid-template-rows: minmax(56dvh, 1fr) auto; }
       #viewer { min-height: 56dvh; }
       .panel { padding: 16px; }
-      .actions, .options { gap: 10px 12px; }
+      .actions, .options { display: flex; align-items: center; gap: 12px 18px; flex-wrap: wrap; }
     }
     @media (min-width: 1000px) { #viewer { min-height: 570px; } }
   </style>
@@ -53,25 +49,19 @@
 <body>
   <main class="layout">
     <div id="viewer" aria-label="Interactive 3D model of Darts of Death">
-      <div id="status" role="status" aria-live="polite">Loading textured 3D model…</div>
+      <div id="status" role="status" aria-live="polite">0 models loaded</div>
     </div>
     <section class="panel" aria-label="Viewer settings">
       <div>
         <h1>Darts of Death</h1>
-        <p class="description"><strong>Tap the Darts of Death artwork</strong> to reveal the looping video for 2 seconds.</p>
         <p class="description">Drag to rotate · Scroll or pinch to zoom · Right-drag to pan</p>
         <div class="actions">
-          <button type="button" id="reveal" class="primary" disabled>Reveal video (2 sec)</button>
-          <button type="button" id="focus" disabled>Focus artwork</button>
           <button type="button" id="reset" disabled>Reset view</button>
-          <button type="button" id="startVideo" hidden>Start video</button>
-          <span id="videoState" class="video-state" role="status" aria-live="polite">Video: loading</span>
         </div>
       </div>
       <div class="options">
         <label><input type="checkbox" id="culling" checked> Back-face culling</label>
         <label><input type="checkbox" id="autorotate"> Auto-rotate</label>
-        <label for="lighting">Lighting <input type="range" id="lighting" min="0.2" max="3" step="0.1" value="1"> <span id="lightingValue">1.0×</span></label>
       </div>
     </section>
   </main>
@@ -85,9 +75,6 @@
     const $ = (id) => document.getElementById(id);
     const mount = $('viewer');
     const status = $('status');
-    const videoState = $('videoState');
-    const playButton = $('startVideo');
-    const revealButton = $('reveal');
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -145,41 +132,21 @@
     videoTexture.minFilter = THREE.LinearFilter;
     videoTexture.magFilter = THREE.LinearFilter;
 
-    video.addEventListener('playing', () => {
-      videoState.textContent = 'Video: looping · muted';
-      playButton.hidden = true;
-    });
-    video.addEventListener('waiting', () => {
-      videoState.textContent = 'Video: buffering';
-    });
-    video.addEventListener('error', () => {
-      videoState.textContent = 'Video: could not load loop.mp4';
-      playButton.hidden = false;
-    });
-    video.addEventListener('pause', () => {
-      if (!video.ended && !video.error) videoState.textContent = 'Video: paused';
-    });
-
+    // Muted autoplay usually works without interaction. If blocked, a tap on
+    // the canvas (or the artwork) retries playback without exposing UI buttons.
     async function ensureVideoPlaying() {
       if (!video.paused || video.error) return;
-      try {
-        await video.play();
-        playButton.hidden = true;
-      } catch (err) {
-        console.warn('Video autoplay blocked; click Start video:', err);
-        videoState.textContent = 'Video: click Start video';
-        playButton.hidden = false;
-      }
+      try { await video.play(); }
+      catch (err) { console.info('Video playback awaits user interaction:', err); }
     }
-    playButton.addEventListener('click', ensureVideoPlaying);
     ensureVideoPlaying();
+    video.addEventListener('error', () => console.error('Could not load loop.mp4'));
 
     let model = null;
     let artwork = null;  // Plane.001: the image that temporarily disappears.
     let screen = null;   // Plane: the MP4 video surface immediately behind artwork.
     let resetPosition = null;
     let resetTarget = null;
-    let hiddenUntil = 0;
     let hideTimeout = null;
 
     function applyCullMode() {
@@ -261,54 +228,30 @@
           ensureVideoPlaying();
         } else {
           console.warn('Could not find video mesh named Plane.');
-          videoState.textContent = 'Video surface Plane was not found';
         }
 
         scene.add(model);
         applyCullMode();
         frameWholeModel();
         $('reset').disabled = false;
-        $('focus').disabled = !(artwork && artwork.isMesh);
-        revealButton.disabled = !(artwork && artwork.isMesh && screen && screen.isMesh);
-        status.textContent = artwork && screen
-          ? 'Ready · Tap the Darts of Death artwork to reveal the video'
-          : 'Model loaded, but a required plane could not be found';
+        status.textContent = '1 model loaded';
       },
       undefined,
       (error) => {
         console.error('Could not load GLB:', error);
         status.classList.add('error');
-        status.textContent = 'Model could not load. Upload index.html, DartsofDeath2.glb and loop.mp4 together, then visit through HTTP(S).';
+        status.textContent = '0 models loaded';
+        status.title = 'Could not load model. Check the developer console for details.';
       }
     );
-
-    function focusArtwork() {
-      if (!artwork || !model) return;
-      artwork.updateWorldMatrix(true, false);
-      const centre = artwork.getWorldPosition(new THREE.Vector3());
-      const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(artwork.getWorldQuaternion(new THREE.Quaternion())).normalize();
-      const size = new THREE.Box3().setFromObject(artwork).getSize(new THREE.Vector3());
-      const halfVerticalFov = THREE.MathUtils.degToRad(camera.fov) / 2;
-      const distance = Math.max(size.y, size.x / camera.aspect) / (2 * Math.tan(halfVerticalFov)) * 1.5;
-      controls.target.copy(centre);
-      camera.position.copy(centre).addScaledVector(normal, distance);
-      camera.updateProjectionMatrix();
-      controls.update();
-    }
 
     function revealVideoForTwoSeconds() {
       if (!artwork || !artwork.visible || !screen || !screen.isMesh) return;
       ensureVideoPlaying();
       artwork.visible = false;
-      hiddenUntil = performance.now() + 2000;
-      revealButton.disabled = true;
-      status.textContent = 'Video revealed · Artwork returns in 2 seconds';
       clearTimeout(hideTimeout);
       hideTimeout = setTimeout(() => {
         artwork.visible = true;
-        hiddenUntil = 0;
-        revealButton.disabled = false;
-        status.textContent = 'Artwork restored · Tap again to reveal the video';
       }, 2000);
     }
 
@@ -330,6 +273,7 @@
     const activePointers = new Set();
     let press = null;
     canvas.addEventListener('pointerdown', (event) => {
+      ensureVideoPlaying();
       if (event.pointerType === 'mouse' && event.button !== 0) return;
       activePointers.add(event.pointerId);
       if (activePointers.size === 1) {
@@ -366,16 +310,6 @@
     $('autorotate').addEventListener('change', (event) => {
       controls.autoRotate = event.target.checked;
     });
-    $('lighting').addEventListener('input', (event) => {
-      const intensity = Number(event.target.value);
-      hemisphere.intensity = 1.25 * intensity;
-      keyLight.intensity = 2.4 * intensity;
-      fillLight.intensity = 0.85 * intensity;
-      scene.environmentIntensity = 0.85 * intensity;
-      $('lightingValue').textContent = intensity.toFixed(1) + '×';
-    });
-    $('focus').addEventListener('click', focusArtwork);
-    revealButton.addEventListener('click', revealVideoForTwoSeconds);
     $('reset').addEventListener('click', () => {
       if (!resetPosition || !resetTarget) return;
       camera.position.copy(resetPosition);
