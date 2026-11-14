@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <!-- generated-dev-journal-entry. Edit entries.json, then run: node build.mjs -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{DOCUMENT_TITLE}}</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="Community Arts" />
+    <meta property="og:title" content="{{DOCUMENT_TITLE}}" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    {{IMAGE_META}}
+    <meta property="article:published_time" content="{{DATE}}" />
+    <meta property="article:modified_time" content="{{MODIFIED}}" />
+    <meta property="article:author" content="Anis Ghebache" />
+    <meta property="article:section" content="{{CATEGORY}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{DOCUMENT_TITLE}}" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{STYLESHEET}}" />
+    <script type="application/ld+json">
+{{JSON_LD}}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    {{HEADER}}
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-reading">
+        {{BREADCRUMB}}
+        <article class="dj-article" aria-labelledby="entry-title">
+          <header class="dj-article-header">
+            <p class="dj-kicker">
+              <span class="dj-category">{{CATEGORY}}</span>
+              <span aria-hidden="true">·</span>
+              <time datetime="{{DATE}}">{{DATE_DISPLAY}}</time>
+            </p>
+            <h1 id="entry-title">{{TITLE}}</h1>
+            <p class="lede">{{EXCERPT}}</p>
+            {{UPDATED_LINE}}
+            <p class="dj-byline">By <a rel="author" href="/anis-ghebache/dev-journal/">Anis Ghebache</a></p>
+          </header>
+          {{IMAGES}}
+          {{BODY}}
+          {{VIDEOS}}
+          {{LINKS}}
+        </article>
+        {{PAGER}}
+      </div>
+    </main>
+    {{FOOTER}}
+  </body>
+</html>

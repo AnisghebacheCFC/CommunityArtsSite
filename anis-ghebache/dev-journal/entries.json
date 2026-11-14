@@ -1,0 +1,120 @@
+{
+  "_comment": "Add, edit or remove notes in entries, then from this folder run: node build.mjs. The build rewrites the journal landing page, each entry page and the Dev Journal URLs in sitemap.xml. Dates are YYYY-MM-DD. Newest is shown first. slug becomes the URL. category becomes a filter. Optional updated is YYYY-MM-DD. body is a list of paragraphs (strings) and blocks: {\"h2\":\"...\"}, {\"h3\":\"...\"}, {\"list\":[\"...\"]}, {\"numbers\":[\"...\"]}, {\"quote\":\"...\"}. Inline marks: **bold**, *italic*, [label](/path) or [label](https://...). images: [{src, alt, caption, width, height}]. videos: [{src, caption, poster, captions}] or [{embed, title, caption}] or [{placeholder:true, caption}]. YouTube and Vimeo watch links are converted to embeds. links: [{href, label}]. Entry folders are regenerated. Removing an entry and running the build deletes its generated page.",
+  "notice": "These entries are placeholders. They show the journal layout and will be replaced with published notes.",
+  "entries": [
+    {
+      "title": "Placeholder: Keeping a record of the work",
+      "slug": "placeholder-artistic-practice",
+      "date": "2026-11-12",
+      "category": "Artistic Practice",
+      "excerpt": "Placeholder entry. A sample page for notes on artistic practice, with an image, a video slot, links and formatted text.",
+      "description": "Placeholder entry on artistic practice. Sample writing, image, video and links in Anis Ghebache's Dev Journal.",
+      "images": [
+        {
+          "src": "/images/facilitators/anis-ghebache.png",
+          "alt": "Anis Ghebache speaking into a microphone.",
+          "caption": "Placeholder image. Replace the file, alternative text and caption when this note is published.",
+          "width": 543,
+          "height": 724
+        }
+      ],
+      "videos": [
+        {
+          "placeholder": true,
+          "caption": "Placeholder video. Add a file path or an embed address in entries.json to show a player here."
+        }
+      ],
+      "links": [
+        {
+          "href": "/",
+          "label": "Community Arts"
+        },
+        {
+          "href": "https://communityarts.org.uk/#facilitators",
+          "label": "Facilitator profile on Community Arts"
+        }
+      ],
+      "body": [
+        "This is placeholder writing. It shows how a Dev Journal entry is structured, and it is meant to be replaced with a published note.",
+        { "h2": "What this page can hold" },
+        "The layout lives in the journal template. A new entry is another record in entries.json: title, date, category, text, pictures, video and links. Publishing it does not mean redesigning the page.",
+        {
+          "list": [
+            "A title, publication date and category",
+            "Formatted paragraphs, including **bold**, *italic* and a [link to Community Arts](/)",
+            "Images with alternative text",
+            "A video file, captions and a visible caption, or an embedded player",
+            "A short list of related links"
+          ]
+        },
+        {
+          "quote": "Placeholder quotation. Use this space for a line from the work, a workshop, or a note to self."
+        },
+        "Categories on the journal page are collected from entries like this one. After the next build, a new category appears with the others."
+      ]
+    },
+    {
+      "title": "Placeholder: Tools beside the studio",
+      "slug": "placeholder-creative-technology",
+      "date": "2026-11-03",
+      "category": "Creative Technology",
+      "excerpt": "Placeholder entry. A sample note for experiments with tools, software and ways of making.",
+      "description": "Placeholder Dev Journal entry by Anis Ghebache on creative technology, tools and studio experiments.",
+      "body": [
+        "This is placeholder writing for a Creative Technology note. Replace it with a record of a tool, a test, or a piece of software in the studio.",
+        { "h2": "A place for the experiment" },
+        "Use this kind of entry for what was tried, what it changed in the work, and what is worth keeping. Pictures and video can be added in entries.json when there is something to show."
+      ]
+    },
+    {
+      "title": "Placeholder: Studies in movement",
+      "slug": "placeholder-animation",
+      "date": "2026-10-21",
+      "category": "Animation",
+      "excerpt": "Placeholder entry. A sample note for animation studies, tests and sequences.",
+      "description": "Placeholder Dev Journal entry by Anis Ghebache on animation studies, movement tests and sequences.",
+      "body": [
+        "This is placeholder writing for an animation note. Replace it with a study, a walk cycle, a test render, or a sequence in progress.",
+        {
+          "list": [
+            "What the movement is for",
+            "What was drawn, modelled or timed",
+            "What the next pass needs"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Placeholder: Working with generative tools",
+      "slug": "placeholder-ai",
+      "date": "2026-10-08",
+      "category": "AI",
+      "excerpt": "Placeholder entry. A sample note for working with generative tools inside an artistic practice.",
+      "description": "Placeholder Dev Journal entry by Anis Ghebache on working with generative tools in artistic practice.",
+      "body": [
+        "This is placeholder writing for a note on AI. Replace it with what the tool was asked to do, what was kept, and what was made by hand afterwards.",
+        {
+          "quote": "Placeholder quotation. A useful line from a test, a prompt, or a decision about what not to automate."
+        }
+      ]
+    },
+    {
+      "title": "Placeholder: Looking through the frame",
+      "slug": "placeholder-filmmaking",
+      "date": "2026-09-16",
+      "category": "Filmmaking",
+      "excerpt": "Placeholder entry. A sample note for shots, edits and things seen through the frame.",
+      "description": "Placeholder Dev Journal entry by Anis Ghebache on filmmaking, shots, edits and the frame.",
+      "links": [
+        {
+          "href": "/anis-ghebache/dev-journal/",
+          "label": "Back to the Dev Journal"
+        }
+      ],
+      "body": [
+        "This is placeholder writing for a filmmaking note. Replace it with a shot, a cut, a location, or a decision about what the frame holds.",
+        "A link list can sit at the end of a note. This sample points back to the journal until a real reference is added."
+      ]
+    }
+  ]
+}

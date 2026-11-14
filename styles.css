@@ -309,9 +309,23 @@ body {
   margin: 0.35rem 0 0.9rem;
 }
 
-.facilitator-copy p:last-child {
+.facilitator-copy > p:not(.facilitator-role):not(.facilitator-more) {
   color: var(--muted);
   line-height: 1.65;
+}
+
+.facilitator-more {
+  margin-top: 0.9rem;
+}
+
+.facilitator-more a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.facilitator-more a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 @media (min-width: 800px) {
@@ -406,6 +420,19 @@ body {
   text-align: center;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.site-footer-nav {
+  margin-top: 0.75rem;
+}
+
+.site-footer a {
+  color: var(--ink);
+}
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .form {

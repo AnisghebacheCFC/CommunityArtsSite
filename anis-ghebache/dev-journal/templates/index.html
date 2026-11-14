@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <!-- generated-dev-journal-index. Edit entries.json, then run: node build.mjs -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{DOCUMENT_TITLE}}</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="Community Arts" />
+    <meta property="og:title" content="{{DOCUMENT_TITLE}}" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    {{IMAGE_META}}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{DOCUMENT_TITLE}}" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="dev-journal.css" />
+    <script type="application/ld+json">
+{{JSON_LD}}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    {{HEADER}}
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-wrap">
+        <header class="dj-hero">
+          <p class="eyebrow">Anis Ghebache</p>
+          <h1>Dev Journal</h1>
+          <p class="lede">Exploring AI, filmmaking, animation, creative technology and artistic practice.</p>
+          {{NOTICE}}
+        </header>
+        <nav class="dj-categories" aria-labelledby="categories-heading">
+          <h2 id="categories-heading" class="dj-filters-title">Categories</h2>
+          <div class="dj-filters">
+{{FILTERS}}
+          </div>
+        </nav>
+        <div class="dj-layout">
+          <aside class="dj-profile">
+            <img
+              class="dj-portrait"
+              src="/images/facilitators/anis-ghebache.png"
+              width="543"
+              height="724"
+              alt="Anis Ghebache speaking into a microphone."
+              fetchpriority="high"
+              decoding="async"
+            />
+            <p class="dj-profile-name">Anis Ghebache</p>
+            <p class="dj-profile-bio">
+              Artist and animator. Project lead and workshop facilitator at Community Arts in Elephant &amp; Castle.
+            </p>
+            <p class="dj-profile-link"><a href="/#facilitators">Community Arts profile</a></p>
+          </aside>
+          <section class="dj-entries" aria-labelledby="entries-heading">
+            <h2 id="entries-heading" class="dj-visually-hidden">Entries</h2>
+            <p id="filter-status" class="dj-visually-hidden" aria-live="polite">{{STATUS}}</p>
+            <p id="filter-empty" class="dj-empty" hidden>No entries in this category yet.</p>
+            <div id="journal-entries" class="dj-list">
+{{ENTRIES}}
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    {{FOOTER}}
+    <script src="dev-journal.js" defer></script>
+  </body>
+</html>
