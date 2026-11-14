@@ -14,8 +14,17 @@ create table if not exists public.journal_entries (
   image_urls text[] not null default '{}',
   video_urls text[] not null default '{}',
   featured_path text,
+  journal text not null default 'community',
+  dev_category text,
   created_at timestamptz not null default now(),
-  published_at timestamptz
+  published_at timestamptz,
+  constraint journal_entries_journal_check check (
+    (journal = 'community' and dev_category is null)
+    or (
+      journal = 'dev'
+      and dev_category in ('AI', 'Filmmaking', 'Animation', 'Creative Technology', 'Artistic Practice')
+    )
+  )
 );
 
 create table if not exists public.submission_log (

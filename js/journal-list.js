@@ -9,8 +9,12 @@
   }
 
   try {
-    const { entries } = await window.CAClient.callFunction("public-journal", { action: "list" });
-    if (!entries?.length) {
+    const { entries: published } = await window.CAClient.callFunction("public-journal", {
+      action: "list",
+      journal: "community",
+    });
+    const entries = (published || []).filter((entry) => entry.journal !== "dev");
+    if (!entries.length) {
       root.innerHTML = "<p class='status'>No journal entries have been published yet.</p>";
       return;
     }

@@ -29,6 +29,28 @@
           Date
           <input name="entry_date" type="date" required />
         </label>
+        <fieldset class="journal-choice">
+          <legend>Publish in</legend>
+          <label class="choice">
+            <input type="radio" name="journal" value="community" checked />
+            Community Journal
+          </label>
+          <label class="choice">
+            <input type="radio" name="journal" value="dev" />
+            Dev Journal
+          </label>
+        </fieldset>
+        <label id="dev-category-field" hidden>
+          Dev Journal category
+          <select name="dev_category">
+            <option value="">Choose a category</option>
+            <option>AI</option>
+            <option>Filmmaking</option>
+            <option>Animation</option>
+            <option>Creative Technology</option>
+            <option>Artistic Practice</option>
+          </select>
+        </label>
         <div>
           <span class="eyebrow">Body</span>
           <div class="toolbar">

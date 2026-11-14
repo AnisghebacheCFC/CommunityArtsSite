@@ -68,6 +68,29 @@
     editor.hidden = true;
   };
 
+  const escapeHtml = (value) =>
+    String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    })[char]);
+
+  const entryPlace = (entry) =>
+    entry.journal === "dev"
+      ? `Dev Journal${entry.dev_category ? ` · ${entry.dev_category}` : ""}`
+      : "Community Journal";
+
+  const syncEntryJournal = () => {
+    const dev = editor.querySelector('input[name="journal"]:checked')?.value === "dev";
+    const field = document.getElementById("entry-category-field");
+    const select = document.getElementById("entry-category");
+    field.hidden = !dev;
+    select.required = dev;
+    if (!dev) select.value = "";
+  };
+
   const showDashboard = async () => {
     loginForm.hidden = true;
     dashboard.hidden = false;
@@ -75,10 +98,10 @@
     listEl.innerHTML = (result.entries || [])
       .map(
         (entry) => `<article class="journal-card">
-        <time datetime="${window.CAClient.dateInputValue(entry.entry_date)}">${window.CAClient.formatDate(entry.entry_date)}</time>
-        <h3>${entry.title}</h3>
-        <p class="status">${entry.status}</p>
-        <a href="#${entry.id}" data-id="${entry.id}">Edit</a>
+        <time datetime="${escapeHtml(window.CAClient.dateInputValue(entry.entry_date))}">${escapeHtml(window.CAClient.formatDate(entry.entry_date))}</time>
+        <h3>${escapeHtml(entry.title)}</h3>
+        <p class="status">${escapeHtml(entry.status)} · ${escapeHtml(entryPlace(entry))}</p>
+        <a href="#${escapeHtml(entry.id)}" data-id="${escapeHtml(entry.id)}">Edit</a>
       </article>`,
       )
       .join("") || "<p class='status'>No entries yet.</p>";
@@ -140,10 +163,19 @@
     document.getElementById("entry-date").value = window.CAClient.dateInputValue(current.entry_date);
     bodyEl.innerHTML = current.body_html || "";
     document.getElementById("entry-embeds").value = (current.video_embeds || []).join("\n");
+    const journal = current.journal === "dev" ? "dev" : "community";
+    const journalInput = editor.querySelector(`input[name="journal"][value="${journal}"]`);
+    if (journalInput) journalInput.checked = true;
+    document.getElementById("entry-category").value = current.dev_category || "";
+    syncEntryJournal();
     renderMedia(current);
     editor.hidden = false;
     editor.scrollIntoView({ behavior: "smooth" });
   };
+
+  editor.querySelectorAll('input[name="journal"]').forEach((input) => {
+    input.addEventListener("change", syncEntryJournal);
+  });
 
   document.querySelectorAll(".toolbar [data-cmd]").forEach((button) => {
     button.addEventListener("click", () => {

@@ -21,6 +21,10 @@ const renderMedia = (entry) => {
 
   try {
     const { entry } = await window.CAClient.callFunction("public-journal", { action: "get", id });
+    if (entry.journal === "dev") {
+      location.replace(`/anis-ghebache/dev-journal/entry.html?id=${encodeURIComponent(id)}`);
+      return;
+    }
     document.title = `${entry.title} · Community Arts`;
     const canonical = document.querySelector('link[rel="canonical"]') || document.createElement("link");
     canonical.rel = "canonical";

@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { journalFields } from "../_shared/journal.ts";
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const VIDEO_TYPES = ["video/mp4", "video/webm"];
@@ -71,6 +72,8 @@ Deno.serve(async (req) => {
   const entryDate = String(form.get("entry_date") || "").trim();
   const bodyHtml = sanitizeHtml(String(form.get("body_html") || "").trim());
   if (!title || !entryDate || !bodyHtml) return json(400, { error: "Title, date and body are required." });
+  const placement = journalFields(String(form.get("journal") || "community"), String(form.get("dev_category") || ""));
+  if ("error" in placement) return json(400, { error: placement.error });
 
   const images = form.getAll("images").filter((item): item is File => item instanceof File && item.size > 0);
   const videos = form.getAll("videos").filter((item): item is File => item instanceof File && item.size > 0);
@@ -129,6 +132,8 @@ Deno.serve(async (req) => {
     image_paths: imagePaths,
     video_paths: videoPaths,
     video_embeds: embeds,
+    journal: placement.journal,
+    dev_category: placement.dev_category,
   });
   if (insertError) return json(500, { error: "Could not save the entry." });
   await supabase.from("submission_log").insert({ ip });
@@ -151,6 +156,7 @@ Deno.serve(async (req) => {
         text: [
           `Title: ${title}`,
           `Date: ${entryDate}`,
+          `Journal: ${placement.journal === "dev" ? `Dev Journal (${placement.dev_category})` : "Community Journal"}`,
           `Preview: ${preview}`,
           "",
           `Review (sign in required): ${reviewLink}`,

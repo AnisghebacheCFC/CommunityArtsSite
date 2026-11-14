@@ -10,6 +10,19 @@ document.querySelectorAll(".toolbar [data-cmd]").forEach((button) => {
   });
 });
 
+const categoryField = document.getElementById("dev-category-field");
+const categorySelect = form.querySelector('select[name="dev_category"]');
+const syncJournalChoice = () => {
+  const dev = form.querySelector('input[name="journal"]:checked')?.value === "dev";
+  categoryField.hidden = !dev;
+  categorySelect.required = dev;
+  if (!dev) categorySelect.value = "";
+};
+form.querySelectorAll('input[name="journal"]').forEach((input) => {
+  input.addEventListener("change", syncJournalChoice);
+});
+syncJournalChoice();
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!window.CAClient.configured()) {

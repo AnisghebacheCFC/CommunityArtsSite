@@ -449,6 +449,10 @@ body {
   font-weight: 600;
 }
 
+.form label[hidden] {
+  display: none;
+}
+
 .form input,
 .form textarea,
 .editor,
@@ -459,6 +463,34 @@ body {
   background: #f7f1e6;
   color: var(--ink);
   font: inherit;
+}
+
+.journal-choice {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid rgb(20 17 15 / 0.18);
+}
+
+.journal-choice legend {
+  padding: 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 44px;
+  font-weight: 500;
+}
+
+.form .choice input {
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
 }
 
 .editor {

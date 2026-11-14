@@ -16,7 +16,8 @@
   <body>
     <main class="page">
       <p class="eyebrow">Administration</p>
-      <h1>Community Journal</h1>
+      <h1>Journal</h1>
+      <p class="lede">Approve an entry for the Community Journal or the Dev Journal.</p>
 
       <noscript>
         <p class="status">JavaScript is required to sign in. The login form will not send your password.</p>
@@ -43,6 +44,28 @@
           <label>
             Date
             <input name="entry_date" id="entry-date" type="date" required />
+          </label>
+          <fieldset class="journal-choice">
+            <legend>Publish in</legend>
+            <label class="choice">
+              <input type="radio" name="journal" value="community" checked />
+              Community Journal
+            </label>
+            <label class="choice">
+              <input type="radio" name="journal" value="dev" />
+              Dev Journal
+            </label>
+          </fieldset>
+          <label id="entry-category-field" hidden>
+            Dev Journal category
+            <select name="dev_category" id="entry-category">
+              <option value="">Choose a category</option>
+              <option>AI</option>
+              <option>Filmmaking</option>
+              <option>Animation</option>
+              <option>Creative Technology</option>
+              <option>Artistic Practice</option>
+            </select>
           </label>
           <div>
             <span class="eyebrow">Body</span>
@@ -80,6 +103,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/client.js"></script>
-    <script src="js/review.js?v=login-fix"></script>
+    <script src="js/review.js?v=dev-journal"></script>
   </body>
 </html>

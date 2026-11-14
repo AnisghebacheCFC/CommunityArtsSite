@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 import { signMedia } from "../_shared/media.ts";
+import { journalFields } from "../_shared/journal.ts";
 
 const ADMIN_EMAIL = "anis@communityarts.org.uk";
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -101,7 +102,7 @@ Deno.serve(async (req) => {
   if (action === "list") {
     const { data, error } = await supabase
       .from("journal_entries")
-      .select("id, title, entry_date, status, created_at")
+      .select("id, title, entry_date, status, journal, dev_category, created_at")
       .order("created_at", { ascending: false });
     if (error) return json(500, { error: "Could not load entries." });
     return json(200, { entries: data || [] });
@@ -155,7 +156,8 @@ Deno.serve(async (req) => {
       featured_path: imagePaths[0] || null,
     };
     const { data: updated } = await supabase.from("journal_entries").update(published).eq("id", id).select("*").single();
-    return json(200, { message: "Entry published.", entry: await present(supabase, updated) });
+    const destination = updated?.journal === "dev" ? "the Dev Journal" : "the Community Journal";
+    return json(200, { message: `Entry published to ${destination}.`, entry: await present(supabase, updated) });
   }
 
   if (action === "update" && form) {
@@ -200,6 +202,8 @@ Deno.serve(async (req) => {
       .map(embedUrl)
       .filter(Boolean)
       .slice(0, 3);
+    const placement = journalFields(String(form.get("journal") || "community"), String(form.get("dev_category") || ""));
+    if ("error" in placement) return json(400, { error: placement.error });
     const excerpt = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 180);
     const { data: updated, error: updateError } = await supabase
       .from("journal_entries")
@@ -208,6 +212,8 @@ Deno.serve(async (req) => {
         entry_date: entryDate,
         body_html: bodyHtml,
         excerpt,
+        journal: placement.journal,
+        dev_category: placement.dev_category,
         image_paths: imagePaths,
         video_paths: videoPaths,
         video_embeds: embeds,

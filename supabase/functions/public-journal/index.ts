@@ -20,6 +20,8 @@ const presentApproved = async (
     entry_date: entry.entry_date,
     excerpt: entry.excerpt,
     body_html: entry.body_html,
+    journal: entry.journal || "community",
+    dev_category: entry.dev_category || null,
     video_embeds: entry.video_embeds || [],
     image_urls: imageUrls,
     video_urls: videoUrls,
@@ -35,13 +37,15 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
-  const { action, id } = await req.json().catch(() => ({ action: "list" }));
+  const payload = await req.json().catch(() => ({ action: "list" }));
+  const { action, id } = payload;
+  const journal = payload.journal === "dev" ? "dev" : "community";
 
   if (action === "get") {
     if (!id) return json(400, { error: "Missing entry id." });
     const { data, error } = await supabase
       .from("journal_entries")
-      .select("id, title, entry_date, excerpt, body_html, image_paths, video_paths, video_embeds, status")
+      .select("id, title, entry_date, excerpt, body_html, image_paths, video_paths, video_embeds, journal, dev_category, status")
       .eq("id", id)
       .eq("status", "approved")
       .maybeSingle();
@@ -52,8 +56,9 @@ Deno.serve(async (req) => {
 
   const { data, error } = await supabase
     .from("journal_entries")
-    .select("id, title, entry_date, excerpt, image_paths, video_paths, video_embeds, status")
+    .select("id, title, entry_date, excerpt, image_paths, video_paths, video_embeds, journal, dev_category, status")
     .eq("status", "approved")
+    .eq("journal", journal)
     .order("entry_date", { ascending: false });
   if (error) return json(500, { error: "Could not load the journal." });
   const entries = await Promise.all((data || []).map((entry) => presentApproved(supabase, entry)));
