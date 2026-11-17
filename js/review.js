@@ -77,19 +77,17 @@
       "'": "&#39;",
     })[char]);
 
-  const entryPlace = (entry) =>
-    entry.journal === "dev"
-      ? `Dev Journal${entry.dev_category ? ` · ${entry.dev_category}` : ""}`
-      : "Community Journal";
-
-  const syncEntryJournal = () => {
-    const dev = editor.querySelector('input[name="journal"]:checked')?.value === "dev";
-    const field = document.getElementById("entry-category-field");
-    const select = document.getElementById("entry-category");
-    field.hidden = !dev;
-    select.required = dev;
-    if (!dev) select.value = "";
+  const entryPlace = (entry) => {
+    const label = window.CAJournalChoice.placeLabel(entry);
+    return entry.dev_category ? `${label} · ${entry.dev_category}` : label;
   };
+
+  const journalChoice = window.CAJournalChoice.bind({
+    form: editor,
+    field: document.getElementById("entry-category-field"),
+    select: document.getElementById("entry-category"),
+  });
+  journalChoice.sync();
 
   const showDashboard = async () => {
     loginForm.hidden = true;
@@ -163,19 +161,14 @@
     document.getElementById("entry-date").value = window.CAClient.dateInputValue(current.entry_date);
     bodyEl.innerHTML = current.body_html || "";
     document.getElementById("entry-embeds").value = (current.video_embeds || []).join("\n");
-    const journal = current.journal === "dev" ? "dev" : "community";
+    const journal = current.journal === "dev" || current.journal === "anna" ? current.journal : "community";
     const journalInput = editor.querySelector(`input[name="journal"][value="${journal}"]`);
     if (journalInput) journalInput.checked = true;
-    document.getElementById("entry-category").value = current.dev_category || "";
-    syncEntryJournal();
+    journalChoice.sync(current.dev_category || "");
     renderMedia(current);
     editor.hidden = false;
     editor.scrollIntoView({ behavior: "smooth" });
   };
-
-  editor.querySelectorAll('input[name="journal"]').forEach((input) => {
-    input.addEventListener("change", syncEntryJournal);
-  });
 
   document.querySelectorAll(".toolbar [data-cmd]").forEach((button) => {
     button.addEventListener("click", () => {

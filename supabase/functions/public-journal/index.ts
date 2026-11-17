@@ -39,7 +39,10 @@ Deno.serve(async (req) => {
   );
   const payload = await req.json().catch(() => ({ action: "list" }));
   const { action, id } = payload;
-  const journal = payload.journal === "dev" ? "dev" : "community";
+  const journal =
+    payload.journal === "dev" || payload.journal === "anna" || payload.journal === "community"
+      ? payload.journal
+      : "community";
 
   if (action === "get") {
     if (!id) return json(400, { error: "Missing entry id." });

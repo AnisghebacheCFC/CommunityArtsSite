@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
-import { journalFields } from "../_shared/journal.ts";
+import { journalFields, journalLabel } from "../_shared/journal.ts";
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const VIDEO_TYPES = ["video/mp4", "video/webm"];
@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
         text: [
           `Title: ${title}`,
           `Date: ${entryDate}`,
-          `Journal: ${placement.journal === "dev" ? `Dev Journal (${placement.dev_category})` : "Community Journal"}`,
+          `Journal: ${journalLabel(placement.journal, placement.dev_category)}`,
           `Preview: ${preview}`,
           "",
           `Review (sign in required): ${reviewLink}`,

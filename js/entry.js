@@ -25,6 +25,10 @@ const renderMedia = (entry) => {
       location.replace(`/anis-ghebache/dev-journal/entry.html?id=${encodeURIComponent(id)}`);
       return;
     }
+    if (entry.journal === "anna") {
+      location.replace(`/anna-verdes/journal/entry.html?id=${encodeURIComponent(id)}`);
+      return;
+    }
     document.title = `${entry.title} · Community Arts`;
     const canonical = document.querySelector('link[rel="canonical"]') || document.createElement("link");
     canonical.rel = "canonical";

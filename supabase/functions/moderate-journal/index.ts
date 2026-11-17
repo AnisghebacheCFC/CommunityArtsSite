@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 import { signMedia } from "../_shared/media.ts";
-import { journalFields } from "../_shared/journal.ts";
+import { journalFields, journalLabel } from "../_shared/journal.ts";
 
 const ADMIN_EMAIL = "anis@communityarts.org.uk";
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
       featured_path: imagePaths[0] || null,
     };
     const { data: updated } = await supabase.from("journal_entries").update(published).eq("id", id).select("*").single();
-    const destination = updated?.journal === "dev" ? "the Dev Journal" : "the Community Journal";
+    const destination = journalLabel(String(updated?.journal || "community"));
     return json(200, { message: `Entry published to ${destination}.`, entry: await present(supabase, updated) });
   }
 

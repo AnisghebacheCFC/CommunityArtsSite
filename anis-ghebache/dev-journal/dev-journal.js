@@ -75,7 +75,7 @@
   };
 
   if (!window.CAClient?.configured()) {
-    showMessage("Dev Journal entries will appear here once the site is connected and an entry is approved.");
+    showMessage("Journal entries will appear here once the site is connected and an entry is approved.");
     return;
   }
 
@@ -86,7 +86,7 @@
     });
     const entries = (published || []).filter((entry) => entry.journal === "dev");
     if (!entries.length) {
-      showMessage("No Dev Journal entries have been published yet.");
+      showMessage("No Journal entries have been published yet.");
       return;
     }
 
@@ -112,6 +112,6 @@
     const initial = location.hash.replace(/^#/, "");
     apply(initial ? slugToFilter.get(initial) || "all" : "all", false);
   } catch {
-    showMessage("The Dev Journal could not be loaded just now.");
+    showMessage("The Journal could not be loaded just now.");
   }
 })();

@@ -24,6 +24,10 @@ create table if not exists public.journal_entries (
       journal = 'dev'
       and dev_category in ('AI', 'Filmmaking', 'Animation', 'Creative Technology', 'Artistic Practice')
     )
+    or (
+      journal = 'anna'
+      and dev_category in ('Child Development', 'Activities', 'Critical Engagement')
+    )
   )
 );
 

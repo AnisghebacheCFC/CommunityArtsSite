@@ -12,16 +12,12 @@ document.querySelectorAll(".toolbar [data-cmd]").forEach((button) => {
 
 const categoryField = document.getElementById("dev-category-field");
 const categorySelect = form.querySelector('select[name="dev_category"]');
-const syncJournalChoice = () => {
-  const dev = form.querySelector('input[name="journal"]:checked')?.value === "dev";
-  categoryField.hidden = !dev;
-  categorySelect.required = dev;
-  if (!dev) categorySelect.value = "";
-};
-form.querySelectorAll('input[name="journal"]').forEach((input) => {
-  input.addEventListener("change", syncJournalChoice);
+const journalChoice = window.CAJournalChoice.bind({
+  form,
+  field: categoryField,
+  select: categorySelect,
 });
-syncJournalChoice();
+journalChoice.sync();
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -51,6 +47,7 @@ form.addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(result.error || "Submission failed.");
     form.reset();
     bodyEl.innerHTML = "";
+    journalChoice.sync();
     statusEl.textContent = "Received. It will stay private until it is approved.";
   } catch (error) {
     statusEl.textContent = error.message;

@@ -1,4 +1,5 @@
 -- Run in the Supabase SQL editor. Does not delete existing journal rows.
+-- Needed before publishing to Anna Verdes's Journal.
 
 alter table public.journal_entries drop constraint if exists journal_entries_status_check;
 alter table public.journal_entries
@@ -27,5 +28,9 @@ alter table public.journal_entries
     or (
       journal = 'dev'
       and dev_category in ('AI', 'Filmmaking', 'Animation', 'Creative Technology', 'Artistic Practice')
+    )
+    or (
+      journal = 'anna'
+      and dev_category in ('Child Development', 'Activities', 'Critical Engagement')
     )
   );

@@ -41,13 +41,17 @@ const renderMedia = (entry) => {
 
   try {
     const { entry } = await window.CAClient.callFunction("public-journal", { action: "get", id });
+    if (entry.journal === "anna") {
+      location.replace(`/anna-verdes/journal/entry.html?id=${encodeURIComponent(id)}`);
+      return;
+    }
     if (entry.journal && entry.journal !== "dev") {
       location.replace(`/entry.html?id=${encodeURIComponent(id)}`);
       return;
     }
 
     const title = `${entry.title} | Anis Ghebache`;
-    const description = entry.excerpt || "A note from Anis Ghebache's Dev Journal.";
+    const description = entry.excerpt || "A note from Anis Ghebache's Journal.";
     const canonical = `https://communityarts.org.uk/anis-ghebache/dev-journal/entry.html?id=${encodeURIComponent(id)}`;
     document.title = title;
     setMeta('meta[name="description"]', "content", description);
