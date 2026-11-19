@@ -27,7 +27,7 @@ alter table public.journal_entries
     (journal = 'community' and dev_category is null)
     or (
       journal = 'dev'
-      and dev_category in ('AI', 'Filmmaking', 'Animation', 'Creative Technology', 'Artistic Practice')
+      and dev_category in ('AI', 'Filmmaking', 'Animation', 'Creative Technology', 'Artistic Practice', 'Fitness')
     )
     or (
       journal = 'anna'

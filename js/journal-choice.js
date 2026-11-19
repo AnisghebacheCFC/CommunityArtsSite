@@ -1,7 +1,7 @@
 window.CAJournalChoice = (() => {
   const CATEGORIES = {
     community: [],
-    dev: ["AI", "Filmmaking", "Animation", "Creative Technology", "Artistic Practice"],
+    dev: ["AI", "Filmmaking", "Animation", "Creative Technology", "Artistic Practice", "Fitness"],
     anna: ["Child Development", "Activities", "Critical Engagement"],
   };
 

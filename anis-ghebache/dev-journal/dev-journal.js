@@ -15,8 +15,10 @@
     })[char]);
 
   const slugToFilter = new Map();
+  const excludedFromAll = new Set();
   buttons.forEach((button) => {
     if (button.dataset.slug) slugToFilter.set(button.dataset.slug, button.dataset.filter);
+    if (button.hasAttribute("data-exclude-from-all")) excludedFromAll.add(button.dataset.filter);
   });
 
   const labelFor = (filter) => {
@@ -31,7 +33,9 @@
     let shown = 0;
 
     entries.forEach((entry) => {
-      const match = active === "all" || entry.dataset.category === active;
+      const match = active === "all"
+        ? !excludedFromAll.has(entry.dataset.category)
+        : entry.dataset.category === active;
       entry.hidden = !match;
       if (match) shown += 1;
     });

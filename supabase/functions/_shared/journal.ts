@@ -4,6 +4,7 @@ export const DEV_CATEGORIES = [
   "Animation",
   "Creative Technology",
   "Artistic Practice",
+  "Fitness",
 ] as const;
 
 export const ANNA_CATEGORIES = [
