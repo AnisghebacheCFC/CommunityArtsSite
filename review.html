@@ -31,6 +31,15 @@
       </form>
 
       <div id="dashboard" hidden>
+        <form class="form" id="featured-form">
+          <p class="eyebrow">Featured artwork</p>
+          <div id="featured-preview"></div>
+          <label>
+            Image
+            <input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required />
+          </label>
+          <button type="submit">Submit image</button>
+        </form>
         <div class="actions">
           <button type="button" id="logout">Log out</button>
         </div>
@@ -103,6 +112,6 @@
     <script src="js/config.js"></script>
     <script src="js/client.js"></script>
     <script src="js/journal-choice.js"></script>
-    <script src="js/review.js?v=facilitator-journals"></script>
+    <script src="js/review.js?v=featured-artwork"></script>
   </body>
 </html>

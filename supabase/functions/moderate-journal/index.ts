@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
     id = String(body.id || "");
   }
 
-  const allowed = ["list", "preview", "update", "approve", "reject", "unpublish", "delete"];
+  const allowed = ["list", "preview", "update", "approve", "reject", "unpublish", "delete", "featured"];
   if (!allowed.includes(action)) return json(400, { error: "Invalid action." });
   await supabase.from("admin_action_log").insert({ action });
 
@@ -106,6 +106,33 @@ Deno.serve(async (req) => {
       .order("created_at", { ascending: false });
     if (error) return json(500, { error: "Could not load entries." });
     return json(200, { entries: data || [] });
+  }
+
+  if (action === "featured") {
+    const file = form?.get("image");
+    if (!(file instanceof File) || !file.size) return json(400, { error: "Choose an image." });
+    if (!IMAGE_TYPES.includes(file.type) || file.size > MAX_IMAGE) {
+      return json(400, { error: "Images must be JPG, PNG, WEBP or GIF under 4MB." });
+    }
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : file.type === "image/gif" ? "gif" : "jpg";
+    const path = `public/featured/artwork-${Date.now()}.${ext}`;
+    const { data: existing } = await supabase.from("featured_artwork").select("image_path").eq("id", 1).maybeSingle();
+    const { error: uploadError } = await supabase.storage.from("journal").upload(path, file, {
+      contentType: file.type,
+      upsert: false,
+    });
+    if (uploadError) return json(500, { error: "Could not store the image." });
+    const { error: saveError } = await supabase.from("featured_artwork").upsert({
+      id: 1,
+      image_path: path,
+      updated_at: new Date().toISOString(),
+    });
+    if (saveError) return json(500, { error: "Could not save the featured artwork." });
+    if (existing?.image_path && existing.image_path !== path) {
+      await supabase.storage.from("journal").remove([existing.image_path]);
+    }
+    const [imageUrl] = await signMedia(supabase, [path]);
+    return json(200, { message: "Featured artwork updated.", image_url: imageUrl || "" });
   }
 
   if (!id) return json(400, { error: "Missing entry id." });

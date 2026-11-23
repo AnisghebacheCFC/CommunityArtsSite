@@ -22,29 +22,6 @@ body {
   line-height: 1.5;
 }
 
-.intro {
-  position: absolute;
-  top: 1.25rem;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  display: grid;
-  gap: 0.35rem;
-  padding: 0 1.5rem;
-  text-align: center;
-  color: #f7f1e6;
-  pointer-events: none;
-  text-shadow: 0 1px 12px rgb(0 0 0 / 0.45);
-}
-
-.intro .eyebrow {
-  color: #f7f1e6;
-}
-
-.intro h1 {
-  font-size: clamp(1.8rem, 5vw, 3.2rem);
-}
-
 .about,
 .page {
   padding: 5.5rem 1.5rem 4rem;
@@ -606,84 +583,23 @@ h2 {
   }
 }
 
-.scroll-scene {
-  /* Sticky viewport plus one-third of the original 200vh travel. */
-  height: 166.67vh;
-  position: relative;
-}
-
-.scene-sticky {
-  position: sticky;
-  top: 0;
+.tower-feature {
   height: 100vh;
   width: 100%;
-  overflow: hidden;
 }
 
-.scene-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.tower-feature iframe {
   display: block;
-}
-
-.scene-veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgb(20 17 15 / 0.18),
-    transparent 28%,
-    transparent 72%,
-    rgb(20 17 15 / 0.35)
-  );
-  pointer-events: none;
-}
-
-.scene-mover {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: min(42vw, 420px);
-  aspect-ratio: 4 / 5;
-  box-shadow:
-    0 24px 60px rgb(0 0 0 / 0.35),
-    0 2px 8px rgb(0 0 0 / 0.2);
-  transform: translate3d(15vw, -50%, 0);
-  will-change: transform;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  overflow: hidden;
-}
-
-.scene-mover img {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
+  border: 0;
+}
+
+#featured-preview img {
+  display: block;
+  width: min(220px, 100%);
+  aspect-ratio: 4 / 5;
   object-fit: contain;
-  opacity: 0;
-  transition: opacity 0.08s linear;
-}
-
-.scene-mover img.is-active {
-  opacity: 1;
-}
-
-.scene-caption {
-  position: absolute;
-  left: 1.5rem;
-  bottom: 1.5rem;
-  color: #fff;
-  font-size: 0.8rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  text-shadow: 0 1px 8px rgb(0 0 0 / 0.5);
-}
-
-@media (max-width: 640px) {
-  .scene-mover {
-    width: min(42vw, 280px);
-  }
+  margin-bottom: 0.5rem;
+  background: var(--frame);
 }

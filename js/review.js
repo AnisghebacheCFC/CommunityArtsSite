@@ -89,9 +89,30 @@
   });
   journalChoice.sync();
 
+  const loadFeatured = async () => {
+    const preview = document.getElementById("featured-preview");
+    if (!preview || !window.CAClient?.configured()) return;
+    try {
+      const response = await fetch(window.CAClient.functionsUrl("featured-artwork"), {
+        headers: {
+          apikey: window.CA.supabaseAnonKey,
+          Authorization: `Bearer ${window.CA.supabaseAnonKey}`,
+        },
+      });
+      const record = await response.json();
+      const image = record.image_url
+        ? `<img src="${escapeHtml(record.image_url)}" alt="Current featured artwork" />`
+        : "<p class='status'>No featured artwork yet.</p>";
+      preview.innerHTML = image;
+    } catch {
+      preview.innerHTML = "<p class='status'>The current artwork could not be loaded.</p>";
+    }
+  };
+
   const showDashboard = async () => {
     loginForm.hidden = true;
     dashboard.hidden = false;
+    await loadFeatured();
     const result = await callAdmin({ action: "list" });
     listEl.innerHTML = (result.entries || [])
       .map(
@@ -175,6 +196,24 @@
       document.execCommand(button.dataset.cmd, false);
       bodyEl.focus();
     });
+  });
+
+  document.getElementById("featured-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    if (!data.get("image")?.size) {
+      statusEl.textContent = "Choose an image.";
+      return;
+    }
+    statusEl.textContent = "Updating the featured artwork…";
+    try {
+      const result = await callAdmin({ action: "featured" }, data);
+      statusEl.textContent = result.message || "Featured artwork updated.";
+      event.currentTarget.reset();
+      await loadFeatured();
+    } catch (err) {
+      statusEl.textContent = err.message;
+    }
   });
 
   document.getElementById("logout").addEventListener("click", async () => {

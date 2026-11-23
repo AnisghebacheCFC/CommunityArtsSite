@@ -55,3 +55,12 @@ on storage.objects
 for select
 to anon, authenticated
 using (bucket_id = 'journal' and (storage.foldername(name))[1] = 'public');
+
+create table if not exists public.featured_artwork (
+  id integer primary key,
+  image_path text,
+  updated_at timestamptz not null default now(),
+  constraint featured_artwork_singleton check (id = 1)
+);
+
+alter table public.featured_artwork enable row level security;

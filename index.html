@@ -22,28 +22,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <section class="scroll-scene" id="scroll-scene">
-      <div class="scene-sticky">
-        <img
-          class="scene-bg"
-          src="images/mural.svg"
-          alt="A wide street mural covering the full width of the page"
-        />
-        <div class="scene-veil" aria-hidden="true"></div>
-        <div class="scene-mover" id="mover" aria-label="Person walking across the mural in a six-frame walk cycle">
-          <img src="images/walk-1.png" alt="" data-step="0" class="is-active" />
-          <img src="images/walk-2.png" alt="" data-step="1" />
-          <img src="images/walk-3.png" alt="" data-step="2" />
-          <img src="images/walk-4.png" alt="" data-step="3" />
-          <img src="images/walk-5.png" alt="" data-step="4" />
-          <img src="images/walk-6.png" alt="" data-step="5" />
-        </div>
-        <header class="intro">
-          <p class="eyebrow">CommunityArts</p>
-          <h1>Scroll the mural.</h1>
-        </header>
-        <p class="scene-caption">Mural under construction</p>
-      </div>
+    <section class="tower-feature" aria-label="The Tower">
+      <iframe src="tower/index.html" title="The Tower, featured community artwork"></iframe>
     </section>
 
     <main>
@@ -219,7 +199,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/client.js"></script>
-    <script src="script.js"></script>
     <script src="js/thanks.js"></script>
     <script src="js/journal-list.js"></script>
   </body>
