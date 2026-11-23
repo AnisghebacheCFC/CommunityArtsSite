@@ -19,7 +19,7 @@ h1 small{display:block;font-size:13px;font-weight:400;color:var(--mut);font-styl
 #count{position:absolute;left:16px;bottom:10px;z-index:4;font:12px system-ui,sans-serif;color:var(--mut);pointer-events:none}
 .hint{color:var(--mut);font-size:12px;line-height:1.5;margin:9px 0 0}
 aside{position:absolute;top:18px;right:18px;z-index:4;width:min(320px,calc(100vw - 36px));max-height:calc(100% - 36px);padding:14px 16px 16px;overflow:auto;font-family:system-ui,sans-serif;font-size:14px;background:rgba(255,250,242,.82);border:1px solid rgba(216,205,191,.95);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.16),0 4px 12px rgba(0,0,0,.08);backdrop-filter:blur(8px)}
-@media(max-width:759px){aside{top:auto;bottom:14px;right:14px;width:min(340px,calc(100vw - 28px));max-height:min(58vh,460px);padding:13px 14px 15px}}
+@media(max-width:759px){#cv{touch-action:none}aside{top:auto;bottom:14px;right:14px;width:min(340px,calc(100vw - 28px));max-height:min(58vh,460px);padding:13px 14px 15px}}
 aside h2{font:600 13px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:16px 0 8px}
 aside h2:first-child{margin-top:0}
 .actions{display:grid;gap:10px;margin-bottom:12px}
@@ -75,11 +75,148 @@ button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line
 #note{z-index:5}
 @media(max-width:759px){#featured-artwork{top:24px;left:20px;width:clamp(160px,38vw,240px)}#featured-artwork .featured-frame{aspect-ratio:4/5}}
 @media(max-height:480px){#featured-artwork{top:18px;left:18px;width:160px}}
+
+/* Painterly sun < dense drifting clouds < transparent 3D world. */
+#sky-sun{position:absolute;z-index:0;right:7%;top:2%;width:clamp(170px,24vw,360px);aspect-ratio:1;pointer-events:none;user-select:none;background-repeat:no-repeat;background-size:100% 100%;opacity:.98}
+@media(max-width:759px){#sky-sun{top:0%;right:0%;width:clamp(150px,44vw,255px)}}
+#sky-clouds{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#sky-clouds .sky-cloud{position:absolute;left:0;top:var(--cloud-y);width:var(--cloud-width);height:auto;
+  opacity:var(--cloud-opacity);pointer-events:none;user-select:none;mix-blend-mode:normal;
+  filter:blur(3.2px);
+  transform:translate3d(-35vw,0,0);will-change:transform;
+  animation:sky-cloud-drift var(--cloud-duration) linear infinite;
+  animation-delay:var(--cloud-delay)}
+@keyframes sky-cloud-drift{from{transform:translate3d(-55vw,0,0)}to{transform:translate3d(160vw,0,0)}}
+@media(max-width:759px){#sky-sun{top:0%;right:0%;width:clamp(150px,44vw,255px)}}
+@media(prefers-reduced-motion:reduce){#sky-clouds .sky-cloud{animation:none;transform:translate3d(var(--cloud-static-x),0,0)}}
+/* Airborne lettering, independent letter movement, no pill or enclosing UI. */
+#brick-prompt{position:absolute;left:65%;top:32%;z-index:3;
+  transform:translate(-50%,-50%);
+  display:inline-flex;align-items:center;justify-content:center;gap:.035em;
+  padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;
+  font:900 clamp(14px,1.7vw,23px)/1.2 system-ui,-apple-system,Segoe UI,sans-serif;
+  letter-spacing:.08em;text-transform:uppercase;color:#56321e;
+  text-shadow:0 2px 0 rgba(255,239,210,.88),0 4px 12px rgba(55,36,20,.2),0 0 14px rgba(255,247,226,.55);
+  white-space:nowrap;pointer-events:none;user-select:none;opacity:1;
+  transition:opacity .33s ease;will-change:opacity,transform}
+#brick-prompt.is-hidden{opacity:0}
+#brick-prompt .brick-prompt-letter{display:inline-block;min-width:.50em;
+  transform:translate3d(var(--lx,0px),var(--ly,0px),0) rotate(var(--lr,0deg));will-change:transform}
+#brick-prompt .brick-prompt-letter.space{min-width:.69em}
+@media(max-width:759px){#brick-prompt{font-size:14px;letter-spacing:.055em}}
+@media(prefers-reduced-motion:reduce){#brick-prompt{transition:opacity .32s ease;transform:translate(-50%,-50%)}#brick-prompt .brick-prompt-letter{transform:none}}
+
+/* Compact floating actions: no enclosing white menu card. */
+aside {
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  top:16px;
+  right:16px;
+  width:min(232px,calc(100vw - 32px));
+  max-height:calc(100dvh - 32px);
+  padding:0;
+  overflow-y:auto;
+  overflow-x:visible;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  backdrop-filter:none;
+  pointer-events:none;
+  scrollbar-width:thin;
+  color:#33291f;
+}
+aside > * { pointer-events:auto; }
+aside .prototype-brand {display:none;}
+aside .actions {order:2;display:grid;gap:7px;margin:0;}
+aside .actions button{
+  width:100%;
+  min-height:42px;
+  padding:10px 13px;
+  font:650 13px/1.2 system-ui,sans-serif;
+  letter-spacing:.01em;
+  border-radius:7px;
+  text-align:left;
+  justify-content:space-between;
+  color:#251c18;
+  background:#e47455;
+  border:1px solid rgba(122,56,34,.23);
+  box-shadow:0 4px 10px rgba(48,33,21,.14);
+}
+aside .actions button[aria-expanded="true"]{
+  background:#bd563b;
+  color:#fff9f2;
+}
+aside .panel {
+  order:1;
+  margin:0;
+  padding:14px;
+  background:rgba(255,250,243,.95);
+  border:1px solid rgba(141,102,73,.35);
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(48,33,21,.14);
+  color:#33291f;
+  max-height:min(53dvh,420px);
+  overflow:auto;
+}
+aside .panel[hidden]{display:none;}
+aside .panel label {color:#554438;font-size:12px;}
+aside input[type=text],
+aside select,
+aside textarea {
+  background:#fffaf2 !important;
+  color:#2b241e !important;
+  border:1px solid #c9b39d !important;
+  color-scheme:light;
+  box-shadow:none;
+  font:13px/1.35 system-ui,sans-serif;
+}
+aside input::placeholder,aside textarea::placeholder{color:#877d73;opacity:1;}
+aside input:focus,aside select:focus,aside textarea:focus{
+  outline:2px solid #e47455;
+  outline-offset:1px;
+  border-color:#d16b4b !important;
+}
+aside .chk {color:#352a22;}
+aside #msg,aside #info,
+aside .result-list button {background:#fffaf2;color:#352a22;border-color:#dcc5af;}
+aside #admin-area {order:3;margin:2px 0 0;align-self:flex-end;max-width:100%;}
+aside #admin-area summary {
+  color:#5e4a3a;
+  background:rgba(255,250,242,.7);
+  padding:3px 7px;
+  border-radius:5px;
+  font-size:11px;
+}
+aside #admin-area[open]{
+  align-self:stretch;
+  padding:9px;
+  border-radius:8px;
+  background:rgba(255,250,242,.94);
+  border:1px solid rgba(141,102,73,.3);
+}
+aside #admin-area button {font-size:11px;padding:7px 8px;}
+@media(max-width:759px){
+  aside{
+    top:auto;
+    bottom:max(12px,env(safe-area-inset-bottom));
+    right:12px;
+    width:min(224px,58vw);
+    max-height:calc(80dvh - 16px);
+    padding:0;
+  }
+  aside .actions button {min-height:42px;padding:10px 11px;font-size:12px;}
+  aside .panel{max-height:47dvh;padding:12px;}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
   <div id="cv">
+    <div id="sky-sun" aria-hidden="true"></div>
+    <div id="sky-clouds" aria-hidden="true"></div>
     <section id="featured-artwork" aria-label="Featured community artwork">
       <a class="featured-frame" id="featured-artwork-link" aria-label="Featured artwork" tabindex="-1">
         <img id="featured-artwork-image" alt="">
@@ -89,12 +226,12 @@ button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line
       <p class="featured-title" id="featured-artwork-title" hidden></p>
       <p class="featured-credit" id="featured-artwork-credit" hidden></p>
     </section>
-    <div id="count"></div><div id="note"></div></div>
+    <div id="brick-prompt" aria-hidden="true" data-desktop-text="CLICK ON A BRICK" data-mobile-text="TAP ON A BRICK"></div><div id="count"></div><div id="note"></div></div>
   <aside>
     <p class="prototype-brand"><strong>CommunityArts Brick by Brick</strong>Prototype vers. 0.9a</p>
     <div class="actions" aria-label="Tower actions">
-      <button id="toggle-add" type="button" aria-expanded="false" aria-controls="add-panel">Add Your Brick <span aria-hidden="true">+</span></button>
-      <button id="toggle-find" type="button" aria-expanded="false" aria-controls="find-panel">Find the Brick <span aria-hidden="true">⌕</span></button>
+      <button id="toggle-add" type="button" aria-expanded="false" aria-controls="add-panel">Add Brick <span aria-hidden="true">+</span></button>
+      <button id="toggle-find" type="button" aria-expanded="false" aria-controls="find-panel">Find Brick <span aria-hidden="true">⌕</span></button>
     </div>
     <section id="add-panel" class="panel" hidden>
       
@@ -1815,6 +1952,92 @@ const cv=$("cv"),bricks=[],byId=new Map();
 const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,.1,2500);
 const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});
 cv.appendChild(ren.domElement);
+// Rasterise the original painterly sun once as a sky layer, so cloud images can pass in front.
+(function makePainterlySunBackdrop(){
+  const host=document.getElementById('sky-sun');
+  if(!host)return;
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=384;
+  const ctx=canvas.getContext('2d');
+  const W=384,c=W/2;
+  const radial=ctx.createRadialGradient(c,c,0,c,c,184);
+  radial.addColorStop(0,'rgba(255,251,223,1)');
+  radial.addColorStop(.20,'rgba(255,239,166,1)');
+  radial.addColorStop(.38,'rgba(255,194,82,.98)');
+  radial.addColorStop(.54,'rgba(255,169,42,.66)');
+  radial.addColorStop(.72,'rgba(255,196,84,.23)');
+  radial.addColorStop(1,'rgba(255,213,124,0)');
+  ctx.fillStyle=radial;ctx.fillRect(0,0,W,W);
+  // Slightly irregular, hand-painted sun disc with a warm paper texture.
+  const count=110;ctx.save();ctx.translate(c,c);
+  ctx.beginPath();
+  for(let i=0;i<=count;i++){
+    const a=i/count*Math.PI*2;
+    const r=64 + 3.7*Math.sin(9*a+.4)+2.5*Math.sin(17*a+1.8)+1.5*Math.sin(31*a);
+    const x=Math.cos(a)*r,y=Math.sin(a)*r;
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  const core=ctx.createRadialGradient(-14,-18,4,0,0,68);
+  core.addColorStop(0,'rgba(255,254,224,.99)');
+  core.addColorStop(.55,'rgba(255,239,166,.99)');
+  core.addColorStop(1,'rgba(255,187,59,.95)');
+  ctx.fillStyle=core;ctx.fill();
+  ctx.restore();
+  host.style.backgroundImage='url('+canvas.toDataURL('image/png')+')';
+})();
+// Procedural clouds: one-off canvas textures + compositor animations, not 3D billboards.
+(function makeCloudBackdrop(){
+  const host=document.getElementById('sky-clouds');
+  if(!host)return;
+  const W=768,H=300;
+  function cloudTexture(seed){
+    let state=seed>>>0;
+    const rnd=()=>((state=(Math.imul(state,1664525)+1013904223)>>>0)/4294967296);
+    const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+    const g=canvas.getContext('2d',{willReadFrequently:true});
+    const count=38+Math.floor(rnd()*16), puffs=[];
+    for(let k=0;k<count;k++){
+      const x=.08+rnd()*.84, y=.24+rnd()*.34;
+      const radius=(.09+rnd()*.14)*W;
+      puffs.push({x:x*W,y:y*H,r:radius,a:.34+rnd()*.22});
+    }
+    puffs.push({x:W*.50,y:H*.52,r:W*.30,a:.62});
+    puffs.sort((a,b)=>a.y-b.y);
+    for(const puff of puffs){
+      const grad=g.createRadialGradient(puff.x,puff.y,puff.r*.04,puff.x,puff.y,puff.r);
+      grad.addColorStop(0,'rgba(255,255,255,'+(puff.a*.95)+')');
+      grad.addColorStop(.38,'rgba(251,253,255,'+(puff.a*.82)+')');
+      grad.addColorStop(.68,'rgba(240,247,255,'+(puff.a*.44)+')');
+      grad.addColorStop(1,'rgba(232,244,255,0)');
+      g.fillStyle=grad;g.beginPath();g.ellipse(puff.x,puff.y,puff.r,puff.r*(.36+rnd()*.16),0,0,Math.PI*2);g.fill();
+    }
+    // A light haze anchors the lower edge without creating a hard cloud cutout.
+    const haze=g.createLinearGradient(0,H*.48,0,H*.88);
+    haze.addColorStop(0,'rgba(255,255,255,.065)');haze.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=haze;g.beginPath();g.ellipse(W*.50,H*.64,W*.39,H*.14,0,0,Math.PI*2);g.fill();
+    return canvas.toDataURL('image/png');
+  }
+  const textures=[cloudTexture(823),cloudTexture(1749),cloudTexture(9161),cloudTexture(5743)];
+  const data=[
+    {top:'4%', width:'46vw', alpha:1, seconds:148, delay:-87, static:'53vw',tex:0},
+    {top:'12%',width:'42vw', alpha:.99, seconds:166, delay:-111,static:'69vw',tex:1},
+    {top:'21%',width:'39vw', alpha:.97, seconds:187, delay:-126,static:'43vw',tex:2},
+    {top:'0%', width:'48vw', alpha:.98, seconds:195, delay:-150,static:'76vw',tex:3},
+    {top:'32%',width:'36vw', alpha:.93, seconds:173, delay:-92, static:'32vw',tex:0},
+    {top:'16%',width:'43vw', alpha:.99, seconds:155, delay:-28, static:'5vw',tex:2},
+    {top:'7%', width:'44vw', alpha:1, seconds:181, delay:-143,static:'60vw',tex:1}
+  ];  for(const c of data){
+    const el=document.createElement('img');el.className='sky-cloud';
+    el.src=textures[c.tex];el.alt='';el.draggable=false;
+    el.style.setProperty('--cloud-y',c.top);
+    el.style.setProperty('--cloud-width',c.width);
+    el.style.setProperty('--cloud-opacity',c.alpha);
+    el.style.setProperty('--cloud-duration',c.seconds+'s');
+    el.style.setProperty('--cloud-delay',c.delay+'s');
+    el.style.setProperty('--cloud-static-x',c.static);
+    host.appendChild(el);
+  }
+})();
 scene.add(new THREE.AmbientLight(0xffffff,.5));
 // The sun sits top-right, BEHIND the tower: light travels towards the camera, so shadows fall forward and to the left.
 const SUN=new THREE.Vector3(.5,.45,-.74).normalize(); // direction towards the sun
@@ -1862,6 +2085,49 @@ function makeOakLeafTexture(){
  tex.needsUpdate=true;
  return tex;
 }
+// Deterministic painterly bark texture: dry-brush vertical grain, pale highlights,
+// irregular seams and dark crevices. Shared by the ez-tree branch mesh.
+function makePaintedBarkTexture(){
+  const canvas=document.createElement('canvas');
+  canvas.width=256;canvas.height=512;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+  let seed=17427;
+  const rnd=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+  ctx.fillStyle='#8d7054';ctx.fillRect(0,0,w,h);
+  // Tall broken strokes in several earthy browns; no shiny highlights.
+  const ink=['#493b32','#574537','#644a37','#77604b','#9b7955','#b29370','#c5a481'];
+  for(let i=0;i<1800;i++){
+    const x=rnd()*w,y=rnd()*h,span=10+rnd()*100;
+    ctx.globalAlpha=.12+rnd()*.48;
+    ctx.strokeStyle=ink[Math.floor(rnd()*ink.length)];
+    ctx.lineWidth=.35+rnd()*4.2;
+    ctx.beginPath();ctx.moveTo(x,y);
+    ctx.bezierCurveTo(x+(rnd()-.5)*8,y+span*.32,
+      x+(rnd()-.5)*9,y+span*.67,x+(rnd()-.5)*7,y+span);
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  for(let i=0;i<65;i++){
+    // Thin, intermittent bark fissures, tapering naturally.
+    let x=rnd()*w,y=rnd()*h,len=12+rnd()*90;
+    ctx.strokeStyle=i%4===0?'rgba(210,172,123,.28)':'rgba(46,34,28,.38)';
+    ctx.lineWidth=.6+rnd()*1.7;
+    ctx.beginPath();ctx.moveTo(x,y);
+    for(let j=1;j<=5;j++)ctx.lineTo(x+(rnd()-.5)*7,y+len*j/5);
+    ctx.stroke();
+  }
+  const tex=new THREE.CanvasTexture(canvas);
+  tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
+  tex.repeat.set(1.7,2.1);
+  tex.anisotropy=Math.min(4,ren.capabilities.getMaxAnisotropy());
+  tex.magFilter=THREE.LinearFilter;
+  tex.minFilter=THREE.LinearMipmapLinearFilter;
+  tex.generateMipmaps=true;
+  if(THREE.sRGBEncoding!==undefined)tex.encoding=THREE.sRGBEncoding;
+  tex.needsUpdate=true;
+  return tex;
+}
 (function installActualOak(){
  try{
    const oak=new window.EzTreeOriginal();
@@ -1890,7 +2156,7 @@ function makeOakLeafTexture(){
    oak.generate();
    // Replace physically-based materials with inexpensive opaque matte painterly Lambert surfaces.
    oak.branchesMesh.material.dispose();
-   oak.branchesMesh.material=new THREE.MeshLambertMaterial({color:0x80664d,flatShading:true,side:THREE.FrontSide});
+   oak.branchesMesh.material=new THREE.MeshLambertMaterial({color:0xe1c8aa,map:makePaintedBarkTexture(),flatShading:true,side:THREE.FrontSide});
    oak.leavesMesh.material.dispose();
    const oakLeafAlpha=makeOakLeafTexture();
    oak.leavesMesh.material=new THREE.MeshLambertMaterial({
@@ -1920,7 +2186,7 @@ function makeOakLeafTexture(){
    // Oak's actual native trunk origin sits at (0,0,0), so place right at grass height.
    oak.scale.setScalar(.18);
    // Slightly right and a touch farther back: the canopy lightly overlaps the artwork, while the trunk stays clear of it.
-   oak.position.set(-9.95,0.025,-8.6);
+   oak.position.set(-10.6,0.025,-8.6); // default: slightly farther left for landscape
    oak.rotation.y=.34;
    scene.add(oak);oakModel=oak;
    console.info('ez-tree oak generated',oak.branchesMesh.geometry.attributes.position.count,oak.leavesMesh.geometry.attributes.position.count);
@@ -2212,6 +2478,10 @@ const inkMaterial=new THREE.ShaderMaterial({
       paint=mix(paint,inkCol,line);
       coverage=max(coverage,line);
       if(coverage<0.035) discard;
+      // Positive aSide identifies the inward-facing painted quad.
+      // Preserve value and shadowing while halving saturation of its final paint.
+      float innerGray=dot(paint,vec3(0.2126,0.7152,0.0722));
+      paint=mix(paint,vec3(innerGray),0.5*step(0.0,vSide));
       gl_FragColor=vec4(paint,clamp(coverage*uInk,0.0,1.0));
     }`
 });
@@ -2246,7 +2516,7 @@ const sunDisc=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.ShaderMateri
       float a=clamp(disc+halo*.55+rays*.22,0.,1.);
       gl_FragColor=vec4(mix(vec3(1.,.82,.52),core,disc),a);
     }`}));
-sunDisc.frustumCulled=false;sunDisc.renderOrder=-5;scene.add(sunDisc);
+sunDisc.frustumCulled=false;sunDisc.renderOrder=-5;sunDisc.visible=false; // Sun composited beneath CSS clouds instead of inside the 3D scene.
 
 // ── Fluffy grass ───────────────────────────────────────────────────────────────────────────────
 // Technique and assets adapted from thebenezer/FluffyGrass (MIT licence, © 2023 Ebenezer): instanced tufts of
@@ -2263,10 +2533,10 @@ const grassNoiseTex=texLoader.load("data:image/webp;base64,UklGRlIlAABXRUJQVlA4W
 const GRASS_FIELD=17;
 const grassU={uTime:{value:0},uNoiseScale:{value:1.5},uBase:{value:new THREE.Color("#313f1b")},uTip1:{value:new THREE.Color("#9bd38d")},
   uTip2:{value:new THREE.Color("#1f352a")},uNoise:{value:grassNoiseTex},uAlpha:{value:grassAlphaTex},uSun:{value:SUN},
-  uTowerH:{value:1},uTowerR:{value:R+.31},uDrag:{value:1},uPaper:{value:new THREE.Color(0xf3ede4)},uShadowDark:{value:.45},uField:{value:GRASS_FIELD}};
+  uTowerH:{value:1},uTowerR:{value:R+.31},uDrag:{value:1},uPaper:{value:new THREE.Color(0xf3ede4)},uShadowDark:{value:.45},uField:{value:GRASS_FIELD},uHeightMul:{value:1}};
 const grassMat=new THREE.ShaderMaterial({side:THREE.DoubleSide,uniforms:grassU,
   vertexShader:`
-    uniform float uTime,uNoiseScale,uTowerH,uTowerR,uField;
+    uniform float uTime,uNoiseScale,uTowerH,uTowerR,uField,uHeightMul;
     uniform sampler2D uNoise;
     uniform vec3 uSun;
     varying vec2 vUv,vGlobalUV;
@@ -2274,9 +2544,17 @@ const grassMat=new THREE.ShaderMaterial({side:THREE.DoubleSide,uniforms:grassU,
     void main(){
       vec4 mp=modelMatrix*instanceMatrix*vec4(position,1.0);
       vSeedG=fract(sin(dot((modelMatrix*instanceMatrix*vec4(0.0,0.0,0.0,1.0)).xz,vec2(12.9898,78.233)))*43758.5453);
-      // Tufts close to the camera shrink away, so the closer camera is never walled in by grass.
+      // Variable heights per clump, with a low, gently tapered ring around the tower.
+      // Keep the lowest brick courses readable without creating a bare circle.
       vec3 org=(modelMatrix*instanceMatrix*vec4(0.0,0.0,0.0,1.0)).xyz;
-      mp.xyz=org+(mp.xyz-org)*smoothstep(2.0,6.0,distance(org.xz,cameraPosition.xz));
+      float radius=length(org.xz);
+      float rim=smoothstep(uTowerR+0.35,uTowerR+4.6,radius);
+      float patches=texture2D(uNoise,(org.xz+vec2(23.0))/33.0).r;
+      float tuftHeight=0.72+0.62*vSeedG+0.26*(patches-0.5);
+      float heightScale=mix(0.16+vSeedG*0.085,tuftHeight,rim)*uHeightMul;
+      mp.xyz=org+(mp.xyz-org)*heightScale;
+      // Natural variable-height grass is kept across the meadow. Only the tower's
+      // immediate base remains low to reveal the first brick courses.
       // Cast shadow of the tower: does the ray from this blade towards the sun pass through the tower?
       vec2 d2=normalize(uSun.xz);float tanE=uSun.y/length(uSun.xz);
       float tc=-dot(mp.xz,d2);
@@ -2291,7 +2569,7 @@ const grassMat=new THREE.ShaderMaterial({side:THREE.DoubleSide,uniforms:grassU,
       vec4 noise=texture2D(uNoise,vGlobalUV+uTime*0.001);
       float wave=sin(50.0*dot(normalize(vec2(1.0,1.0)),vGlobalUV)+noise.g*5.5+uTime)*0.07*(1.0-uv.y);
       mp.x+=wave;mp.z+=wave;
-      mp.y+=exp(texture2D(uNoise,vGlobalUV*uNoiseScale).r)*0.22*(1.0-uv.y);
+      mp.y+=exp(texture2D(uNoise,vGlobalUV*uNoiseScale).r)*0.22*heightScale*(1.0-uv.y);
       vUv=vec2(uv.x,1.0-uv.y);
       gl_Position=projectionMatrix*viewMatrix*mp;
     }`,
@@ -2318,7 +2596,8 @@ const grassMat=new THREE.ShaderMaterial({side:THREE.DoubleSide,uniforms:grassU,
       col=mix(col,heldC,step(1.0-uDrag*0.85,rnd(vec2(li*2.1+kk*3.3,vSeedG)))*uDrag);
       col+=vec3(1.0,0.88,0.66)*0.28*smoothstep(0.4,1.0,vUv.y); // the sun is behind: tips catch a warm glow
       col=mix(col,col*uShadowDark*vec3(0.9,0.95,1.2),vShadow);
-      col=mix(col,uPaper,smoothstep(0.6,1.0,vFieldD));       // the field dissolves into the paper at its edge
+      // Keep the foreground grass green; the previous cream-paper fade made it appear white.
+      col=mix(col,vec3(0.34,0.47,0.29),0.16*smoothstep(0.68,1.0,vFieldD));
       gl_FragColor=vec4(col,1.0);
     }`});
 const GRASS_COUNT=9000,gm=new THREE.InstancedMesh(grassGeo,grassMat,GRASS_COUNT);
@@ -2335,18 +2614,47 @@ gm.frustumCulled=false;scene.add(gm);
 // Flowers intentionally removed.
 function animateFlowers(){}
 const flowers={set visible(v){},get visible(){return false}};
-// A soft green wash under the tufts (the repo's terrain colour), fading out into the paper.
-const wash=new THREE.Mesh(new THREE.CircleGeometry(GRASS_FIELD+9,64),new THREE.ShaderMaterial({transparent:true,depthWrite:false,
-  vertexShader:`varying vec2 vP;void main(){vP=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`varying vec2 vP;
-    float h(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}
-    float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),f.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),f.x),f.y);}
+// Procedural painted soil beneath every grass tuft, with darker earth immediately
+// outside the tower. Reuses the former green-wash plane: no additional draw calls.
+// The meadow slowly blends from warm exposed soil to muted soil/green at the edges.
+const wash=new THREE.Mesh(new THREE.CircleGeometry(GRASS_FIELD+9,80),new THREE.ShaderMaterial({
+  transparent:true,depthWrite:true,depthTest:true,side:THREE.DoubleSide,
+  uniforms:{uField:{value:GRASS_FIELD}},
+  vertexShader:`varying vec2 vGround;void main(){vGround=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`
+    precision highp float;
+    varying vec2 vGround;
+    uniform float uField;
+    float hash21(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}
+    float noise(vec2 p){
+      vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+      return mix(mix(hash21(i),hash21(i+vec2(1.,0.)),f.x),mix(hash21(i+vec2(0.,1.)),hash21(i+vec2(1.,1.)),f.x),f.y);
+    }
     void main(){
-      float d=length(vP)/26.0;
-      float a=(1.0-smoothstep(0.30,0.95,d))*(0.55+0.45*n(vP*0.35));
-      gl_FragColor=vec4(mix(vec3(0.37,0.53,0.37),vec3(0.55,0.68,0.45),n(vP*0.8)),a*0.7);
-    }`}));
-wash.rotation.x=-Math.PI/2;wash.position.y=-.004;wash.renderOrder=-3;scene.add(wash);ground.renderOrder=-2;
+      float r=length(vGround);
+      float macro=noise(vGround*.20),medium=noise(vGround*1.1),fine=noise(vGround*5.3);
+      float clumps=noise(vGround*2.2+macro*3.0);
+      float exposed=1.0-smoothstep(5.0,11.0,r);
+      // Distinct earth colours: deep umber in shade, warm sienna in light, olive-brown further out.
+      vec3 darkSoil=vec3(.19,.115,.075);
+      vec3 warmSoil=vec3(.43,.275,.155);
+      vec3 meadowSoil=vec3(.36,.40,.255);
+      vec3 col=mix(darkSoil,warmSoil,clamp(.30+macro*.52+medium*.25,0.,1.));
+      col=mix(col,meadowSoil,clamp((1.0-exposed)*(.34+.32*clumps),0.,.7));
+      col*=.88+.22*fine;
+      // Dry-brush flecks and pigment grain, no polygonal stone or extra geometry.
+      float fleck=step(.90,hash21(floor(vGround*13.0)))*(.06+.06*fine);
+      col+=fleck*vec3(.55,.42,.24);
+      float a=1.0-smoothstep(uField+5.0,uField+11.0,r);
+      if(a<.005)discard;
+      gl_FragColor=vec4(col,a);
+    }`
+}));
+wash.rotation.x=-Math.PI/2;
+wash.position.y=-.001; // covers the field just below grass roots; above the shadow catcher
+wash.renderOrder=-3;
+scene.add(wash);
+ground.renderOrder=-2;
 
 // Lightweight approximation of the article's edge-preserving Kuwahara filter.
 // The full anisotropic multi-pass tensor formulation is intentionally omitted:
@@ -2414,6 +2722,21 @@ function category(b){return b.visualKind==="check"?"check":b.visualKind==="strip
 function makeGroup(kind,pending){
   const key=kind+(pending?":pending":":approved");
   const material=new THREE.MeshLambertMaterial({color:0xffffff,...(kind==="plain"?{}:{map:tex(kind)}),emissive:pending?0xffb000:0x000000,emissiveIntensity:pending?.35:0});
+  // Brick local +Z faces the tower interior; local -Z faces the outside.
+  // Desaturate only the inner face, without changing its luminance or the outer paint.
+  material.onBeforeCompile=shader=>{
+    shader.vertexShader=shader.vertexShader.replace(
+      '#include <common>', '#include <common>\nvarying float vInnerBrickFace;'
+    ).replace(
+      '#include <begin_vertex>', '#include <begin_vertex>\nvInnerBrickFace = smoothstep(0.55, 0.92, normal.z);'
+    );
+    shader.fragmentShader=shader.fragmentShader.replace(
+      '#include <common>', '#include <common>\nvarying float vInnerBrickFace;'
+    ).replace(
+      '#include <color_fragment>',
+      '#include <color_fragment>\nfloat innerGray = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(innerGray), 0.5 * vInnerBrickFace);'
+    );
+  };
   const g={key,kind,pending,material,capacity:128,entries:[],mesh:null};
   groups[key]=g;createMesh(g,g.capacity);return g;
 }
@@ -2565,12 +2888,110 @@ function focus(b){rotTarget=b.p.a-Math.PI/2;camTarget=Math.max(1.2,b.p.y+.3)}
 // Layout: the left SCREEN_LEFT of the canvas stays empty. The tower fills the rest, with HIDDEN of its width running off the
 // right edge, so it has to be rotated to see all of it. (1/3 and 1/3 make the tower exactly as wide as the canvas.)
 const SCREEN_LEFT=1/3,HIDDEN=1/3,TOWER_W=(1-SCREEN_LEFT)/(1-HIDDEN),TOWER_SHIFT=SCREEN_LEFT+TOWER_W/2-.5;
-function resize(){const w=Math.max(1,cv.clientWidth),h=Math.max(1,cv.clientHeight);ren.setPixelRatio(Math.min(window.devicePixelRatio||1,2));ren.setSize(w,h);const size=new THREE.Vector2();ren.getDrawingBufferSize(size);
+function placeOakForViewport(w,h){
+  if(!oakModel)return;
+  // Shift toward the right on portrait/mobile to avoid covering the artwork.
+  const portrait=h>w || w<760;
+  const targetX=portrait?-3.6:-10.6;
+  oakModel.position.x=targetX;
+  const s=portrait?.18*.85:.18;
+  oakModel.scale.setScalar(s);
+}
+const brickPrompt=document.getElementById('brick-prompt');
+const promptLetters=[];
+let brickPromptText='';
+function syncBrickPromptText(){
+  if(!brickPrompt)return;
+  const mobile=window.matchMedia('(max-width: 759px)').matches || window.innerHeight>window.innerWidth;
+  const nextText=(mobile?brickPrompt.dataset.mobileText:brickPrompt.dataset.desktopText)||'CLICK ON A BRICK';
+  if(nextText===brickPromptText && promptLetters.length)return;
+  brickPromptText=nextText;
+  brickPrompt.textContent='';
+  promptLetters.length=0;
+  for(let i=0;i<brickPromptText.length;i++){
+    const ch=brickPromptText[i];
+    const span=document.createElement('span');
+    span.className='brick-prompt-letter'+(ch===' ' ? ' space' : '');
+    span.textContent=ch===' ' ? ' ' : ch;
+    brickPrompt.appendChild(span);
+    promptLetters.push(span);
+  }
+}
+if(brickPrompt)syncBrickPromptText();
+const promptWorld=new THREE.Vector3();
+const towerPoint=new THREE.Vector3();
+function updateBrickPrompt(time=0){
+  if(!brickPrompt)return;
+  syncBrickPromptText();
+  const w=cv.clientWidth,h=cv.clientHeight;
+  if(w<=0||h<=0)return;
+  const towerHeight=Math.max(BH,Math.ceil(bricks.length/N)*BH);
+  cam.updateMatrixWorld();
+  // Track the actual projected tower top, rather than anchoring text to the page.
+  promptWorld.set(0,towerHeight+1.35,0).project(cam);
+  const x=(promptWorld.x*.5+.5)*w;
+  const y=(-promptWorld.y*.5+.5)*h;
+  brickPrompt.style.left=Math.max(96,Math.min(w-96,x))+'px';
+  brickPrompt.style.top=Math.max(40,Math.min(h*.7,y))+'px';
+  const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduceMotion){
+    for(let i=0;i<promptLetters.length;i++){
+      const span=promptLetters[i];
+      if(span.classList.contains('space'))continue;
+      const phase=i*.73;
+      const lx=Math.sin(time*1.53+phase)*2.1;
+      const ly=Math.cos(time*1.78+phase)*5.2 + Math.sin(time*.91+phase*1.4)*1.8;
+      const lr=Math.sin(time*1.17+phase)*4.2;
+      span.style.setProperty('--lx',lx.toFixed(2)+'px');
+      span.style.setProperty('--ly',ly.toFixed(2)+'px');
+      span.style.setProperty('--lr',lr.toFixed(2)+'deg');
+    }
+  }
+  // Fade once the pointer comes close to the visible tower footprint.
+  let near=false;
+  if(ptr.on){
+    const rect=cv.getBoundingClientRect();
+    const px=ptr.x-rect.left,py=ptr.y-rect.top;
+    const centerHeight=Math.min(camY,towerHeight*.5);
+    towerPoint.set(0,centerHeight,0).project(cam);
+    const tx=(towerPoint.x*.5+.5)*w,ty=(-towerPoint.y*.5+.5)*h;
+    const side=new THREE.Vector3(R,centerHeight,0).project(cam);
+    const radius=Math.max(62,Math.abs(side.x-towerPoint.x)*w*.5);
+    const nearX=Math.abs(px-tx)<radius+Math.max(38,w*.045);
+    const nearY=Math.abs(py-ty)<Math.max(130,h*.29);
+    near=nearX&&nearY;
+  }
+  brickPrompt.classList.toggle('is-hidden',near||!!sel);
+}
+function resize(){
+  const w=Math.max(1,cv.clientWidth),h=Math.max(1,cv.clientHeight);
+  const mobile=w<760 || h>w*1.22;
+  placeOakForViewport(w,h);
+  ren.setPixelRatio(Math.min(window.devicePixelRatio||1,mobile?1.5:2));
+  ren.setSize(w,h);
+  const size=new THREE.Vector2();ren.getDrawingBufferSize(size);
   rt.setSize(Math.max(1,Math.floor(size.x)),Math.max(1,Math.floor(size.y)));
-  postMaterial.uniforms.uResolution.value.copy(size);postMaterial.uniforms.uPx.value=Math.max(.5,size.y/900);cam.aspect=w/h;const half=(R+.34)/(TOWER_W*.72*Math.max(cam.aspect,.1));   // tan(fov/2)*distance that makes the tower TOWER_W of the canvas wide
-  camDistance=Math.max(half/Math.tan(THREE.MathUtils.degToRad(21)),11);                  // never closer than 11: the lens narrows instead
-  cam.fov=2*THREE.MathUtils.radToDeg(Math.atan(half/camDistance));
-  cam.setViewOffset(w,h,-w*TOWER_SHIFT,0,w,h);cam.updateProjectionMatrix()}
+  postMaterial.uniforms.uResolution.value.copy(size);
+  postMaterial.uniforms.uPx.value=Math.max(.5,size.y/900);
+  cam.aspect=w/h;
+  if(mobile){
+    // Mobile framing: closer camera for larger touch-friendly bricks,
+    // with the tower shifted farther right to match the desktop composition.
+    grassU.uHeightMul.value=.78;
+    camDistance=19.4;
+    cam.fov=43;
+    camTarget=Math.max(.70,Math.min(camTarget,2.4));
+    // Negative offset shifts the rendered composition to the right.
+    cam.setViewOffset(w,h,-w*.31,0,w,h);
+  }else{
+    grassU.uHeightMul.value=1;
+    const half=(R+.34)/(TOWER_W*.72*Math.max(cam.aspect,.1));
+    camDistance=Math.max(half/Math.tan(THREE.MathUtils.degToRad(21)),11);
+    cam.fov=2*THREE.MathUtils.radToDeg(Math.atan(half/camDistance));
+    cam.setViewOffset(w,h,-w*TOWER_SHIFT,0,w,h);
+  }
+  cam.updateProjectionMatrix();
+}
 new ResizeObserver(resize).observe(cv);resize();
 let scrollT=null,off=0;
 window.setTowerScroll=(progress,step,steps,turns=1,smooth=false)=>{if(scrollT===null)rot=((rot%TAU)+TAU)%TAU;scrollT=TAU*turns*(smooth?progress:step/Math.max(1,steps-1))};
@@ -2579,10 +3000,25 @@ function loop(t){
   else if(scrollT!==null){rot+=(scrollT+off-rot)*.08}else if(!drag)rot+=spin;
   tower.rotation.y=rot;
   camY+=(camTarget-camY)*.06;
-  cam.position.set(0,camY+.18,camDistance);cam.lookAt(0,camY,0);
+  const mobileView=cv.clientWidth<760 || cv.clientHeight>cv.clientWidth*1.22;
+  cam.position.set(0,camY+(mobileView?.40:.18),camDistance);
+  cam.lookAt(0,camY+(mobileView?.06:0),0);
   {const dz=camDistance+60,hh=Math.tan(THREE.MathUtils.degToRad(cam.fov/2))*dz;
-   sunDisc.position.set(hh*cam.aspect*(.62-2*TOWER_SHIFT),camY+.18+hh*.56,-60);sunDisc.scale.setScalar(hh*1.05)}
+   if(mobileView){
+     // Place the sun using viewport coordinates so portrait view offsets
+     // cannot accidentally push it off the left side of the screen.
+     cam.updateMatrixWorld(true);
+     const target=new THREE.Vector3(.62,.73,.85).unproject(cam);
+     const line=target.sub(cam.position);
+     const t=(-60-cam.position.z)/line.z;
+     sunDisc.position.copy(cam.position).addScaledVector(line,t);
+     sunDisc.scale.setScalar(hh*.95);
+   }else{
+     sunDisc.position.set(hh*cam.aspect*(.62-2*TOWER_SHIFT),camY+.18+hh*.56,-60);
+     sunDisc.scale.setScalar(hh*1.05);
+   }}
   grassU.uTime.value=t/1000;oakWindTime.value=t/1000;gm.visible=camY<13;
+  updateBrickPrompt(t/1000);
   updateInteraction(t);
   const pulse=.2+.5*(.5+.5*Math.sin(t/300));
   for(const kind of ["plain","check","stripe"]){const g=groups[kind+":pending"];if(g.entries.length)g.material.emissiveIntensity=pulse}
@@ -2594,7 +3030,7 @@ function loop(t){
 requestAnimationFrame(loop);
 cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};moved=0;rotTarget=null;cv.setPointerCapture(e.pointerId)});
 cv.addEventListener("pointermove",e=>{ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true;hoverDirty=true;if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved+=Math.abs(dx)+Math.abs(dy);if(scrollT!==null)off+=dx*.008;else rot+=dx*.008;drag={x:e.clientX,y:e.clientY}});
-cv.addEventListener("pointerup",e=>{if(drag&&moved<5)handleClick(e);drag=null});
+cv.addEventListener("pointerup",e=>{if(drag&&moved<(e.pointerType==='touch'?13:5))handleClick(e);drag=null});
 cv.addEventListener("pointerleave",()=>{ptr.on=false;hoverDirty=true});
 cv.addEventListener("pointercancel",()=>{drag=null});
 // ── Hover, push-out, float and crumble ───────────────────────────────────────────────────────────
@@ -2622,13 +3058,25 @@ hoverMesh.visible=false;hoverMesh.renderOrder=5;hoverMesh.frustumCulled=false;to
 const _ray=new THREE.Raycaster(),_v2=new THREE.Vector2(),_p=new THREE.Vector3(),_q=new THREE.Quaternion(),_q2=new THREE.Quaternion(),_e=new THREE.Euler(),_m=new THREE.Matrix4(),_s=new THREE.Vector3();
 const eo3=u=>1-Math.pow(1-u,3),eio=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2,eob=u=>1+2.70158*Math.pow(u-1,3)+1.70158*Math.pow(u-1,2);
 function setRay(cx,cy){const r=cv.getBoundingClientRect();_v2.set((cx-r.left)/r.width*2-1,-(cy-r.top)/r.height*2+1);_ray.setFromCamera(_v2,cam)}
-function pickAt(cx,cy){
-  setRay(cx,cy);tower.updateMatrixWorld(true);
-  const hit=_ray.intersectObjects(tower.children.filter(x=>x.userData.group&&x.userData.group.mesh===x),false)[0];
-  if(!hit||hit.instanceId===undefined)return null;
-  const b=hit.object.userData.group.entries[hit.instanceId];if(!b)return null;
-  const lp=tower.worldToLocal(hit.point.clone());
-  return{b,side:Math.hypot(lp.x,lp.z)>R?1:-1};   // +1 = outer face, -1 = inner face
+function pickAt(cx,cy,touch=false){
+  tower.updateMatrixWorld(true);
+  const meshes=tower.children.filter(x=>x.userData.group&&x.userData.group.mesh===x);
+  const offsets=touch?[[0,0],[0,-12],[-12,0],[12,0],[0,12],[-9,-9],[9,-9],[-9,9],[9,9]]:[[0,0]];
+  let winner=null;
+  for(const [dx,dy] of offsets){
+    setRay(cx+dx,cy+dy);
+    const hit=_ray.intersectObjects(meshes,false)[0];
+    if(!hit||hit.instanceId===undefined)continue;
+    const b=hit.object.userData.group.entries[hit.instanceId];
+    if(!b)continue;
+    const score=Math.hypot(dx,dy)*.018+hit.distance*.0005;
+    if(!winner||score<winner.score){
+      const lp=tower.worldToLocal(hit.point.clone());
+      winner={b,side:Math.hypot(lp.x,lp.z)>R?1:-1,score};
+    }
+    if(dx===0&&dy===0)break;
+  }
+  return winner;
 }
 function setHover(h){
   hovered=h?h.b:null;
@@ -2718,7 +3166,7 @@ function startCrumble(t){
 }
 function handleClick(e){
   const t=performance.now();
-  if(!sel){const h=pickAt(e.clientX,e.clientY);if(h)startSel(h.b,t);return}
+  if(!sel){const h=pickAt(e.clientX,e.clientY,e.pointerType==='touch'||e.pointerType==='pen');if(h)startSel(h.b,t);return}
   if(sel.phase==="crumble"||sel.phase==="return")return;
   setRay(e.clientX,e.clientY);
   if(sel.tv&&_ray.intersectObject(sel.tv.m,false).length)return;   // the floating brick itself: nothing happens

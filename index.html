@@ -207,5 +207,37 @@
     <script src="js/client.js"></script>
     <script src="js/thanks.js"></script>
     <script src="js/journal-list.js"></script>
+    <script>
+      (() => {
+        const feature = document.querySelector(".tower-feature");
+        const frame = feature?.querySelector("iframe");
+        if (!feature || !frame) return;
+        const src = new URL(frame.getAttribute("src"), location.href).href;
+        let running = true;
+        let ticking = false;
+        const sync = () => {
+          const past = window.scrollY > feature.offsetHeight;
+          if (past && running) {
+            frame.removeAttribute("src");
+            frame.src = "about:blank";
+            running = false;
+          } else if (!past && !running) {
+            frame.src = src;
+            running = true;
+          }
+        };
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            ticking = false;
+            sync();
+          });
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", sync);
+        sync();
+      })();
+    </script>
   </body>
 </html>
