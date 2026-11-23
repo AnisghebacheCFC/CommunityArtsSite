@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
   );
   const { data, error } = await supabase
     .from("featured_artwork")
-    .select("image_path")
+    .select("image_path, updated_at")
     .eq("id", 1)
     .maybeSingle();
   if (error) return json(500, { error: "Could not load the featured artwork." });
@@ -29,5 +29,6 @@ Deno.serve(async (req) => {
     title: "",
     artist: "",
     journal_url: "",
+    uploaded_at: data.updated_at || "",
   });
 });

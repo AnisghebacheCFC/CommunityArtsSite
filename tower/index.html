@@ -19,7 +19,7 @@ h1 small{display:block;font-size:13px;font-weight:400;color:var(--mut);font-styl
 #count{position:absolute;left:16px;bottom:10px;z-index:4;font:12px system-ui,sans-serif;color:var(--mut);pointer-events:none}
 .hint{color:var(--mut);font-size:12px;line-height:1.5;margin:9px 0 0}
 aside{position:absolute;top:18px;right:18px;z-index:4;width:min(320px,calc(100vw - 36px));max-height:calc(100% - 36px);padding:14px 16px 16px;overflow:auto;font-family:system-ui,sans-serif;font-size:14px;background:rgba(255,250,242,.82);border:1px solid rgba(216,205,191,.95);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.16),0 4px 12px rgba(0,0,0,.08);backdrop-filter:blur(8px)}
-@media(max-width:759px){#cv{touch-action:none}aside{top:auto;bottom:14px;right:14px;width:min(340px,calc(100vw - 28px));max-height:min(58vh,460px);padding:13px 14px 15px}}
+@media(max-width:759px){#cv{touch-action:pan-y}aside{top:auto;bottom:14px;right:14px;width:min(340px,calc(100vw - 28px));max-height:min(58vh,460px);padding:13px 14px 15px}}
 aside h2{font:600 13px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:16px 0 8px}
 aside h2:first-child{margin-top:0}
 .actions{display:grid;gap:10px;margin-bottom:12px}
@@ -59,14 +59,14 @@ button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line
 #note .nid{display:block;margin-top:4px;font:11px ui-monospace,Menlo,monospace;font-style:normal;color:var(--mut);opacity:.8}
 
 /* Featured artwork */
-#featured-artwork{position:absolute;top:34px;left:42px;width:clamp(220px,25vw,360px);z-index:1;font-family:system-ui,sans-serif;pointer-events:auto;transform:translateZ(0)}
+#featured-artwork{position:absolute;top:34px;left:42px;width:clamp(220px,25vw,360px);z-index:3;font-family:system-ui,sans-serif;pointer-events:auto;transform:translateZ(0)}
 #featured-artwork .featured-frame{display:block;position:relative;aspect-ratio:4/5;overflow:hidden;background:rgba(255,250,242,.82);border:1px solid rgba(216,205,191,.95);border-radius:4px;text-decoration:none;color:var(--ink);cursor:default;box-shadow:0 22px 42px rgba(0,0,0,.18),0 6px 14px rgba(0,0,0,.10);backdrop-filter:blur(2px);transform:rotate(-1.25deg)}
 #featured-artwork .featured-frame.is-linked{cursor:pointer}
 #featured-artwork img{width:100%;height:100%;object-fit:contain;display:none}
 #featured-artwork.has-image img{display:block}
 #featured-artwork .featured-placeholder{position:absolute;inset:0;display:grid;place-items:center;padding:18px;color:var(--mut);text-align:center;font:italic 15px/1.5 Georgia,serif}
 #featured-artwork.has-image .featured-placeholder{display:none}
-#featured-artwork .featured-label{margin:12px 0 0 8px;font:600 12px/1.35 system-ui,sans-serif;letter-spacing:.035em;color:var(--ink)}
+#featured-artwork .featured-label{position:relative;z-index:4;margin:12px 0 0 8px;font:600 12px/1.35 system-ui,sans-serif;letter-spacing:.035em;color:#000;text-shadow:0 1px 2px rgba(255,255,255,.55)}
 #featured-artwork .featured-title{margin:10px 0 0 8px;font:italic 16px/1.3 Georgia,serif;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 #featured-artwork .featured-credit{margin:4px 0 0 8px;color:var(--mut);font-size:12px;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 #featured-artwork [hidden]{display:none}
@@ -210,6 +210,30 @@ aside #admin-area button {font-size:11px;padding:7px 8px;}
   aside .panel{max-height:47dvh;padding:12px;}
 }
 
+
+/* Artwork heading sits above the frame, readable even against the oak. */
+#featured-artwork .featured-heading{position:relative;z-index:5;margin:0 0 10px 7px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:3px 10px;pointer-events:none;}
+#featured-artwork .featured-label{margin:0;color:#101010;font-weight:750;text-shadow:0 1px 1px rgba(255,255,255,.7)}
+#featured-artwork .featured-date{font:600 11px/1.35 system-ui,sans-serif;color:#101010;text-shadow:0 1px 1px rgba(255,255,255,.7)}
+#featured-artwork .featured-date[hidden]{display:none}
+#featured-artwork{touch-action:pan-y}
+#featured-artwork .featured-frame{touch-action:pan-y}
+/* Keep native vertical page scrolling, while horizontal gestures over the tower spin it. */
+@media(max-width:759px){
+  html,body{overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto}
+  #cv{touch-action:pan-y}
+  #featured-artwork,#featured-artwork .featured-frame{touch-action:pan-y}
+}
+
+#mobile-page-footer{display:none}
+@media(max-width:759px){
+  #app{height:100dvh;overflow:hidden}
+  #mobile-page-footer{display:flex;min-height:210px;padding:42px 24px 60px;flex-direction:column;align-items:center;gap:8px;background:#f3ede4;color:#2d241d;font:14px/1.5 system-ui,sans-serif;text-align:center}
+  #mobile-page-footer strong{font-size:17px}
+  #mobile-page-footer a{margin-top:10px;color:#884a34;text-decoration:underline;text-underline-offset:3px}
+}
+html.is-embedded,html.is-embedded body{overflow:hidden}
+html.is-embedded #mobile-page-footer{display:none}
 </style>
 </head>
 <body>
@@ -218,11 +242,14 @@ aside #admin-area button {font-size:11px;padding:7px 8px;}
     <div id="sky-sun" aria-hidden="true"></div>
     <div id="sky-clouds" aria-hidden="true"></div>
     <section id="featured-artwork" aria-label="Featured community artwork">
+      <div class="featured-heading">
+        <p class="featured-label">Featured Artwork</p>
+        <time id="featured-artwork-date" class="featured-date" hidden></time>
+      </div>
       <a class="featured-frame" id="featured-artwork-link" aria-label="Featured artwork" tabindex="-1">
         <img id="featured-artwork-image" alt="">
         <span class="featured-placeholder">Featured artwork</span>
       </a>
-      <p class="featured-label">Featured Artwork</p>
       <p class="featured-title" id="featured-artwork-title" hidden></p>
       <p class="featured-credit" id="featured-artwork-credit" hidden></p>
     </section>
@@ -260,7 +287,14 @@ aside #admin-area button {font-size:11px;padding:7px 8px;}
     </details>
   </aside>
 </div>
+
+<footer id="mobile-page-footer" aria-label="Community Arts">
+  <strong>Community Arts</strong>
+  <span>Creative. Together.</span>
+  <a href="https://communityarts.org.uk/">Visit Community Arts</a>
+</footer>
 <script>
+if (window.parent !== window) document.documentElement.classList.add("is-embedded");
 window.TOWER_FEATURED_ARTWORK_ENDPOINT = "https://njsmvpdgdsoalbmmcxhh.supabase.co/functions/v1/featured-artwork";
 window.TOWER_SUPABASE_ANON_KEY = "sb_publishable_MqY7bonc7YdJ4gTkwyot6w_2LS2ZyOY";
 </script>
@@ -1912,6 +1946,21 @@ window.EzTreeOriginal=Tree;
   const link=document.getElementById('featured-artwork-link');
   const title=document.getElementById('featured-artwork-title');
   const credit=document.getElementById('featured-artwork-credit');
+  const artworkDate=document.getElementById('featured-artwork-date');
+  const dateFormatter=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  function renderUploadDate(record){
+    const raw=record.uploaded_at??record.uploadedAt??record.upload_date??record.uploadDate??record.image_uploaded_at??record.created_at??record.createdAt;
+    if(raw===undefined||raw===null||raw===''){
+      artworkDate.hidden=true;artworkDate.textContent='';artworkDate.removeAttribute('datetime');return;
+    }
+    const date=(typeof raw==='number')?new Date(raw<1e11?raw*1000:raw):new Date(raw);
+    if(!Number.isFinite(date.getTime())){
+      artworkDate.hidden=true;artworkDate.textContent='';artworkDate.removeAttribute('datetime');return;
+    }
+    artworkDate.dateTime=date.toISOString();
+    artworkDate.textContent=dateFormatter.format(date);
+    artworkDate.hidden=false;
+  }
   function safeUrl(value){
     if(typeof value!=='string'||!value.trim())return '';
     try{const url=new URL(value,location.href);return ['https:','http:'].includes(url.protocol)?url.href:''}catch{return ''}
@@ -1920,6 +1969,7 @@ window.EzTreeOriginal=Tree;
     const data=record?.featured_artwork||record?.data||record||{};
     const imageUrl=safeUrl(data.image_url||data.imageUrl||data.image);
     const journalUrl=safeUrl(data.journal_url||data.journalUrl||data.url);
+    renderUploadDate(data);
     img.onload=()=>{panel.classList.add('has-image')};
     img.onerror=()=>{panel.classList.remove('has-image');img.removeAttribute('src')};
     panel.classList.remove('has-image');
@@ -3027,6 +3077,7 @@ function loop(t){
      sunDisc.scale.setScalar(hh*1.05);
    }}
   grassU.uTime.value=t/1000;oakWindTime.value=t/1000;gm.visible=camY<13;
+  if(sel&&sel.tv&&sel.tv.glow&&sel.tv.glow.material&&sel.tv.glow.material.uniforms)sel.tv.glow.material.uniforms.uTime.value=t/1000;
   updateBrickPrompt(t/1000);
   updateInteraction(t);
   const pulse=.2+.5*(.5+.5*Math.sin(t/300));
@@ -3037,9 +3088,31 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
-cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};moved=0;rotTarget=null;cv.setPointerCapture(e.pointerId)});
-cv.addEventListener("pointermove",e=>{ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true;hoverDirty=true;if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved+=Math.abs(dx)+Math.abs(dy);if(scrollT!==null)off+=dx*.008;else rot+=dx*.008;drag={x:e.clientX,y:e.clientY}});
-cv.addEventListener("pointerup",e=>{if(drag&&moved<(e.pointerType==='touch'?13:5))handleClick(e);drag=null});
+cv.addEventListener("pointerdown",e=>{
+  if(e.target.closest('#featured-artwork, aside'))return;
+  drag={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,pointerId:e.pointerId,kind:e.pointerType,axis:null};
+  moved=0;rotTarget=null;
+  // Let the browser claim vertical touch gestures for native scrolling.
+  if(e.pointerType!=='touch')cv.setPointerCapture(e.pointerId);
+});
+cv.addEventListener("pointermove",e=>{
+  ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true;hoverDirty=true;
+  if(!drag||e.pointerId!==drag.pointerId)return;
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(drag.kind==='touch'&&!drag.axis){
+    const totalX=e.clientX-drag.startX,totalY=e.clientY-drag.startY;
+    if(Math.hypot(totalX,totalY)<7)return;
+    drag.axis=Math.abs(totalX)>Math.abs(totalY)*1.2?'horizontal':'vertical';
+  }
+  if(drag.axis==='vertical'){drag.x=e.clientX;drag.y=e.clientY;return;}
+  moved+=Math.abs(dx)+Math.abs(dy);
+  if(scrollT!==null)off+=dx*.008;else rot+=dx*.008;
+  drag.x=e.clientX;drag.y=e.clientY;
+});
+cv.addEventListener("pointerup",e=>{
+  if(drag&&e.pointerId===drag.pointerId&&drag.axis!=='vertical'&&moved<(e.pointerType==='touch'?13:5))handleClick(e);
+  drag=null;
+});
 cv.addEventListener("pointerleave",()=>{ptr.on=false;hoverDirty=true});
 cv.addEventListener("pointercancel",()=>{drag=null});
 // ── Hover, push-out, float and crumble ───────────────────────────────────────────────────────────
@@ -3063,6 +3136,68 @@ const hoverMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:
     }`});
 const hoverMesh=new THREE.Mesh(new THREE.PlaneGeometry(BW*1.16,BH*1.34),hoverMat);
 hoverMesh.visible=false;hoverMesh.renderOrder=5;hoverMesh.frustumCulled=false;tower.add(hoverMesh);
+
+// Selected brick feedback: a soft glow helps mobile users keep track of the chosen brick while spinning the tower.
+const travelerGlowGeo=new THREE.BoxGeometry(BW*1.11,BH*1.26,BD*1.11);
+function makeTravelerGlowMaterial(color){
+  return new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.BackSide,blending:THREE.NormalBlending,
+    uniforms:{uTime:{value:0},uColor:{value:color.clone()}},
+    vertexShader:`varying vec3 vWorldNormal;varying vec3 vViewDir;
+void main(){
+  vec4 wp=modelMatrix*vec4(position,1.0);
+  vec3 wn=normalize(mat3(modelMatrix)*normal);
+  vWorldNormal=wn;
+  vViewDir=normalize(cameraPosition-wp.xyz);
+  gl_Position=projectionMatrix*viewMatrix*wp;
+}`,
+    fragmentShader:`uniform float uTime;uniform vec3 uColor;varying vec3 vWorldNormal;varying vec3 vViewDir;
+float h(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1.0,0.0)),f.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),f.x),f.y);}
+void main(){
+  float fres=pow(1.0-max(dot(normalize(vWorldNormal),normalize(vViewDir)),0.0),3.3);
+  float pulse=.86+.14*sin(uTime*4.4);
+  float shimmer=.92+.08*n(gl_FragCoord.xy*0.035+uTime*0.16);
+  float a=fres*0.18*pulse*shimmer;
+  if(a<0.012)discard;
+  gl_FragColor=vec4(uColor,a);
+}`});
+}
+
+const travelerPaintGeo=new THREE.BoxGeometry(BW*1.05,BH*1.08,BD*1.05);
+function makeTravelerPaintMaterial(baseColor){
+  return new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,
+    uniforms:{uBase:{value:baseColor.clone()}},
+    vertexShader:`varying vec3 vPos;varying vec3 vNormalW;
+void main(){
+  vPos=position;
+  vNormalW=normalize(mat3(modelMatrix)*normal);
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
+}`,
+    fragmentShader:`uniform vec3 uBase;varying vec3 vPos;varying vec3 vNormalW;
+float h(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1.0,0.0)),f.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),f.x),f.y);}
+float fbm(vec2 p){float v=0.0,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p*=2.02;a*=.5;}return v;}
+vec2 faceUv(vec3 p,vec3 nrm){
+  vec3 an=abs(nrm);
+  if(an.x>an.y && an.x>an.z) return p.zy*vec2(sign(nrm.x),1.0);
+  if(an.y>an.z) return p.xz;
+  return p.xy*vec2(sign(nrm.z),1.0);
+}
+void main(){
+  vec2 uv=faceUv(vPos,normalize(vNormalW));
+  uv=uv*2.7;
+  float wash=fbm(uv*1.15+3.4);
+  float streak=fbm(vec2(uv.x*5.2,uv.y*1.35));
+  float fleck=smoothstep(.58,.93,fbm(uv*7.5+11.0));
+  float edge=1.0-smoothstep(0.58,0.96,max(abs(fract(uv.x)-.5)*2.0,abs(fract(uv.y)-.5)*2.0));
+  float alpha=clamp(.09+.14*wash+.08*streak+.06*fleck,0.0,.32)*(0.82+.18*edge);
+  vec3 light=mix(uBase*0.82,uBase*1.12,.45+.55*wash);
+  vec3 dark=mix(light,vec3(0.12,0.09,0.06),.24*streak);
+  vec3 col=mix(light,dark,.38+.32*fleck);
+  if(alpha<0.035)discard;
+  gl_FragColor=vec4(col,alpha);
+}`});
+}
 
 const _ray=new THREE.Raycaster(),_v2=new THREE.Vector2(),_p=new THREE.Vector3(),_q=new THREE.Quaternion(),_q2=new THREE.Quaternion(),_e=new THREE.Euler(),_m=new THREE.Matrix4(),_s=new THREE.Vector3();
 const eo3=u=>1-Math.pow(1-u,3),eio=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2,eob=u=>1+2.70158*Math.pow(u-1,3)+1.70158*Math.pow(u-1,2);
@@ -3106,17 +3241,30 @@ function showInstance(b,k){
 function makeTraveler(b,M0){
   const g=b.group,m=new THREE.InstancedMesh(geo,g.material,1),o=new THREE.InstancedMesh(inkPlane.clone(),inkMaterial,1);
   const col=g.kind==="plain"?brickColour(b.id):new THREE.Color(1,1,1);
+  const glowCol=(g.kind==="check"?new THREE.Color(0x9bc87a):g.kind==="stripe"?new THREE.Color(0xe6a483):col.clone().lerp(new THREE.Color(0xf0d5b6),0.22));
   m.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array([col.r,col.g,col.b]),3);
   m.setMatrixAt(0,M0);o.setMatrixAt(0,M0);
   o.geometry.setAttribute("aSeed",new THREE.InstancedBufferAttribute(new Float32Array([(hash(b.id)%10000)/10000]),1));
   o.geometry.setAttribute("aInkColor",new THREE.InstancedBufferAttribute(new Float32Array([col.r,col.g,col.b]),3));
-  for(const x of [m,o]){x.frustumCulled=false;x.matrixAutoUpdate=false;scene.add(x)}
-  return{m,o};
+  const glow=new THREE.Mesh(travelerGlowGeo,makeTravelerGlowMaterial(glowCol));
+  const paintAll=new THREE.Mesh(travelerPaintGeo,makeTravelerPaintMaterial(col));
+  for(const x of [m,o,glow,paintAll]){x.frustumCulled=false;x.matrixAutoUpdate=false;scene.add(x)}
+  return{m,o,glow,paintAll};
 }
-function disposeTraveler(tv){scene.remove(tv.m);scene.remove(tv.o);tv.m.dispose();tv.o.geometry.dispose();tv.o.dispose()}
+function disposeTraveler(tv){
+  scene.remove(tv.m);scene.remove(tv.o);if(tv.glow)scene.remove(tv.glow);if(tv.paintAll)scene.remove(tv.paintAll);
+  tv.m.dispose();tv.o.geometry.dispose();tv.o.dispose();
+  if(tv.glow){tv.glow.geometry.dispose();tv.glow.material.dispose();}
+  if(tv.paintAll){tv.paintAll.geometry.dispose();tv.paintAll.material.dispose();}
+}
 function placeTraveler(pos,quat,scale){
   _m.compose(pos,quat,_s.setScalar(scale));const tv=sel.tv;
-  tv.m.matrix.copy(_m).multiply(sel.inv);tv.o.matrix.copy(tv.m.matrix);tv.m.matrixWorldNeedsUpdate=tv.o.matrixWorldNeedsUpdate=true;
+  tv.m.matrix.copy(_m).multiply(sel.inv);tv.o.matrix.copy(tv.m.matrix);
+  if(tv.glow)tv.glow.matrix.copy(_m);
+  if(tv.paintAll)tv.paintAll.matrix.copy(_m);
+  tv.m.matrixWorldNeedsUpdate=tv.o.matrixWorldNeedsUpdate=true;
+  if(tv.glow)tv.glow.matrixWorldNeedsUpdate=true;
+  if(tv.paintAll)tv.paintAll.matrixWorldNeedsUpdate=true;
   sel.curP.copy(pos);sel.curQ.copy(quat);sel.curS=scale;
 }
 let floatScale=1.5;
