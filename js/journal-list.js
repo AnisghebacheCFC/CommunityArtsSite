@@ -19,21 +19,25 @@
       return;
     }
 
-    root.innerHTML = entries
-      .map((entry) => {
+    const cards = await Promise.all(
+      entries.map(async (entry) => {
         const image = entry.featured_path
           ? `<img src="${entry.featured_path}" alt="" />`
           : "";
+        const href = await window.CAJournalUrl(entry.id, `entry.html?id=${encodeURIComponent(entry.id)}`);
         return `<article class="journal-card">
         ${image}
         <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
         <h3>${entry.title}</h3>
         <p>${entry.excerpt || ""}</p>
-        <a href="entry.html?id=${entry.id}">Read the full entry</a>
+        <a href="${href}">Read the full entry</a>
       </article>`;
-      })
-      .join("");
+      }),
+    );
+    root.innerHTML = cards.join("");
   } catch {
-    root.innerHTML = "<p class='status'>The journal could not be loaded just now.</p>";
+    if (!root.querySelector("a")) {
+      root.innerHTML = "<p class='status'>The journal could not be loaded just now.</p>";
+    }
   }
 })();

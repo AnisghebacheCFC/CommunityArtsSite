@@ -90,12 +90,13 @@
       return;
     }
 
-    list.innerHTML = entries
-      .map((entry) => {
+    const cards = await Promise.all(
+      entries.map(async (entry) => {
         const image = entry.featured_path
           ? `<img src="${escapeHtml(entry.featured_path)}" alt="" />`
           : "";
         const date = window.CAClient.formatDate(entry.entry_date);
+        const href = await window.CAJournalUrl(entry.id, `entry.html?id=${encodeURIComponent(entry.id)}`);
         return `<article class="dj-entry" data-category="${escapeHtml(entry.dev_category || "")}">
           ${image}
           <p class="dj-meta">
@@ -103,15 +104,16 @@
             <span aria-hidden="true">·</span>
             <span class="dj-category">${escapeHtml(entry.dev_category || "")}</span>
           </p>
-          <h3><a href="entry.html?id=${encodeURIComponent(entry.id)}">${escapeHtml(entry.title)}</a></h3>
+          <h3><a href="${escapeHtml(href)}">${escapeHtml(entry.title)}</a></h3>
           <p>${escapeHtml(entry.excerpt || "")}</p>
         </article>`;
-      })
-      .join("");
+      }),
+    );
+    list.innerHTML = cards.join("");
 
     const initial = location.hash.replace(/^#/, "");
     apply(initial ? slugToFilter.get(initial) || "all" : "all", false);
   } catch {
-    showMessage("The Journal could not be loaded just now.");
+    if (!list.querySelector("a")) showMessage("The Journal could not be loaded just now.");
   }
 })();

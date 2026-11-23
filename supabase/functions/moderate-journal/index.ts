@@ -9,6 +9,23 @@ const VIDEO_TYPES = ["video/mp4", "video/webm"];
 const MAX_IMAGE = 4 * 1024 * 1024;
 const MAX_VIDEO = 12 * 1024 * 1024;
 
+const requestPublish = async () => {
+  const token = Deno.env.get("JOURNAL_PUBLISH_TOKEN");
+  const repo = Deno.env.get("JOURNAL_PUBLISH_REPO") || "AnisghebacheCFC/CommunityArtsSite";
+  if (!token) return;
+  await fetch(`https://api.github.com/repos/${repo}/dispatches`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "community-arts-journal",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    body: JSON.stringify({ event_type: "publish-journal" }),
+  }).catch(() => undefined);
+};
+
 const json = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), {
     status,
@@ -147,6 +164,7 @@ Deno.serve(async (req) => {
     const paths = [...(entry.image_paths || []), ...(entry.video_paths || [])];
     if (paths.length) await supabase.storage.from("journal").remove(paths);
     await supabase.from("journal_entries").delete().eq("id", id);
+    if (entry.status === "approved") await requestPublish();
     return json(200, { message: "Entry deleted." });
   }
 
@@ -157,6 +175,7 @@ Deno.serve(async (req) => {
       .eq("id", id)
       .select("*")
       .single();
+    if (entry.status === "approved") await requestPublish();
     return json(200, { message: "Entry rejected.", entry: await present(supabase, updated) });
   }
 
@@ -167,6 +186,7 @@ Deno.serve(async (req) => {
       .eq("id", id)
       .select("*")
       .single();
+    if (entry.status === "approved") await requestPublish();
     return json(200, { message: "Entry unpublished.", entry: await present(supabase, updated) });
   }
 
@@ -184,6 +204,7 @@ Deno.serve(async (req) => {
     };
     const { data: updated } = await supabase.from("journal_entries").update(published).eq("id", id).select("*").single();
     const destination = journalLabel(String(updated?.journal || "community"));
+    await requestPublish();
     return json(200, { message: `Entry published to ${destination}.`, entry: await present(supabase, updated) });
   }
 
@@ -252,6 +273,7 @@ Deno.serve(async (req) => {
       .select("*")
       .single();
     if (updateError) return json(500, { error: "Could not save the entry." });
+    if (entry.status === "approved") await requestPublish();
     return json(200, { message: "Saved. The public journal will update for approved entries.", entry: await present(supabase, updated) });
   }
 

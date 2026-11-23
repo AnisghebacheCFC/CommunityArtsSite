@@ -39,6 +39,12 @@ const renderMedia = (entry) => {
     return;
   }
 
+  const permanent = await window.CAJournalUrl(id, "");
+  if (permanent) {
+    location.replace(permanent);
+    return;
+  }
+
   try {
     const { entry } = await window.CAClient.callFunction("public-journal", { action: "get", id });
     if (entry.journal === "dev") {

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developing a Painterly Identity Through Procedural Rendering | Anis Ghebache</title>
+    <meta name="description" content="Developing a Painterly Identity Through Procedural Rendering Once the tower was functioning, I began considering its artistic direction. I wasn&#39;t particularl…" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="https://communityarts.org.uk/anis-ghebache/dev-journal/developing-a-painterly-identity-through-procedural-rendering/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Developing a Painterly Identity Through Procedural Rendering | Anis Ghebache" />
+    <meta property="og:description" content="Developing a Painterly Identity Through Procedural Rendering Once the tower was functioning, I began considering its artistic direction. I wasn&#39;t particularl…" />
+    <meta property="og:url" content="https://communityarts.org.uk/anis-ghebache/dev-journal/developing-a-painterly-identity-through-procedural-rendering/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/anis-ghebache/dev-journal/dev-journal.css" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"BlogPosting","headline":"Developing a Painterly Identity Through Procedural Rendering","description":"Developing a Painterly Identity Through Procedural Rendering Once the tower was functioning, I began considering its artistic direction. I wasn't particularl…","datePublished":"2026-11-16","articleSection":"Creative Technology","inLanguage":"en-GB","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/developing-a-painterly-identity-through-procedural-rendering/","author":{"@type":"Person","name":"Anis Ghebache","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/"},"publisher":{"@type":"Organization","name":"Community Arts","url":"https://communityarts.org.uk/"},"mainEntityOfPage":"https://communityarts.org.uk/anis-ghebache/dev-journal/developing-a-painterly-identity-through-procedural-rendering/"}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    <header class="dj-bar">
+      <a class="dj-home" href="/">Community Arts</a>
+      <a href="/anis-ghebache/dev-journal/">Journal</a>
+    </header>
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-reading">
+        <article class="dj-article" data-entry-id="f535e786-b34f-49b1-a63a-32e4c5ca145a">
+          <header class="dj-article-header">
+            <p class="dj-kicker">
+              <span class="dj-category">Creative Technology</span>
+              <span aria-hidden="true">·</span>
+              <time datetime="2026-11-16">16 November 2026</time>
+            </p>
+            <h1>Developing a Painterly Identity Through Procedural Rendering</h1>
+            <p class="dj-byline">By <a rel="author" href="/anis-ghebache/dev-journal/">Anis Ghebache</a></p>
+          </header>
+          <div class="dj-prose"><h1>Developing a Painterly Identity Through Procedural Rendering</h1><p>Once the tower was functioning, I began considering its artistic direction. I wasn't particularly interested in making the geometry appear realistic or demonstrating the technical capabilities of Three.js for their own sake.</p><p>I wanted the tower to feel painted.</p><p>This aesthetic is an extension of my previous creative practice, particularly my most recent short film, where I explored a similar visual language. Carrying that approach into an interactive environment felt like a natural continuation of my work.</p><p>For me, artistic direction is as much about restraint as it is about experimentation. I would rather create something visually coherent than something technically impressive but disconnected from its surroundings.</p><h2>Procedural Brushstrokes</h2><p>I began exploring methods of generating painterly surfaces using shaders.</p><p>One approach would have been to create individual brushstroke images and apply them as textures. This would provide a great deal of artistic control over their shape, placement, and appearance.</p><p>However, I was interested in the possibility of producing the strokes procedurally.</p><p>The current prototype uses a custom shader that generates directional marks across the bricks, varying their shape, thickness, coverage, and orientation. Additional strokes follow the edges, giving the geometry irregular, ink-like outlines.</p><p>I also explored painterly post-processing, including the Kuwahara filter, which simplifies areas of colour while retaining some of their boundaries.</p><p>These techniques work together to give the surfaces a quality that sits somewhere between three-dimensional geometry and painted illustration.</p><h2>Painting With Light</h2><p>One of the aspects I'm most satisfied with is how the brushstrokes interact with lighting.</p><p>The shader incorporates the direction of the light into the appearance of the strokes. As the surface changes orientation, one side becomes lighter while another falls into shade.</p><p>This resembles the way an illuminated physical object behaves, but photorealism isn't the objective. I want the lighting to reinforce the impression that the bricks have been painted.</p><p>The visible strokes and variations in colour are more important to me than creating perfectly smooth surfaces.</p><p>I'm particularly interested in how procedural rendering can reproduce some of the irregularity associated with traditional media without relying entirely on pre-existing images.</p><h2>Artistic Consistency</h2><p>The purpose of this experiment isn't to make the tower appear more technologically sophisticated.</p><p>It's about maintaining a consistent artistic identity across the website.</p><p>My plans for the accompanying character involve physical printing, painting, collage, and materials taken from fashion magazines. I want the digital environment to exist alongside those methods rather than appear visually detached from them.</p><p>The challenge is to use computational techniques in service of an established artistic direction.</p><p>I don't see the procedural approach as a replacement for physical artwork. It's another method of extending that visual language into an interactive space.</p><p>What matters to me is that the technology supports the artistic vision, rather than becoming the artistic vision itself.</p></div>
+          <div id="entry-media" class="entry-media"></div>
+        </article>
+      </div>
+    </main>
+    <footer class="dj-footer">
+      <p><a href="/">Community Arts</a> · Elephant &amp; Castle, Southwark</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/entry-media.js"></script>
+  </body>
+</html>

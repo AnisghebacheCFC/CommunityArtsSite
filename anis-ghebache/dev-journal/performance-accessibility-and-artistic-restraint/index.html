@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Performance, Accessibility and Artistic Restraint | Anis Ghebache</title>
+    <meta name="description" content="While developing the tower, I&#39;ve been thinking about the relationship between visual quality, performance, and accessibility. My priority is to reduce fricti…" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="https://communityarts.org.uk/anis-ghebache/dev-journal/performance-accessibility-and-artistic-restraint/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Performance, Accessibility and Artistic Restraint | Anis Ghebache" />
+    <meta property="og:description" content="While developing the tower, I&#39;ve been thinking about the relationship between visual quality, performance, and accessibility. My priority is to reduce fricti…" />
+    <meta property="og:url" content="https://communityarts.org.uk/anis-ghebache/dev-journal/performance-accessibility-and-artistic-restraint/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/anis-ghebache/dev-journal/dev-journal.css" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"BlogPosting","headline":"Performance, Accessibility and Artistic Restraint","description":"While developing the tower, I've been thinking about the relationship between visual quality, performance, and accessibility. My priority is to reduce fricti…","datePublished":"2026-11-17","articleSection":"Creative Technology","inLanguage":"en-GB","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/performance-accessibility-and-artistic-restraint/","author":{"@type":"Person","name":"Anis Ghebache","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/"},"publisher":{"@type":"Organization","name":"Community Arts","url":"https://communityarts.org.uk/"},"mainEntityOfPage":"https://communityarts.org.uk/anis-ghebache/dev-journal/performance-accessibility-and-artistic-restraint/"}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    <header class="dj-bar">
+      <a class="dj-home" href="/">Community Arts</a>
+      <a href="/anis-ghebache/dev-journal/">Journal</a>
+    </header>
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-reading">
+        <article class="dj-article" data-entry-id="75632c5b-0ec8-4709-aec1-254a7da3ee40">
+          <header class="dj-article-header">
+            <p class="dj-kicker">
+              <span class="dj-category">Creative Technology</span>
+              <span aria-hidden="true">·</span>
+              <time datetime="2026-11-17">17 November 2026</time>
+            </p>
+            <h1>Performance, Accessibility and Artistic Restraint</h1>
+            <p class="dj-byline">By <a rel="author" href="/anis-ghebache/dev-journal/">Anis Ghebache</a></p>
+          </header>
+          <div class="dj-prose"><p>While developing the tower, I've been thinking about the relationship between visual quality, performance, and accessibility.</p><p>My priority is to reduce friction when people access the website. I don't want visitors to need expensive or particularly powerful hardware simply to interact with something I've created.</p><p>This has influenced how I'm thinking about rendering performance.</p><h2>Testing the Prototype</h2><p>I tested the current implementation on a Samsung Galaxy M53, where it was running at approximately 40 frames per second, and&nbsp;<span style="font-family: inherit; font-size: inherit; font-style: inherit; font-variant-ligatures: inherit; font-variant-caps: inherit; font-weight: inherit;">I consider that an acceptable result for the type of experience I'm creating.</span></p><p>The website isn't a competitive game, and its interactions don't require exceptionally high frame rates. The purpose is to explore an environment, contribute to a collective artwork, and engage with its visual elements.</p><p>I've therefore been considering limiting the rendering rate to approximately 24 frames per second.</p><p>I don't regard 24 FPS as a technical limitation</p><h2>Frame Rate as an Artistic Decision</h2><p>A lower frame rate may also complement the painterly rendering style.</p><p>I've noticed occasional jittering associated with the paint effect. Rather than automatically pursuing higher frame rates, I'm interested in whether a more restrained update frequency could produce movement that feels appropriate to the environment.</p><p>There is a distinction between animation that is technically smooth and animation that is artistically suitable.</p><p>My intention isn't to make the experience feel unresponsive. It's to establish a level of motion that supports the aesthetic without consuming unnecessary computational resources.</p><p>Of course, limiting the frame rate doesn't automatically make the rendering inexpensive. The cost of individual frames, shader calculations, memory allocation, and the number of objects being rendered still matters.</p><p>These are aspects I want to continue measuring.</p><h2>Designing for Accessibility</h2><p>The broader motivation is accessibility.</p><p>Community Arts is intended to encourage participation, so it would be contradictory to create a digital environment that unnecessarily excludes people because of their hardware.</p><p>I want to design for devices with relatively limited capabilities rather than assume everyone will be accessing the website through a powerful computer.</p><p>This means benchmarking the prototype, testing it on different devices, and evaluating how the rendering techniques scale as the number of bricks increases.</p><p>The procedural paint effects are worth retaining because they contribute substantially to the artistic identity, but I don't want to maximise resource consumption simply because the technology allows it.</p><p>For me, again, restraint is part of artistic direction.</p><p>A technically ambitious project doesn't necessarily need to demand the maximum performance available. The more interesting objective is determining how little computation is required to achieve the experience I actually want.</p><p>I want the work to remain visually distinctive, accessible, and sustainable as the project develops!</p></div>
+          <div id="entry-media" class="entry-media"></div>
+        </article>
+      </div>
+    </main>
+    <footer class="dj-footer">
+      <p><a href="/">Community Arts</a> · Elephant &amp; Castle, Southwark</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/entry-media.js"></script>
+  </body>
+</html>

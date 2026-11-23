@@ -19,6 +19,12 @@ const renderMedia = (entry) => {
     return;
   }
 
+  const permanent = await window.CAJournalUrl(id, "");
+  if (permanent) {
+    location.replace(permanent);
+    return;
+  }
+
   try {
     const { entry } = await window.CAClient.callFunction("public-journal", { action: "get", id });
     if (entry.journal === "dev") {
@@ -30,10 +36,6 @@ const renderMedia = (entry) => {
       return;
     }
     document.title = `${entry.title} · Community Arts`;
-    const canonical = document.querySelector('link[rel="canonical"]') || document.createElement("link");
-    canonical.rel = "canonical";
-    canonical.href = `https://communityarts.org.uk/entry.html?id=${encodeURIComponent(id)}`;
-    document.head.appendChild(canonical);
     root.innerHTML = `
     <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
     <h1>${entry.title}</h1>

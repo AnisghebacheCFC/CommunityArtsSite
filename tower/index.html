@@ -2897,6 +2897,17 @@ function placeOakForViewport(w,h){
   const s=portrait?.18*.85:.18;
   oakModel.scale.setScalar(s);
 }
+// Once the visitor has selected a brick, the instruction is never shown again.
+// Persist this onboarding state across refreshes in the same browser.
+const BRICK_PROMPT_DONE_KEY='ca-brick-by-brick-prompt-seen-v1';
+let brickPromptDismissed=false;
+try{brickPromptDismissed=localStorage.getItem(BRICK_PROMPT_DONE_KEY)==='1'}catch(e){}
+function dismissBrickPromptForever(){
+  if(brickPromptDismissed)return;
+  brickPromptDismissed=true;
+  try{localStorage.setItem(BRICK_PROMPT_DONE_KEY,'1')}catch(e){}
+  if(brickPrompt)brickPrompt.classList.add('is-hidden');
+}
 const brickPrompt=document.getElementById('brick-prompt');
 const promptLetters=[];
 let brickPromptText='';
@@ -2917,7 +2928,7 @@ function syncBrickPromptText(){
     promptLetters.push(span);
   }
 }
-if(brickPrompt)syncBrickPromptText();
+if(brickPrompt){syncBrickPromptText();brickPrompt.classList.toggle('is-hidden',brickPromptDismissed);}
 const promptWorld=new THREE.Vector3();
 const towerPoint=new THREE.Vector3();
 function updateBrickPrompt(time=0){
@@ -2927,10 +2938,15 @@ function updateBrickPrompt(time=0){
   if(w<=0||h<=0)return;
   const towerHeight=Math.max(BH,Math.ceil(bricks.length/N)*BH);
   cam.updateMatrixWorld();
-  // Track the actual projected tower top, rather than anchoring text to the page.
-  promptWorld.set(0,towerHeight+1.35,0).project(cam);
+  // Track the actual projected tower top, including the mobile-only tower offset.
+  tower.updateMatrixWorld(true);
+  promptWorld.set(0,towerHeight+1.35,0);
+  tower.localToWorld(promptWorld);
+  promptWorld.project(cam);
   const x=(promptWorld.x*.5+.5)*w;
-  const y=(-promptWorld.y*.5+.5)*h;
+  let y=(-promptWorld.y*.5+.5)*h;
+  const mobilePrompt=window.matchMedia('(max-width: 759px)').matches || window.innerHeight>window.innerWidth;
+  if(mobilePrompt) y+=26;
   brickPrompt.style.left=Math.max(96,Math.min(w-96,x))+'px';
   brickPrompt.style.top=Math.max(40,Math.min(h*.7,y))+'px';
   const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2947,25 +2963,15 @@ function updateBrickPrompt(time=0){
       span.style.setProperty('--lr',lr.toFixed(2)+'deg');
     }
   }
-  // Fade once the pointer comes close to the visible tower footprint.
-  let near=false;
-  if(ptr.on){
-    const rect=cv.getBoundingClientRect();
-    const px=ptr.x-rect.left,py=ptr.y-rect.top;
-    const centerHeight=Math.min(camY,towerHeight*.5);
-    towerPoint.set(0,centerHeight,0).project(cam);
-    const tx=(towerPoint.x*.5+.5)*w,ty=(-towerPoint.y*.5+.5)*h;
-    const side=new THREE.Vector3(R,centerHeight,0).project(cam);
-    const radius=Math.max(62,Math.abs(side.x-towerPoint.x)*w*.5);
-    const nearX=Math.abs(px-tx)<radius+Math.max(38,w*.045);
-    const nearY=Math.abs(py-ty)<Math.max(130,h*.29);
-    near=nearX&&nearY;
-  }
-  brickPrompt.classList.toggle('is-hidden',near||!!sel);
+  // Keep the instruction visible until the first actual brick selection.
+  brickPrompt.classList.toggle('is-hidden',brickPromptDismissed);
 }
 function resize(){
   const w=Math.max(1,cv.clientWidth),h=Math.max(1,cv.clientHeight);
   const mobile=w<760 || h>w*1.22;
+  // Move only the brick tower closer/right on mobile; leave the camera,
+  // landscape, sky, sun, grass, tree, overlays, and desktop view untouched.
+  tower.position.set(mobile?0.90:0,0,mobile?2.65:0);
   placeOakForViewport(w,h);
   ren.setPixelRatio(Math.min(window.devicePixelRatio||1,mobile?1.5:2));
   ren.setSize(w,h);
@@ -3001,8 +3007,11 @@ function loop(t){
   tower.rotation.y=rot;
   camY+=(camTarget-camY)*.06;
   const mobileView=cv.clientWidth<760 || cv.clientHeight>cv.clientWidth*1.22;
-  cam.position.set(0,camY+(mobileView?.40:.18),camDistance);
-  cam.lookAt(0,camY+(mobileView?.06:0),0);
+  // Look slightly upward on portrait screens, bringing more blue sky into
+  // the composition and pushing the grass below the bottom edge.
+  // Keep desktop framing unchanged and preserve the mobile tower size/offset.
+  cam.position.set(0,camY+(mobileView?.32:.18),camDistance);
+  cam.lookAt(0,camY+(mobileView?1.22:0),0);
   {const dz=camDistance+60,hh=Math.tan(THREE.MathUtils.degToRad(cam.fov/2))*dz;
    if(mobileView){
      // Place the sun using viewport coordinates so portrait view offsets
@@ -3118,7 +3127,9 @@ function floatPos(){   // centre of the empty left of the screen, on a plane in 
 }
 function floatQuat(el,out){return out.setFromEuler(_e.set(.08*Math.sin(el*.9),Math.PI+el*.55,.05*Math.sin(el*.7),"YXZ"))}   // a slow turntable, so every face gets its turn in the light
 function startSel(b,t){
-  if(!b.group||sel)return;setHover(null);tower.updateMatrixWorld(true);
+  if(!b.group||sel)return;
+  dismissBrickPromptForever();
+  setHover(null);tower.updateMatrixWorld(true);
   const M0=matrixFor(b.p).clone(),W0=new THREE.Matrix4().multiplyMatrices(tower.matrixWorld,M0);
   const s={b,phase:"out",t0:t,p0:new THREE.Vector3(),q0:new THREE.Quaternion(),
     dir:new THREE.Vector3(Math.cos(b.p.a),0,Math.sin(b.p.a)).transformDirection(tower.matrixWorld),inv:M0.clone().invert(),
