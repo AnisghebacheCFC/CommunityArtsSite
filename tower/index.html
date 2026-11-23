@@ -12,7 +12,7 @@
 html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 Georgia,"Times New Roman",serif}
 #app{display:flex;flex-direction:column;height:100%}
-#cv{flex:1;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;cursor:grab;background:var(--bg)}
+#cv{flex:1;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;cursor:grab;background:linear-gradient(180deg,#74bfff 0%,#a9dbff 34%,#d7efff 62%,#f3ede4 100%)}
 #cv canvas{display:block;position:relative;z-index:2;pointer-events:none}
 h1{position:absolute;left:16px;top:12px;margin:0;font-size:22px;letter-spacing:.01em;pointer-events:none}
 h1 small{display:block;font-size:13px;font-weight:400;color:var(--mut);font-style:italic}
@@ -59,19 +59,23 @@ button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line
 #note .nid{display:block;margin-top:4px;font:11px ui-monospace,Menlo,monospace;font-style:normal;color:var(--mut);opacity:.8}
 
 /* Featured artwork */
-#featured-artwork{position:absolute;top:34px;left:42px;width:clamp(220px,25vw,360px);z-index:1;font-family:system-ui,sans-serif;pointer-events:auto;transform:translateZ(0)}
+#featured-artwork{position:absolute;top:34px;left:42px;width:clamp(220px,25vw,360px);z-index:3;font-family:system-ui,sans-serif;pointer-events:auto;transform:translateZ(0)}
 #featured-artwork .featured-frame{display:block;position:relative;aspect-ratio:4/5;overflow:hidden;background:rgba(255,250,242,.82);border:1px solid rgba(216,205,191,.95);border-radius:4px;text-decoration:none;color:var(--ink);cursor:default;box-shadow:0 22px 42px rgba(0,0,0,.18),0 6px 14px rgba(0,0,0,.10);backdrop-filter:blur(2px);transform:rotate(-1.25deg)}
 #featured-artwork .featured-frame.is-linked{cursor:pointer}
 #featured-artwork img{width:100%;height:100%;object-fit:contain;display:none}
 #featured-artwork.has-image img{display:block}
 #featured-artwork .featured-placeholder{position:absolute;inset:0;display:grid;place-items:center;padding:18px;color:var(--mut);text-align:center;font:italic 15px/1.5 Georgia,serif}
 #featured-artwork.has-image .featured-placeholder{display:none}
+#featured-artwork .featured-label{margin:12px 0 0 8px;font:600 12px/1.35 system-ui,sans-serif;letter-spacing:.035em;color:var(--ink)}
 #featured-artwork .featured-title{margin:10px 0 0 8px;font:italic 16px/1.3 Georgia,serif;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 #featured-artwork .featured-credit{margin:4px 0 0 8px;color:var(--mut);font-size:12px;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 #featured-artwork [hidden]{display:none}
+.prototype-brand{margin:0 0 20px;font:500 13px/1.45 system-ui,sans-serif;letter-spacing:.02em;color:var(--mut)}
+.prototype-brand strong{display:block;font-weight:650;font-size:15px;color:var(--ink)}
 #note{z-index:5}
-@media(max-width:759px){#featured-artwork{top:24px;left:20px;width:clamp(160px,38vw,240px)}#featured-artwork .featured-frame{aspect-ratio:4/5}}
-@media(max-height:480px){#featured-artwork{top:18px;left:18px;width:160px}}
+@media(max-width:759px){#featured-artwork{top:24px;left:20px;width:clamp(160px,38vw,240px);transform:none}#featured-artwork .featured-frame{aspect-ratio:4/5}}
+@media(min-width:760px){#featured-artwork{top:50%;left:50%;width:min(70vw,calc(92vh * 0.8));transform:translate(-50%,-50%)}#featured-artwork .featured-frame{transform:rotate(-1.25deg)}}
+@media(max-height:480px){#featured-artwork{top:18px;left:18px;width:min(42vw,220px);transform:none}}
 </style>
 </head>
 <body>
@@ -82,11 +86,13 @@ button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line
         <img id="featured-artwork-image" alt="">
         <span class="featured-placeholder">Featured artwork</span>
       </a>
+      <p class="featured-label">Featured Artwork</p>
       <p class="featured-title" id="featured-artwork-title" hidden></p>
       <p class="featured-credit" id="featured-artwork-credit" hidden></p>
     </section>
     <div id="count"></div><div id="note"></div></div>
   <aside>
+    <p class="prototype-brand"><strong>CommunityArts Brick by Brick</strong>Prototype vers. 0.9a</p>
     <div class="actions" aria-label="Tower actions">
       <button id="toggle-add" type="button" aria-expanded="false" aria-controls="add-panel">Add Your Brick <span aria-hidden="true">+</span></button>
       <button id="toggle-find" type="button" aria-expanded="false" aria-controls="find-panel">Find the Brick <span aria-hidden="true">⌕</span></button>
