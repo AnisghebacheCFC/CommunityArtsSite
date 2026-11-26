@@ -182,7 +182,7 @@
     document.getElementById("entry-date").value = window.CAClient.dateInputValue(current.entry_date);
     bodyEl.innerHTML = current.body_html || "";
     document.getElementById("entry-embeds").value = (current.video_embeds || []).join("\n");
-    const journal = current.journal === "dev" || current.journal === "anna" ? current.journal : "community";
+    const journal = current.journal === "dev" || current.journal === "anna" || current.journal === "miki" ? current.journal : "community";
     const journalInput = editor.querySelector(`input[name="journal"][value="${journal}"]`);
     if (journalInput) journalInput.checked = true;
     journalChoice.sync(current.dev_category || "");

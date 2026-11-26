@@ -33,6 +33,10 @@ alter table public.journal_entries
       journal = 'anna'
       and dev_category in ('Child Development', 'Activities', 'Critical Engagement')
     )
+    or (
+      journal = 'miki'
+      and dev_category in ('Workshops', 'Exhibitions', 'Art Practise')
+    )
   );
 
 create table if not exists public.featured_artwork (

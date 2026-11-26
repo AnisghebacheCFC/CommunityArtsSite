@@ -597,10 +597,10 @@ h2 {
   position: absolute;
   z-index: 4;
   left: 50%;
-  bottom: 0;
+  bottom: 20%;
   width: 1440px;
   height: auto;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(33%);
   pointer-events: none;
   user-select: none;
 }
@@ -648,6 +648,8 @@ h1.site-banner {
 }
 
 .tower-feature iframe {
+  position: relative;
+  z-index: 1;
   display: block;
   flex: 1 1 auto;
   width: 100%;

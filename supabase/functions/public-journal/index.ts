@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
   const payload = await req.json().catch(() => ({ action: "list" }));
   const { action, id } = payload;
   const journal =
-    payload.journal === "dev" || payload.journal === "anna" || payload.journal === "community"
+    payload.journal === "dev" || payload.journal === "anna" || payload.journal === "miki" || payload.journal === "community"
       ? payload.journal
       : "community";
 

@@ -36,6 +36,15 @@ const journals = {
     listEnd: "<!-- journal-static:end -->",
     card: "personal",
   },
+  miki: {
+    folder: path.join("miki-takekawa", "journal"),
+    archive: "/miki-takekawa/journal/",
+    archiveLabel: "Miki Takekawa · Journal",
+    listFile: path.join(root, "miki-takekawa", "journal", "index.html"),
+    listStart: "<!-- journal-static:start -->",
+    listEnd: "<!-- journal-static:end -->",
+    card: "personal",
+  },
 };
 
 const escapeHtml = (value) =>
@@ -149,9 +158,12 @@ const communityPage = (entry, url) => `<!DOCTYPE html>
 `;
 
 const personalPage = (entry, url, journal) => {
-  const css = journal === "dev" ? "/anis-ghebache/dev-journal/dev-journal.css" : "/anna-verdes/journal/journal.css";
-  const author = journal === "dev" ? "Anis Ghebache" : "Anna Verdes";
-  const authorUrl = journal === "dev" ? `${site}/anis-ghebache/dev-journal/` : `${site}/anna-verdes/journal/`;
+  const people = {
+    dev: ["Anis Ghebache", "/anis-ghebache/dev-journal/dev-journal.css", `${site}/anis-ghebache/dev-journal/`],
+    anna: ["Anna Verdes", "/anna-verdes/journal/journal.css", `${site}/anna-verdes/journal/`],
+    miki: ["Miki Takekawa", "/miki-takekawa/journal/journal.css", `${site}/miki-takekawa/journal/`],
+  };
+  const [author, css, authorUrl] = people[journal];
   return `<!DOCTYPE html>
 <html lang="en-GB">
   <head>

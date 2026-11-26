@@ -13,9 +13,12 @@ export const ANNA_CATEGORIES = [
   "Critical Engagement",
 ] as const;
 
+export const MIKI_CATEGORIES = ["Workshops", "Exhibitions", "Art Practise"] as const;
+
 const PERSONAL = {
   dev: { label: "Anis Ghebache · Journal", categories: DEV_CATEGORIES },
   anna: { label: "Anna Verdes · Journal", categories: ANNA_CATEGORIES },
+  miki: { label: "Miki Takekawa · Journal", categories: MIKI_CATEGORIES },
 } as const;
 
 export const journalLabel = (journal: string, category?: string | null) => {
@@ -26,7 +29,7 @@ export const journalLabel = (journal: string, category?: string | null) => {
 };
 
 export const journalFields = (journalRaw: string, categoryRaw: string) => {
-  const journal = journalRaw === "dev" || journalRaw === "anna" || journalRaw === "community" ? journalRaw : "";
+  const journal = journalRaw === "dev" || journalRaw === "anna" || journalRaw === "miki" || journalRaw === "community" ? journalRaw : "";
   if (!journal) return { error: "Choose a journal." };
   if (journal === "community") return { journal, dev_category: null };
   const place = PERSONAL[journal];

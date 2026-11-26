@@ -13,7 +13,7 @@
       action: "list",
       journal: "community",
     });
-    const entries = (published || []).filter((entry) => entry.journal !== "dev" && entry.journal !== "anna");
+    const entries = (published || []).filter((entry) => entry.journal !== "dev" && entry.journal !== "anna" && entry.journal !== "miki");
     if (!entries.length) {
       root.innerHTML = "<p class='status'>No journal entries have been published yet.</p>";
       return;

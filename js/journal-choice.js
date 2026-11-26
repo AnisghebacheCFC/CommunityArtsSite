@@ -3,12 +3,14 @@ window.CAJournalChoice = (() => {
     community: [],
     dev: ["AI", "Filmmaking", "Animation", "Creative Technology", "Artistic Practice", "Fitness"],
     anna: ["Child Development", "Activities", "Critical Engagement"],
+    miki: ["Workshops", "Exhibitions", "Art Practise"],
   };
 
   const LABELS = {
     community: "Community Journal",
     dev: "Anis Ghebache · Journal",
     anna: "Anna Verdes · Journal",
+    miki: "Miki Takekawa · Journal",
   };
 
   const selectedJournal = (root) => root.querySelector('input[name="journal"]:checked')?.value || "community";
@@ -25,7 +27,7 @@ window.CAJournalChoice = (() => {
   const bind = ({ form, field, select }) => {
     const sync = (current) => {
       const journal = selectedJournal(form);
-      const personal = journal === "dev" || journal === "anna";
+      const personal = journal === "dev" || journal === "anna" || journal === "miki";
       field.hidden = !personal;
       select.required = personal;
       fillCategories(select, journal, personal ? current || select.value : "");

@@ -35,6 +35,10 @@ const renderMedia = (entry) => {
       location.replace(`/anna-verdes/journal/entry.html?id=${encodeURIComponent(id)}`);
       return;
     }
+    if (entry.journal === "miki") {
+      location.replace(`/miki-takekawa/journal/entry.html?id=${encodeURIComponent(id)}`);
+      return;
+    }
     document.title = `${entry.title} · Community Arts`;
     root.innerHTML = `
     <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
