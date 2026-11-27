@@ -112,6 +112,7 @@ const communityPage = (entry, url) => `<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${escapeHtml(entry.title)} | Community Arts</title>
     <meta name="description" content="${escapeHtml(descriptionFrom(entry))}" />
@@ -170,6 +171,7 @@ const personalPage = (entry, url, journal) => {
 <html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${escapeHtml(entry.title)} | ${escapeHtml(author)}</title>
     <meta name="description" content="${escapeHtml(descriptionFrom(entry))}" />
