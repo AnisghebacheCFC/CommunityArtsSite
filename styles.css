@@ -516,6 +516,109 @@ body {
   margin: 1.5rem 0;
 }
 
+.reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.75rem;
+}
+
+.journal-card .reactions {
+  justify-content: flex-end;
+  margin-top: 0.35rem;
+}
+
+.reactions button {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgb(20 17 15 / 0.16);
+  border-radius: 999px;
+  background: #fffaf2;
+  color: var(--ink);
+  font: 600 0.84rem/1 "Outfit", system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.reactions button [aria-hidden="true"] {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.reactions button:not([aria-pressed="true"]):hover [aria-hidden="true"] {
+  animation: reaction-shake 0.42s ease-in-out infinite;
+}
+
+.reaction-thanks {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  margin: 0;
+  padding: 0.02em 0.32em 0.06em;
+  color: #000;
+  background: var(--paper);
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 1.45rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.05;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.reaction-burst {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  top: 46%;
+  width: min(46vw, 280px);
+  height: auto;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@keyframes reaction-shake {
+  0%,
+  100% {
+    transform: scale(1.22) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.34) rotate(-12deg);
+  }
+  50% {
+    transform: scale(1.22) rotate(10deg);
+  }
+  75% {
+    transform: scale(1.34) rotate(-8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reactions button:not([aria-pressed="true"]):hover [aria-hidden="true"] {
+    animation: none;
+    transform: scale(1.22);
+  }
+}
+
+.reactions button[aria-pressed="true"] {
+  background: #f0d7c8;
+  border-color: rgb(181 72 42 / 0.45);
+  cursor: default;
+}
+
+.reactions button:disabled {
+  cursor: default;
+}
+
+.reactions-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .entry-media img,
 .entry-media video,
 .entry-media iframe {

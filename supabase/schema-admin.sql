@@ -47,3 +47,14 @@ create table if not exists public.featured_artwork (
 );
 
 alter table public.featured_artwork enable row level security;
+
+create table if not exists public.journal_reactions (
+  id bigint generated always as identity primary key,
+  entry_id uuid not null references public.journal_entries(id) on delete cascade,
+  client_id uuid not null,
+  reaction text not null check (reaction in ('love', 'applaud', 'inspired', 'growth', 'together')),
+  created_at timestamptz not null default now(),
+  unique (entry_id, client_id, reaction)
+);
+
+alter table public.journal_reactions enable row level security;

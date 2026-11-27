@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Interface Reflections | Anis Ghebache</title>
+    <meta name="description" content="Finding the Right Brick There are quite a few edges close together on the tower. When you turn it, the bricks that sit further around the side can look parti…" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="https://communityarts.org.uk/anis-ghebache/dev-journal/user-interface-reflections/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="User Interface Reflections | Anis Ghebache" />
+    <meta property="og:description" content="Finding the Right Brick There are quite a few edges close together on the tower. When you turn it, the bricks that sit further around the side can look parti…" />
+    <meta property="og:url" content="https://communityarts.org.uk/anis-ghebache/dev-journal/user-interface-reflections/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/anis-ghebache/dev-journal/dev-journal.css" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"BlogPosting","headline":"User Interface Reflections","description":"Finding the Right Brick There are quite a few edges close together on the tower. When you turn it, the bricks that sit further around the side can look parti…","datePublished":"2026-11-20","articleSection":"Creative Technology","inLanguage":"en-GB","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/user-interface-reflections/","author":{"@type":"Person","name":"Anis Ghebache","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/"},"publisher":{"@type":"Organization","name":"Community Arts","url":"https://communityarts.org.uk/"},"mainEntityOfPage":"https://communityarts.org.uk/anis-ghebache/dev-journal/user-interface-reflections/"}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    <header class="dj-bar">
+      <a class="dj-home" href="/">Community Arts</a>
+      <a href="/anis-ghebache/dev-journal/">Journal</a>
+    </header>
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-reading">
+        <article class="dj-article" data-entry-id="530c9539-5e33-412d-ae10-f284399977b1">
+          <header class="dj-article-header">
+            <p class="dj-kicker">
+              <span class="dj-category">Creative Technology</span>
+              <span aria-hidden="true">·</span>
+              <time datetime="2026-11-20">20 November 2026</time>
+            </p>
+            <h1>User Interface Reflections</h1>
+            <p class="dj-byline">By <a rel="author" href="/anis-ghebache/dev-journal/">Anis Ghebache</a></p>
+          </header>
+          <div class="dj-prose"><h2>Finding the Right Brick</h2><p>There are quite a few edges close together on the tower. When you turn it, the bricks that sit further around the side can look particularly narrow. I wanted to make it easier to tell which of those bricks you were about to select.</p><p>On a desktop, I can use the position of the mouse to respond before somebody clicks. On a phone, I have to wait until they touch the screen.</p><p>In both cases, I wanted the feedback to come from the brick. If you can see the exact one you’re about to open, you can keep looking at the tower while you decide what to do.</p><h2>Trying a Hand Cursor</h2><p>I considered using a hand cursor when the mouse passed over the bricks. It's familiar and would have been fairly straightforward to apply.</p><p>The problem I kept coming back to was that the cursor is the same wherever it appears. It can tell you that there's something to click, but when several bricks sit close together, you still have to work out which one is being picked up.</p><p>I also associate that cursor with links. I wanted people to feel that they could explore the surface and see it respond while staying where they were on the page.</p><h2>Choosing White</h2><p>I settled on a white glow around the individual brick. I liked the way the white sat against the reds, oranges and yellows. It has a sharpness to it that feels satisfying when you move from one brick to the next.</p><p>I wanted that contrast to look intentional. There’s already quite a bit of variation in the tower’s surface, and I wanted a response I could recognise across all those different colours and textures.</p><p>The effect can be quite small. The edge of the brick is where I naturally look to see which one I’ve caught, so a little change there does most of the work.</p><h2>Giving Touch Its Own Feedback</h2><p>On a phone, there’s no opportunity to show the visitor what they're about to select while their thumb is still above the screen. The tap is the first clue the interface gets.</p><p>I added a glow when a brick is tapped so it could confirm that moment. This is particularly useful after turning the tower. Your thumb briefly covers part of the surface, and the glow helps you see what you picked once you lift it again.</p><p>It also makes the feedback consistent between the two devices. The moment at which the glow appears changes, but the brick responds in a way you can recognise on either screen.</p><h2>Keeping the Brick in the Tower</h2><p>I’ve been thinking about the glow alongside the movement I want to add later. If a brick is going to push out of the structure, the glow gives your eye somewhere to settle before that movement begins.</p><p>There's a short moment when the brick is still in the wall, but you can already tell which one will move. I think that moment will help the next part of the interaction feel connected to what you did.</p><p>I want to be able to turn the tower, let my mouse settle on a brick and see the response without losing the feeling that I’m looking at a solid structure. Keeping the light close to the surface gives me room to do that.</p><h2>Changing My Mind About the Cursor</h2><p>My reaction to the hand cursor was based on my own associations. I spend a lot of time looking at this page and already know where to click and how to turn the tower. I asked a few colleagues what they thought, and I ended up changing my mind.</p><p>When you hover over a brick, the cursor now becomes the pointing hand to show that you can click it. Over the surrounding area, it’s an open hand, which suggests you can drag to turn the tower. The glow still shows you exactly which brick you’re about to select.</p><p>I went against my first instinct on this one. I’d already spent time thinking about what the cursor meant to me, but hearing what other people expected from it was more valuable. They're closer to the experience of somebody arriving at the tower for the first time.</p></div>
+          <div id="entry-media" class="entry-media"></div>
+        </article>
+      </div>
+    </main>
+    <footer class="dj-footer">
+      <p><a href="/">Community Arts</a> · Elephant &amp; Castle, Southwark</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/entry-media.js"></script>
+  </body>
+</html>

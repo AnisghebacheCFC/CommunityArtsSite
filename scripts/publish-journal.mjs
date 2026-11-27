@@ -147,12 +147,14 @@ const communityPage = (entry, url) => `<!DOCTYPE html>
         <h1>${escapeHtml(entry.title)}</h1>
         <div class="prose">${entry.body_html || ""}</div>
         <div id="entry-media" class="entry-media"></div>
+        <div class="reactions" data-reactions></div>
       </article>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/client.js"></script>
     <script src="/js/entry-media.js"></script>
+    <script src="/js/reactions.js"></script>
   </body>
 </html>
 `;
@@ -233,11 +235,12 @@ const personalPage = (entry, url, journal) => {
 `;
 };
 
-const communityCard = (entry, href) => `<article class="journal-card">
+const communityCard = (entry, href) => `<article class="journal-card" data-entry-id="${escapeHtml(entry.id)}">
         <time datetime="${escapeHtml(String(entry.entry_date).slice(0, 10))}">${escapeHtml(formatDate(entry.entry_date))}</time>
         <h3>${escapeHtml(entry.title)}</h3>
         <p>${escapeHtml(entry.excerpt || "")}</p>
         <a href="${href}">Read the full entry</a>
+        <div class="reactions" data-reactions></div>
       </article>`;
 
 const personalCard = (entry, href) => `<article class="dj-entry" data-category="${escapeHtml(entry.dev_category || "")}">
@@ -255,7 +258,7 @@ const loadEntries = async (journal) => {
   const full = [];
   for (const item of entries || []) {
     const { entry } = await callJournal({ action: "get", id: item.id });
-    if (entry?.journal === journal && entry.status === "approved") full.push(entry);
+    if (entry?.journal === journal && (!entry.status || entry.status === "approved")) full.push(entry);
   }
   return full;
 };
@@ -285,7 +288,13 @@ for (const [journal, config] of Object.entries(journals)) {
   batches.push({ journal, config, entries: await loadEntries(journal) });
 }
 
-for (const oldPath of await previousPaths()) {
+const previous = await previousPaths();
+const fetched = batches.reduce((count, batch) => count + batch.entries.length, 0);
+if (fetched === 0 && previous.length > 0) {
+  throw new Error("Refusing to remove published entries because the journal returned none.");
+}
+
+for (const oldPath of previous) {
   await rm(path.join(root, oldPath), { recursive: true, force: true });
 }
 

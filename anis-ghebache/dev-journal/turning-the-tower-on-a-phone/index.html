@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turning the Tower on a Phone | Anis Ghebache</title>
+    <meta name="description" content="Painting All Sides of the Tower I’d spent quite a lot of time looking at the tower from the angle it first appears on the page. That’s where I made most of t…" />
+    <meta name="author" content="Anis Ghebache" />
+    <meta name="theme-color" content="#100e0c" />
+    <link rel="canonical" href="https://communityarts.org.uk/anis-ghebache/dev-journal/turning-the-tower-on-a-phone/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Turning the Tower on a Phone | Anis Ghebache" />
+    <meta property="og:description" content="Painting All Sides of the Tower I’d spent quite a lot of time looking at the tower from the angle it first appears on the page. That’s where I made most of t…" />
+    <meta property="og:url" content="https://communityarts.org.uk/anis-ghebache/dev-journal/turning-the-tower-on-a-phone/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/anis-ghebache/dev-journal/dev-journal.css" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"BlogPosting","headline":"Turning the Tower on a Phone","description":"Painting All Sides of the Tower I’d spent quite a lot of time looking at the tower from the angle it first appears on the page. That’s where I made most of t…","datePublished":"2026-11-21","articleSection":"Creative Technology","inLanguage":"en-GB","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/turning-the-tower-on-a-phone/","author":{"@type":"Person","name":"Anis Ghebache","url":"https://communityarts.org.uk/anis-ghebache/dev-journal/"},"publisher":{"@type":"Organization","name":"Community Arts","url":"https://communityarts.org.uk/"},"mainEntityOfPage":"https://communityarts.org.uk/anis-ghebache/dev-journal/turning-the-tower-on-a-phone/"}
+    </script>
+  </head>
+  <body>
+    <a class="dj-skip" href="#content">Skip to content</a>
+    <header class="dj-bar">
+      <a class="dj-home" href="/">Community Arts</a>
+      <a href="/anis-ghebache/dev-journal/">Journal</a>
+    </header>
+    <main id="content" class="dj-main" tabindex="-1">
+      <div class="dj-reading">
+        <article class="dj-article" data-entry-id="0414727e-7dc5-499e-a65b-81e0d5c3e1d8">
+          <header class="dj-article-header">
+            <p class="dj-kicker">
+              <span class="dj-category">Creative Technology</span>
+              <span aria-hidden="true">·</span>
+              <time datetime="2026-11-21">21 November 2026</time>
+            </p>
+            <h1>Turning the Tower on a Phone</h1>
+            <p class="dj-byline">By <a rel="author" href="/anis-ghebache/dev-journal/">Anis Ghebache</a></p>
+          </header>
+          <div class="dj-prose"><div class="markdown-here-wrapper" data-md-url="communityarts.org.uk" style="" markdown-here-wrapper-content-modified="true"><h2>Painting All Sides of the Tower</h2><p>I’d spent quite a lot of time looking at the tower from the angle it first appears on the page. That’s where I made most of the decisions about colour and how much of the brushwork I wanted to see. Once I pulled the tower out and let it spin, I noticed that some of the bricks looked much flatter as they came around. It was easy to miss in a still image. In motion, I could see where the painted surface dropped away.</p><p>I extended the painterly layer around the whole tower. I wanted the strokes to feel as though they belonged to the bricks and would stay with them as they turned. The procedural treatment lets me vary the marks across the structure as new bricks are added. The white glow still appears around the individual brick you hover over or tap, so you can see which one you’ve picked.</p><p>Watching a full turn also changed how I judged the detail. When the tower is still, I can pick out individual strokes. When it’s moving, I see patches of colour first and catch a few marks as each face passes in front of me. At the size the tower appears on a phone, some of the detail I could see while working close up barely registered. That gave me a better idea of which marks were worth keeping.</p><h2>Turning the Tower and Scrolling the Page</h2><p>The tower and featured artwork are already on screen when the feature opens. The problem came when I tried to get to the rest of the website. If I started an upward swipe over the scene, the tower took over the gesture and the page stayed where it was. With so much of the phone screen occupied by the scene, I had to think about where to put my thumb just to scroll.</p><p>I changed it so a sideways drag turns the tower and an up or down swipe scrolls the page, even if the gesture starts over the bricks. MDN’s documentation on touch gestures describes how a browser can keep handling vertical panning over an area with its own touch controls. That’s the distinction I wanted here. A sideways movement lets me look around the tower, and an upward swipe takes me through the rest of the site. If I stop and tap a brick, the glow helps me see which one I touched once I lift my thumb.</p><p>The feel of the turn matters as much as the gesture. If the scene hesitates while I’m dragging, it’s harder to stop with the brick I want facing me. The animation guide on web.dev explains the relationship between the work required to draw each frame and how smoothly motion appears. I’m using that principle to weigh up the detail in the brick surfaces, grass and tree while looking at the whole scene in motion.</p><p>The accessibility question I’m still thinking about is how somebody could turn the tower if dragging is difficult for them. W3C’s guidance on dragging movements calls for a click or tap alternative where dragging is used and isn’t essential. I’d like to try simple turn controls and see whether they give someone enough control to find a brick without having to hold and move their finger across the screen.</p><p><strong>References</strong></p><ul><li><p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/touch-action">MDN Web Docs · CSS <code>touch-action</code></a></p></li><li><p><a href="https://web.dev/articles/animations-overview">web.dev · Why are some animations slow?</a></p></li><li><p><a href="https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html">W3C · Understanding Dragging Movements</a></p></li></ul></div></div>
+          <div id="entry-media" class="entry-media"></div>
+        </article>
+      </div>
+    </main>
+    <footer class="dj-footer">
+      <p><a href="/">Community Arts</a> · Elephant &amp; Castle, Southwark</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/entry-media.js"></script>
+  </body>
+</html>

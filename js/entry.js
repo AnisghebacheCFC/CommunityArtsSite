@@ -40,12 +40,15 @@ const renderMedia = (entry) => {
       return;
     }
     document.title = `${entry.title} · Community Arts`;
+    root.dataset.entryId = entry.id;
     root.innerHTML = `
     <time datetime="${entry.entry_date}">${window.CAClient.formatDate(entry.entry_date)}</time>
     <h1>${entry.title}</h1>
     <div class="prose">${entry.body_html}</div>
     ${renderMedia(entry)}
+    <div class="reactions" data-reactions></div>
   `;
+    window.CAReactions?.mount(root);
   } catch {
     root.innerHTML = "<p class='status'>This entry is not published.</p>";
   }
